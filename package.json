@@ -1,0 +1,62 @@
+{
+  "name": "english-learning-platform",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "dev": "concurrently -n BE,FE -c cyan,magenta \"cd apps/backend && nr dev\" \"cd apps/frontend && nr dev\""
+  },
+  "dependencies": {
+    "@antfu/eslint-config": "^6.0.0",
+    "@antfu/ni": "^27.0.0",
+    "concurrently": "^9.2.1",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.38.0",
+    "typescript-eslint": "^8.46.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "lint-staged": "^16.2.5",
+    "simple-git-hooks": "^2.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "@scarf/scarf",
+      "@swc/core",
+      "@tailwindcss/oxide",
+      "bcrypt",
+      "better-sqlite3",
+      "esbuild",
+      "sharp",
+      "unrs-resolver",
+      "vue-demi",
+      "simple-git-hooks"
+    ],
+    "overrides": {
+      "@shared/config": "workspace:*",
+      "@shared/interfaces": "workspace:*",
+      "@shared/types": "workspace:*",
+      "@shared/utils": "workspace:*",
+      "vite": "npm:rolldown-vite@7.1.14"
+    }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,css,html,vue}": [
+      "nlx eslint --fix"
+    ],
+    "*.{json,md}": [
+      "nlx prettier --write"
+    ]
+  }
+}

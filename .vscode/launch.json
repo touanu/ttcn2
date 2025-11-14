@@ -1,0 +1,44 @@
+{
+  "configurations": [
+    {
+      "command": "npm run dev",
+      "name": "Run Server (Dev)",
+      "request": "launch",
+      "type": "node-terminal",
+      "preLaunchTask": "npm: install"
+    },
+    {
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:3333"
+    },
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:3333"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "name": "Launch Firefox",
+      "url": "http://localhost:3333/"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Development (Firefox)",
+      "configurations": ["Run Server (Dev)", "Launch Firefox"]
+    },
+    {
+      "name": "Development (Chrome)",
+      "configurations": ["Run Server (Dev)", "Launch Chrome"]
+    },
+    {
+      "name": "Development (Edge)",
+      "configurations": ["Run Server (Dev)", "Launch Edge"]
+    }
+  ]
+}
