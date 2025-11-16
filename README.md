@@ -1,5 +1,5 @@
 <div align='center'>
-    <img src="./assets/icon.png" width="200"></img>
+    <img src="./.github/assets/icon.png" width="200"></img>
 </div>
 <h1 align="center">English Platform Fullstack System</h1>
 <div align="center">
