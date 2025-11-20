@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/i18n',
     'nuxt-security',
+    '@nuxt/test-utils/module',
   ],
   eslint: {
     config: {
