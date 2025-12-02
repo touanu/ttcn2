@@ -40,9 +40,6 @@ const EnvSchema = z
 
     API_SERVER_URL: z.url().optional(),
 
-    SENTRY_DSN: z.string().default(''),
-    REDIS_URL: z.url().default('redis://localhost:6379'),
-
     DB_NAME: z.string().min(1).default('englearn'),
     DB_HOST: z.string().min(1).default('localhost'),
     DB_PORT: z.coerce.number().int().positive().default(27017),
@@ -78,8 +75,6 @@ export const LOG_LEVEL = env.LOG_LEVEL
 export const ORIGIN = env.ORIGIN
 export const CREDENTIALS = env.CREDENTIALS
 
-export const SENTRY_DSN = env.SENTRY_DSN
-export const REDIS_URL = env.REDIS_URL
 export const API_SERVER_URL = env.API_SERVER_URL
 
 export const DB_NAME = env.DB_NAME
