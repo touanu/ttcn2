@@ -1,8 +1,15 @@
 {
   "configurations": [
     {
-      "command": "npm run dev",
-      "name": "Run Server (Dev)",
+      "command": "npm run dev:backend",
+      "name": "Dev: Run Backend",
+      "request": "launch",
+      "type": "node-terminal",
+      "preLaunchTask": "npm: install"
+    },
+    {
+      "command": "npm run dev:frontend",
+      "name": "Dev: Run Frontend",
       "request": "launch",
       "type": "node-terminal",
       "preLaunchTask": "npm: install"
@@ -29,16 +36,8 @@
   ],
   "compounds": [
     {
-      "name": "Development (Firefox)",
-      "configurations": ["Run Server (Dev)", "Launch Firefox"]
-    },
-    {
-      "name": "Development (Chrome)",
-      "configurations": ["Run Server (Dev)", "Launch Chrome"]
-    },
-    {
-      "name": "Development (Edge)",
-      "configurations": ["Run Server (Dev)", "Launch Edge"]
+      "name": "Development",
+      "configurations": ["Dev: Run Backend", "Dev: Run Frontend"]
     }
   ]
 }
