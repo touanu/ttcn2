@@ -44,3 +44,7 @@ EPFS cung cấp các tính năng chính sau:
 - Bài kiểm tra và đánh giá: Tạo bài kiểm tra, chấm điểm.
 - Theo dõi tiến độ học tập: Hiển thị tiến độ của học viên trong các khóa học.
 - Thông báo: Gửi thông báo về các sự kiện quan trọng.
+
+## Cài đặt và chạy dự án
+
+Xem tài liệu [GETTING_STARTED.md](./docs/GETTING_STARTED.md) để biết hướng dẫn chi tiết về cách cài đặt và chạy dự án trên máy cục bộ của bạn.
