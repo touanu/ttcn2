@@ -11,7 +11,10 @@
 
 ## Mục lục
 
-To-do: Viết mục lục cho tài liệu README này.
+- [🚀 Giới thiệu](#-giới-thiệu)
+- [✨ Các công nghệ chính được sử dụng](#-các-công-nghệ-chính-được-sử-dụng)
+- [🎨 Các tính năng](#-các-tính-năng)
+- [📝 Cài đặt và chạy dự án](#-cài-đặt-và-chạy-dự-án)
 
 ## 🚀 Giới thiệu
 
@@ -25,7 +28,7 @@ Hệ thống bao gồm các thành phần chính:
 
 EPFS cung cấp các tính năng như quản lý người dùng, khóa học, bài học, bài kiểm tra và theo dõi tiến độ học tập.
 
-## Các công nghệ chính được sử dụng
+## ✨ Các công nghệ chính được sử dụng
 
 - 📃 Ngôn ngữ: [Typescript](https://www.typescriptlang.org/)
 - 🖥️ Frontend: [NuxtJS](https://nuxt.com/)
@@ -34,7 +37,7 @@ EPFS cung cấp các tính năng như quản lý người dùng, khóa học, b�
 
 Chi tiết về kiến trúc hệ thống có thể được tìm thấy trong tài liệu [ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
-## Các tính năng
+## 🎨 Các tính năng
 
 EPFS cung cấp các tính năng chính sau:
 
@@ -45,6 +48,6 @@ EPFS cung cấp các tính năng chính sau:
 - Theo dõi tiến độ học tập: Hiển thị tiến độ của học viên trong các khóa học.
 - Thông báo: Gửi thông báo về các sự kiện quan trọng.
 
-## Cài đặt và chạy dự án
+## 📝 Cài đặt và chạy dự án
 
 Xem tài liệu [GETTING_STARTED.md](./docs/GETTING_STARTED.md) để biết hướng dẫn chi tiết về cách cài đặt và chạy dự án trên máy cục bộ của bạn.
