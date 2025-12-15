@@ -6,7 +6,7 @@ import { logger } from './logger'
 
 const eta = new Eta({
   views: path.join(__dirname, '../templates'),
-  cache: true,
+  cache: NODE_ENV === 'production',
   debug: NODE_ENV !== 'production',
 })
 

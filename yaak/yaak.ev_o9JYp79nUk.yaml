@@ -3,7 +3,7 @@ model: environment
 id: ev_o9JYp79nUk
 workspaceId: wk_5U6CCvq3pJ
 createdAt: 2025-12-11T01:09:51.572071041
-updatedAt: 2025-12-15T01:52:48.957403115
+updatedAt: 2025-12-15T04:43:22.943887303
 name: Global Variables
 public: true
 base: true
@@ -12,7 +12,7 @@ parentId: null
 variables:
 - enabled: true
   name: username
-  value: ${[ secure(value='YENC_eUE0azNuQwE8esdBwFr5UKhD1dMPlofgmIJ1KT9eI1z0kR9hwqaZIFwCuwUnxyLodfsXylpF') ]}
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3SGc0MmlJRkpxc0lFTTMzSHIrNFVPeUl5KzJ5SHRkZlFTM3lzTURYVkMzSWo3U3hwVWk1MEEwNk9aSHp1TU1wdz09') ]}
   id: t3AtYn8Ajf
 - enabled: true
   name: password
@@ -20,7 +20,7 @@ variables:
   id: sMKmSJqz5d
 - enabled: true
   name: email
-  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RnIxeTA0cWdDclFNYWxZTSs5QmsyR1lmc0xDdExocFBQUStIeTMvaUE4bUtLZWZnbEdlTzVWT2VUY0hiRVg2Y0w0eld3Y1NWV2Nsdz09') ]}
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RStkYlJJRDBJZGxkWlQ5MXg1OExHVjRMRUxTdS83RWJ0OFhYQll1VWh5SEJPMjF5UEJSMFdobEF4QmoydjE5S1FrZXByeGhHYmkvd3c9') ]}
   id: PpDCdQRkKm
 - enabled: true
   name: fullName
@@ -28,7 +28,7 @@ variables:
   id: FPjD5IX7YG
 - enabled: true
   name: phoneNumber
-  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RTVIR001VEVtUmNsdmd4ZkJsTERnVXNWVHIxdlRIcVY4dnIzQ0lrTktJTXc0TVFpNXErYzgvclh0cE9idDRTdDFJVXBqNw') ]}
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RXU2bWJCaFdMakladUl1TTcyNE1zOEw2K2IzdnFtTkY3SXR0ODl6UkVFZ0hXdmhxV2EyK21Dd0FJVGdsS1drSXlhYjlTZw') ]}
   id: 4zdUzxb2vJ
 - enabled: true
   name: internalToken

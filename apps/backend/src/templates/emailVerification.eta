@@ -1,24 +1,39 @@
 <% layout("./partials/base") %>
-<%
-  include('./components/card', {
-    content: `
-      <mj-text font-size="24px" font-weight="700" align="center" css-class="dark-text">
-        ${it.appName} – Email Verification
-      </mj-text>
 
-      ${include('./components/divider')}
+<mj-section padding="20px">
+  <mj-column css-class="dark-card" background-color="#ffffff" border-radius="12px" padding="32px" border="1px solid #e5e7eb">
 
-      ${include('./components/dual-text', {
-        viTitle: `Xin chào ${it.username},`,
-        viText: `Vui lòng sử dụng mã OTP dưới đây để xác minh email.<br/><br/>OTP: <b>${it.otp}</b><br/>Hết hạn sau ${it.expiresInMinutes} phút.`,
-        enTitle: `Hello ${it.username},`,
-        enText: `Use the OTP below to verify your email.<br/><br/>OTP: <b>${it.otp}</b><br/>Expires in ${it.expiresInMinutes} minutes.`
-      })}
+    <mj-text font-size="24px" font-weight="700" align="center" css-class="dark-text">
+      <%= it.appName %> – Email Verification
+    </mj-text>
 
-      ${include('./components/button', {
-        href: it.verifyUrl,
-        text: "Verify Email"
-      })}
-    `
-  });
-%>
+    <%~ include('./components/divider') %>
+
+    <!-- Vietnamese -->
+    <mj-text font-size="16px" css-class="dark-text">
+      <strong>Xin chào <%= it.username %>,</strong><br/>
+      Vui lòng sử dụng mã OTP dưới đây để xác minh email.<br/><br/>
+      OTP: <b><%= it.otp %></b><br/>
+      Hết hạn sau <%= it.expiresInMinutes %> phút.
+    </mj-text>
+
+    <!-- English -->
+    <mj-text font-size="16px" css-class="dark-text" padding-top="16px">
+      <strong>Hello <%= it.username %>,</strong><br/>
+      Use the OTP below to verify your email.<br/><br/>
+      OTP: <b><%= it.otp %></b><br/>
+      Expires in <%= it.expiresInMinutes %> minutes.
+    </mj-text>
+
+    <mj-button
+      padding="12px 24px"
+      border-radius="8px"
+      background-color="#3B82F6"
+      color="#ffffff"
+      href="<%= it.verifyUrl %>"
+    >
+      Verify Email
+    </mj-button>
+
+  </mj-column>
+</mj-section>

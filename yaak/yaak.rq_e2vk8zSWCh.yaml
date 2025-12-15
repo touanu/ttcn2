@@ -1,0 +1,28 @@
+type: http_request
+model: http_request
+id: rq_e2vk8zSWCh
+createdAt: 2025-12-15T04:39:16.153158274
+updatedAt: 2025-12-15T04:47:22.735486799
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "email": "${[ email ]}",
+      "otp": "441744",
+      "newPassword": "${[ password ]}1"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 5n8TUvD253
+method: POST
+name: Reset Password
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/reset-password
+urlParameters: []

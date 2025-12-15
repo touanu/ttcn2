@@ -152,8 +152,8 @@ export class AuthService {
       verifyUrl,
       currentYear: new Date().getFullYear(),
       bannerUrl: `${FE_URL}/email-banner.png`,
-      expireHours: tokenData.expiresIn / 60,
-      name: findUser.fullName || 'Người dùng',
+      expiresInMinutes: tokenData.expiresIn / 60,
+      username: findUser.fullName || 'Người dùng',
       otp: tokenData.otp,
     }
 
@@ -362,9 +362,9 @@ export class AuthService {
       currentYear: new Date().getFullYear(),
       logoUrl: `${FE_URL}/logo.png`,
       bannerUrl: `${FE_URL}/email-banner.png`,
-      expireMinutes: tokenData.expiresIn,
-      name: findUser.fullName || 'Người dùng',
-      otpCode: tokenData.otp,
+      expiresInMinutes: tokenData.expiresIn / 60,
+      username: findUser.fullName || 'Người dùng',
+      otp: tokenData.otp,
     }
 
     const sendMailError = await sendMail(
