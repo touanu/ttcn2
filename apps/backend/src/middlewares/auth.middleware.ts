@@ -1,4 +1,4 @@
-import type { AccessTokenData, RequestWithUser } from '@shared/interfaces'
+import type { InternalTokenData, RequestWithUser } from '@shared/interfaces'
 import type { NextFunction, Request, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
@@ -35,9 +35,9 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
     if (!token)
       return next(new HttpException(401, 'TOKEN_NOT_FOUND'))
 
-    let payload: AccessTokenData
+    let payload: InternalTokenData
     try {
-      payload = verify(token, INTERNAL_TOKEN_SECRET) as AccessTokenData
+      payload = verify(token, INTERNAL_TOKEN_SECRET) as InternalTokenData
     }
     catch (err) {
       if (err instanceof TokenExpiredError) {
@@ -48,6 +48,12 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
       }
       return next(new HttpException(401, 'AUTHENTICATION_FAILED'))
     }
+
+    if (payload.iss && payload.iss !== 'bff')
+      return next(new HttpException(401, 'TOKEN_INVALID_ISSUER'))
+
+    if (!payload.id)
+      return next(new HttpException(401, 'TOKEN_INVALID'))
 
     const findUser = await UserModel.findById(String(payload.id)).lean().exec()
     if (!findUser)

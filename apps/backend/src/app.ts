@@ -58,7 +58,7 @@ class App {
     this.app.use(
       rateLimit({
         windowMs: 60_000,
-        limit: this.env === 'production' ? 100 : 1000,
+        limit: this.env === 'production' ? 20 : 1000,
         standardHeaders: true,
         legacyHeaders: false,
         skip: req => this.env !== 'production' || ['127.0.0.1', '::1', '::ffff:127.0.0.1']

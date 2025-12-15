@@ -1,6 +1,6 @@
 import type { AccessTokenData, ClientInfo, LoginCredential, LoginResponse, Token, TokenWithOTP, User } from '@shared/interfaces'
 import type { ObjectId } from 'mongoose'
-import { randomBytes, randomInt } from 'node:crypto'
+import { randomBytes } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
 import { UserModel } from '@models/users.model'
@@ -36,22 +36,11 @@ export class AuthService {
   }
 
   /*
-    * Tạo refresh token cho người dùng đã đăng nhập
-    * @param user - Đối tượng người dùng
-    * @returns TokenData - Dữ liệu token bao gồm token và thời gian hết hạn
-    * @throws Error - Nếu không tìm thấy SECRET_KEY trong biến môi trường
-    * @throws Error - Nếu người dùng không có ID
+    * Tạo refresh token ngẫu nhiên
+    * @returns Token - Dữ liệu token bao gồm token và thời gian hết hạn
   */
-  private createRefreshToken(user: User): Token {
-    if (!ACCESS_TOKEN_SECRET)
-      throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
-
-    if (user._id === undefined) {
-      throw new HttpException(500, 'CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
-    }
-
+  private createRefreshToken(): Token {
     const token = randomBytes(64).toString('hex')
-
     return { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME, token }
   }
 
@@ -90,15 +79,17 @@ export class AuthService {
     if (!ACCESS_TOKEN_SECRET)
       throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
 
+    // Tạo OTP từ các byte ngẫu nhiên
+    const bytes = randomBytes(Math.ceil(OTP_LENGTH * 0.5))
+    let otp = ''
+    for (let i = 0; otp.length < OTP_LENGTH && i < bytes.length; i++) {
+      otp += bytes[i].toString().padStart(3, '0')
+    }
+
+    otp = otp.slice(0, OTP_LENGTH)
+
     const expiresIn = OTP_EXPIRATION_TIME
-
-    // Tạo OTP ngẫu nhiên và token chứa OTP
-    const otp: string = randomInt(0, 10 ** OTP_LENGTH)
-      .toString()
-      .padStart(OTP_LENGTH, '0')
-
-    const token: string = sign({ otp }, ACCESS_TOKEN_SECRET as string, { expiresIn })
-
+    const token: string = sign({ otp }, ACCESS_TOKEN_SECRET, { expiresIn })
     return { expiresIn, token, otp }
   }
 
@@ -213,7 +204,7 @@ export class AuthService {
     if (!findUser.isEmailVerified)
       throw new HttpException(401, 'EMAIL_NOT_VERIFIED')
 
-    const refreshToken = this.createRefreshToken(findUser)
+    const refreshToken = this.createRefreshToken()
     const accessToken = this.createAccessToken(findUser)
     const sessionId = await this.createSession(
       refreshToken,
@@ -234,8 +225,14 @@ export class AuthService {
       .findById(sessionId)
       .exec()
 
+    // Tránh cách thức tấn công thu hồi nhiều lần
     if (!session)
       return
+
+    if (session.revoked) {
+      logger.warn(`Phiên đăng nhập đã bị thu hồi trước đó, không cần thu hồi lại\nSessionID: ${session._id}`)
+      return
+    }
 
     session.revoked = true
     session.revokedAt = new Date()
@@ -307,12 +304,12 @@ export class AuthService {
 
     const isRefreshTokenMatching = await compare(refreshToken, session.refreshTokenHash)
     if (!isRefreshTokenMatching) {
-      logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}\nRefreshToken: ${refreshToken}`)
+      logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}`)
       throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
     }
 
     if (session.revoked) {
-      logger.warn(`Phát hiện sử dụng lại refresh token đã bị thu hồi\nSessionID: ${session._id.toString()}\nRefreshToken: ${refreshToken}`)
+      logger.warn(`Phát hiện sử dụng lại refresh token đã bị thu hồi\nSessionID: ${session._id.toString()}`)
       throw new HttpException(401, 'REVOKED_REFRESH_TOKEN')
     }
 
@@ -322,7 +319,7 @@ export class AuthService {
 
     // Tạo access token và refresh token mới
     const newAccessToken = this.createAccessToken(findUser)
-    const newRefreshToken = this.createRefreshToken(findUser)
+    const newRefreshToken = this.createRefreshToken()
     const newSessionId = await this.createSession(
       newRefreshToken,
       findUser._id,
@@ -334,9 +331,17 @@ export class AuthService {
     )
 
     // Thu hồi phiên đăng nhập cũ
-    session.revoked = true
-    session.revokedAt = new Date()
-    await SessionModel.updateOne({ _id: session._id }, session).exec()
+    const revokeResult = await SessionModel.findOneAndUpdate(
+      { _id: session._id, revoked: false },
+      { $set: { revoked: true, revokedAt: new Date() } },
+      { new: true },
+    ).lean().exec()
+
+    if (!revokeResult) {
+      logger.warn(`Phiên đăng nhập đã thu hồi sẵn rồi!\nSessionID: ${session._id.toString()}`)
+      throw new HttpException(401, 'REVOKED_REFRESH_TOKEN')
+    }
+
     logger.info(`Đã thu hồi phiên đăng nhập cũ\nOld SessionID: ${session._id.toString()}\nNew SessionID: ${newSessionId}`)
 
     return {
@@ -371,15 +376,17 @@ export class AuthService {
     }
 
     try {
-      await sendMail(email, 'Yêu cầu xác nhận email', 'emailVerification', mailData)
+      await sendMail(email, 'Yêu cầu đặt lại mật khẩu', 'passwordReset', mailData)
     }
     catch (error) {
       const errorMessage = error instanceof Error ? error.message : `EMAIL_SENDING_ERROR`
       throw new HttpException(500, errorMessage)
     }
 
-    findUser.passwordResetToken = tokenData.token
-    await UserModel.updateOne({ _id: findUser._id }, findUser).exec()
+    await UserModel.updateOne(
+      { _id: findUser._id },
+      { $set: { passwordResetToken: tokenData.token } },
+    ).exec()
   }
 
   /*

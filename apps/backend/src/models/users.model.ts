@@ -70,3 +70,7 @@ const UserSchema: Schema = new Schema<User>({
 })
 
 export const UserModel = model<User>('User', UserSchema)
+
+UserSchema.index({ email: 1 }, { unique: true })
+UserSchema.index({ emailVerificationToken: 1 }, { unique: true, sparse: true })
+UserSchema.index({ passwordResetToken: 1 }, { unique: true, sparse: true })

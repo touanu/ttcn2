@@ -10,7 +10,6 @@ export class AuthController {
 
   public signUp: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userData: User = req.body
-    userData.role = 'student'
     const signUpUserData = await this.authService.signup(userData)
 
     res.status(201).json({ data: signUpUserData, message: 'REGISTER_SUCCESS' })
