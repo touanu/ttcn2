@@ -261,7 +261,7 @@ export class AuthService {
 
     findUser.isEmailVerified = true
     findUser.emailVerificationToken = undefined
-    findUser.save()
+    await findUser.save()
   }
 
   /*
@@ -287,7 +287,7 @@ export class AuthService {
 
     findUser.isEmailVerified = true
     findUser.emailVerificationToken = undefined
-    findUser.save()
+    await findUser.save()
   }
 
   /*
