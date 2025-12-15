@@ -6,7 +6,7 @@ import { NODE_ENV } from '@shared/config'
 import { logger } from '@utils/logger'
 import { ZodError } from 'zod'
 
-interface ValidationIssue { path: string, message: string, code?: string }
+interface ValidationIssue { path: string, message: string }
 type HttpExceptionWithData = HttpException & { data?: unknown }
 interface WithStack { stack?: string }
 
