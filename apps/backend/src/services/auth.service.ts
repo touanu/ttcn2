@@ -157,21 +157,23 @@ export class AuthService {
       otp: tokenData.otp,
     }
 
-    const sendMailError = await sendMail(
-      email,
-      'Yêu cầu xác nhận email',
-      'emailVerification',
-      mailData,
-    )
-
-    if (sendMailError) {
-      const errorMessage = sendMailError instanceof Error ? sendMailError.message : `EMAIL_SENDING_ERROR`
+    try {
+      await sendMail(email, 'Yêu cầu xác nhận email', 'emailVerification', mailData)
+    }
+    catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `EMAIL_SENDING_ERROR`
       throw new HttpException(500, errorMessage)
     }
 
-    findUser.isEmailVerified = false
-    findUser.emailVerificationToken = tokenData.token
-    await UserModel.updateOne({ _id: findUser._id }, findUser).exec()
+    await UserModel.findOneAndUpdate(
+      { _id: findUser._id },
+      {
+        $set: {
+          isEmailVerified: false,
+          emailVerificationToken: tokenData.token,
+        },
+      },
+    ).exec()
   }
 
   /*
@@ -188,7 +190,8 @@ export class AuthService {
     userData.password = await hash(userData.password, 10)
 
     await UserModel.create({ ...userData })
-    return userData
+    const { password, ...safeUserData } = userData
+    return safeUserData as User
   }
 
   /*
@@ -203,7 +206,7 @@ export class AuthService {
     if (!findUser)
       throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
 
-    const isPasswordMatching = compare(loginData.password, findUser.password)
+    const isPasswordMatching = await compare(loginData.password, findUser.password)
     if (!isPasswordMatching)
       throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
 
@@ -302,7 +305,7 @@ export class AuthService {
     if (!session)
       throw new HttpException(401, 'INVALID_SESSION_ID')
 
-    const isRefreshTokenMatching = compare(refreshToken, session.refreshTokenHash)
+    const isRefreshTokenMatching = await compare(refreshToken, session.refreshTokenHash)
     if (!isRefreshTokenMatching) {
       logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}\nRefreshToken: ${refreshToken}`)
       throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
@@ -367,15 +370,11 @@ export class AuthService {
       otp: tokenData.otp,
     }
 
-    const sendMailError = await sendMail(
-      email,
-      'Yêu cầu đặt lại mật khẩu',
-      'passwordReset',
-      mailData,
-    )
-
-    if (sendMailError) {
-      const errorMessage = sendMailError instanceof Error ? sendMailError.message : `EMAIL_SENDING_ERROR`
+    try {
+      await sendMail(email, 'Yêu cầu xác nhận email', 'emailVerification', mailData)
+    }
+    catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `EMAIL_SENDING_ERROR`
       throw new HttpException(500, errorMessage)
     }
 
@@ -386,7 +385,7 @@ export class AuthService {
   /*
     * Đặt lại mật khẩu bằng OTP
     * @param email - Địa chỉ email của người dùng
-    * @param otp - Mã OTP để đặt lại mậresetPasswordt khẩu
+    * @param otp - Mã OTP để đặt lại mật khẩu
     * @param newPassword - Mật khẩu mới
     * @return Promise<void>
     * @throws HttpException - Nếu không tìm thấy người dùng với email đã cho
@@ -406,8 +405,9 @@ export class AuthService {
       throw new HttpException(400, `INVALID_OTP`)
 
     const hashedPassword = await hash(newPassword, 10)
-    findUser.password = hashedPassword
-    findUser.passwordResetToken = undefined
-    await UserModel.updateOne({ _id: findUser._id }, findUser).exec()
+    await UserModel.updateOne(
+      { _id: findUser._id },
+      { $set: { password: hashedPassword }, $unset: { passwordResetToken: '' } },
+    ).exec()
   }
 }

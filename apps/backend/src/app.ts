@@ -1,4 +1,4 @@
-import type { Routes } from '@shared/interfaces'
+import type { Routes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { NotFoundMiddleware } from '@middlewares/notFound.middleware'
 import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, MAILDEV_ENABLED, NODE_ENV } from '@shared/config'
@@ -131,6 +131,8 @@ class App {
       })
       maildev.listen()
       logger.info('🚀 MailDev đang chạy tại http://localhost:1080')
+    }).catch((error) => {
+      logger.error('❌ Không thể khởi động MailDev:', error)
     })
   }
 }

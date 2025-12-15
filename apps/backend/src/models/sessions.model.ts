@@ -1,4 +1,5 @@
 import type { Document, InferSchemaType } from 'mongoose'
+import { SESSION_EXPIRATION_TIME } from '@shared/constants'
 import { model, Schema } from 'mongoose'
 
 const SessionSchema = new Schema({
@@ -10,7 +11,6 @@ const SessionSchema = new Schema({
   refreshTokenHash: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
   },
   ipAddress: {
@@ -32,14 +32,10 @@ const SessionSchema = new Schema({
   revokedAt: {
     type: Date,
   },
-  createdAt: {
+  expiresAt: {
     type: Date,
-    default: Date.now,
-    expires: 60 * 60 * 24 * 30, // Tự động xóa sau 30 ngày
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
+    default: () => new Date(Date.now() + 1000 * SESSION_EXPIRATION_TIME),
+    expires: 0,
   },
 }, {
   timestamps: true,

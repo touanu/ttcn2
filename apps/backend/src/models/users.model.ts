@@ -19,6 +19,7 @@ const UserSchema: Schema = new Schema<User>({
     required: false,
     unique: true,
     trim: true,
+    sparse: true,
   },
   isEmailVerified: {
     type: Boolean,
@@ -33,6 +34,7 @@ const UserSchema: Schema = new Schema<User>({
     required: false,
     unique: true,
     trim: true,
+    sparse: true,
   },
   fullName: {
     type: String,

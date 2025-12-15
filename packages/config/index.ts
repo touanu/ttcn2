@@ -39,8 +39,8 @@ const EnvSchema = z
     CREDENTIALS: z.coerce.boolean(), // chuỗi 'true'/'false' → boolean
     CORS_ORIGINS: z.string().optional(), // "http://a.com,http://b.com"
 
-    BE_URL: z.url().optional().default(`http://localhost:${process.env.BE_PORT || 3000}`),
-    FE_URL: z.url().optional().default(`http://localhost:${process.env.FE_PORT || 3333}`),
+    BE_URL: z.url().optional(),
+    FE_URL: z.url().optional(),
 
     DB_NAME: z.string().min(1).default('englearn'),
     DB_HOST: z.string().min(1).default('localhost'),
@@ -85,8 +85,8 @@ export const LOG_LEVEL = env.LOG_LEVEL
 export const ORIGIN = env.ORIGIN
 export const CREDENTIALS = env.CREDENTIALS
 
-export const BE_URL = env.BE_URL
-export const FE_URL = env.FE_URL
+export const BE_URL = env.BE_URL || `http://localhost:${env.BE_PORT || 3000}`
+export const FE_URL = env.FE_URL || `http://localhost:${env.FE_PORT || 3333}`
 
 export const DB_NAME = env.DB_NAME
 export const DB_HOST = env.DB_HOST

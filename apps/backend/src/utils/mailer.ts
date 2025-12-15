@@ -47,15 +47,16 @@ export async function sendMail(
     text: fallbackMail,
   } as TransportOptions
 
-  return mailer.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      logger.error(`Đã có lỗi trong khi gửi mail đến ${to}: ${error.message}`)
-      return new Error(`EMAIL_SENDING_ERROR`)
-    }
-    else {
+  return new Promise<void>((resolve, reject) => {
+    mailer.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        logger.error(`Đã có lỗi trong khi gửi mail đến ${to}: ${error.message}`)
+        reject(new Error(`EMAIL_SENDING_ERROR`))
+        return
+      }
       logger.info(`Mail được gửi đến ${to}, id: ${info.messageId}`)
-    }
-
-    logger.debug(`Envelope: ${info.envelope}, accepted: ${info.accepted}, rejected: ${info.rejected}, nội dung mail: ${info.response}`)
+      logger.debug(`Envelope: ${info.envelope}, accepted: ${info.accepted}, rejected: ${info.rejected}, nội dung mail: ${info.response}`)
+      resolve()
+    })
   })
 }

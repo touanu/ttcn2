@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_iT35XxcY4H
 createdAt: 2025-12-13T01:43:32.123552177
-updatedAt: 2025-12-15T03:01:43.484053831
+updatedAt: 2025-12-15T04:59:20.902480596
 workspaceId: wk_5U6CCvq3pJ
 folderId: fl_KKkHUzqC5j
 authentication: {}
@@ -11,7 +11,7 @@ body:
   text: |-
     {
       "email": "${[ email ]}",
-      "otp": "793284"
+      "otp": "399805"
     }
 bodyType: application/json
 description: ''
