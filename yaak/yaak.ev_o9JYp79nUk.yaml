@@ -1,0 +1,38 @@
+type: environment
+model: environment
+id: ev_o9JYp79nUk
+workspaceId: wk_5U6CCvq3pJ
+createdAt: 2025-12-11T01:09:51.572071041
+updatedAt: 2025-12-15T01:52:48.957403115
+name: Global Variables
+public: true
+base: true
+parentModel: workspace
+parentId: null
+variables:
+- enabled: true
+  name: username
+  value: ${[ secure(value='YENC_eUE0azNuQwE8esdBwFr5UKhD1dMPlofgmIJ1KT9eI1z0kR9hwqaZIFwCuwUnxyLodfsXylpF') ]}
+  id: t3AtYn8Ajf
+- enabled: true
+  name: password
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3Rk94ZEYrQlhZZmtveWhDcDU3TXUvWlFyWVdSUUYzTUxqOVBSQm52OXNNTVNtc01yTFI1MThIZ1p5bFJlZUxRZHF4') ]}
+  id: sMKmSJqz5d
+- enabled: true
+  name: email
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RnIxeTA0cWdDclFNYWxZTSs5QmsyR1lmc0xDdExocFBQUStIeTMvaUE4bUtLZWZnbEdlTzVWT2VUY0hiRVg2Y0w0eld3Y1NWV2Nsdz09') ]}
+  id: PpDCdQRkKm
+- enabled: true
+  name: fullName
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3R0tHNXFpTnVIdHFGampMeGRManpiK1R4Y3pmcXBvNzQ1U3VrUlVmOWFmNTJMK1A0NExKamZGeWpRYndMZnpCcDJiRkM0Rw') ]}
+  id: FPjD5IX7YG
+- enabled: true
+  name: phoneNumber
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3RTVIR001VEVtUmNsdmd4ZkJsTERnVXNWVHIxdlRIcVY4dnIzQ0lrTktJTXc0TVFpNXErYzgvclh0cE9idDRTdDFJVXBqNw') ]}
+  id: 4zdUzxb2vJ
+- enabled: true
+  name: internalToken
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3R2k1eTE3bXN2d0hHczJOYkJjQjBXU2tVUmxaQ2xXOHJNUW9JTGQ0NjcvZmgzanYzRDlqVFhaUWxGVmcxNXBlZ29mdjlrNkMrZFhKZ1E1dGRBY1NXRDVDTU9JNEhCSmliRFZRcDU1cktEZ2hmeExSdFRYeGxFRVRQTjJiZWxUZVRQTTk2SkRqbTFiZWZibkdsUjFPUHJuRGY2eGRBT0RuMEhHUDd2MzR0aFcxT25pY3Y3RVZNR1kzM0xIS2p5TytUeGtmMExKZlU1NCtMR2p6enYva2FQWFQxRm1za08vUG1vbFpKR0svVnNMb3ZsY0RmZmRyOW5EV25sdE4xMnNGa0p0WHJkL1AxMDVJc05kbCtvd1JHNEtyUlp6cHVPYWM5bHgrbU5YV0FVYUVrVzVNcysyb0ZKODFIUHFPQ2NZRk1yUy9MSldaY002QjhSL2F0VDVZbmd3cE5Md0ZPclRCY254VkRLSXpwTnFtNTA5L0JSdzBCVVFJMXNGMi84OQ') ]}
+  id: uEnbnhFrz5
+color: null
+sortPriority: 0.0

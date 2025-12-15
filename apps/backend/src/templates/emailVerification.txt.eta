@@ -1,0 +1,44 @@
+==============================
+  <%= it.appName %> - Xác minh Email
+==============================
+
+[VIETNAMESE]
+
+Xin chào <%= it.name %>,
+
+Cảm ơn bạn đã đăng ký tài khoản tại <%= it.appName %>.
+Vui lòng xác minh địa chỉ email của bạn để tiếp tục.
+
+Mã xác minh:
+>>> <%= it.otp %> <<<
+
+Hoặc nhấn vào liên kết:
+<%= it.verifyUrl %>
+
+Mã có hiệu lực trong <%= it.expireMinutes %> phút.
+Nếu bạn không yêu cầu tạo tài khoản, bạn có thể bỏ qua email này.
+
+
+==============================
+  <%= it.appName %> - Email Verification
+==============================
+
+[ENGLISH]
+
+Hello <%= it.name %>,
+
+Thank you for signing up at <%= it.appName %>.
+Please verify your email address to continue.
+
+Verification code:
+>>> <%= it.otp %> <<<
+
+Or click the link:
+<%= it.verifyUrl %>
+
+The code is valid for <%= it.expireMinutes %> minutes.
+If you did not request this action, you can ignore this email.
+
+
+------------------------------
+© <%= new Date().getFullYear() %> <%= it.appName %>. All rights reserved.

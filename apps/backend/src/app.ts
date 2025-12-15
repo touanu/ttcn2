@@ -1,7 +1,7 @@
 import type { Routes } from '@shared/interfaces'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { NotFoundMiddleware } from '@middlewares/notFound.middleware'
-import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, NODE_ENV } from '@shared/config'
+import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, MAILDEV_ENABLED, NODE_ENV } from '@shared/config'
 import { dbConnection } from '@utils/database'
 import { logger, stream } from '@utils/logger'
 import compression from 'compression'
@@ -28,6 +28,10 @@ class App {
     this.initializeMiddlewares()
     this.initializeRoutes(routes, apiPrefix)
     this.initializeErrorHandling()
+
+    if (MAILDEV_ENABLED) {
+      this.initializeMaildev()
+    }
   }
 
   public listen() {
@@ -115,6 +119,19 @@ class App {
   private initializeErrorHandling() {
     this.app.use(NotFoundMiddleware)
     this.app.use(ErrorMiddleware)
+  }
+
+  private initializeMaildev() {
+    // Chỉ khởi chạy MailDev trong môi trường phát triển
+    import('maildev').then(({ default: MailDev }) => {
+      const maildev = new MailDev({
+        smtp: 1025,
+        web: 1080,
+        silent: this.env === 'production',
+      })
+      maildev.listen()
+      logger.info('🚀 MailDev đang chạy tại http://localhost:1080')
+    })
   }
 }
 

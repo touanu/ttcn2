@@ -24,6 +24,7 @@
     "@shared/interfaces": "*",
     "@shared/types": "*",
     "@shared/utils": "*",
+    "@shared/constants": "*",
     "@unhead/vue": "^2.0.19",
     "@vite-pwa/nuxt": "^1.0.7",
     "@vueuse/nuxt": "^14.0.0",

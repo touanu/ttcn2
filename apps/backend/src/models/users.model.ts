@@ -1,17 +1,70 @@
-import type { Document, InferSchemaType } from 'mongoose'
+import type { User } from '@shared/interfaces'
 import { model, Schema } from 'mongoose'
 
-const UserSchema: Schema = new Schema({
+const UserSchema: Schema = new Schema<User>({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
   email: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
+  },
+  emailVerificationToken: {
+    type: String,
+    required: false,
+    unique: true,
+    trim: true,
+  },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
   },
   password: {
     type: String,
     required: true,
   },
+  passwordResetToken: {
+    type: String,
+    required: false,
+    unique: true,
+    trim: true,
+  },
+  fullName: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: false,
+    unique: true,
+    sparse: true,
+  },
+  isPhoneNumberVerified: {
+    type: Boolean,
+    default: false,
+  },
+  role: {
+    type: String,
+    enum: ['student', 'teacher', 'admin', 'superadmin'],
+    default: 'user',
+  },
+  profilePictureUrl: {
+    type: String,
+    required: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
-export type UserType = InferSchemaType<typeof UserSchema>
-export const UserModel = model<UserType & Document>('User', UserSchema)
+export const UserModel = model<User>('User', UserSchema)

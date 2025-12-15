@@ -1,0 +1,29 @@
+<%
+  const COLORS = {
+    brand: "#3B82F6",
+    text: "#1f2937",
+    textLight: "#6b7280",
+    border: "#e5e7eb",
+    lightBg: "#ffffff",
+    background: "#f5f7fa",
+  };
+
+  const FONT = {
+    family: "Inter, Arial, sans-serif",
+    size: {
+      body: "16px",
+      small: "14px",
+      title: "24px",
+    }
+  };
+
+  const RADIUS = {
+    card: "12px",
+    button: "8px"
+  };
+
+  const SPACING = {
+    section: "20px",
+    cardPadding: "32px"
+  };
+%>

@@ -1,5 +1,18 @@
+import type { ObjectId } from 'mongoose'
+
 export interface User {
-  id?: string | number // uuid or number-string
+  _id?: ObjectId
+  username: string
   email: string
+  emailVerificationToken?: string
+  isEmailVerified?: boolean
   password: string
+  passwordResetToken?: string
+  fullName: string
+  phoneNumber?: string
+  isPhoneNumberVerified?: boolean
+  role?: 'student' | 'teacher' | 'admin' | 'superadmin'
+  profilePictureUrl?: string
+  createdAt?: Date
+  updatedAt?: Date
 }

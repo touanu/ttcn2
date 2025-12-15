@@ -24,8 +24,8 @@ export class UsersService {
       throw new HttpException(409, 'Email đã tồn tại')
 
     const hashedPassword = await hash(user.password, 10)
-    const created: User = { id: String(Date.now()), email: user.email, password: hashedPassword }
-    await UserModel.create(created)
+    const created: User = { ...user, password: hashedPassword }
+    await UserModel.create({ ...created })
     return created
   }
 
@@ -39,7 +39,7 @@ export class UsersService {
     }
 
     const updated = await UserModel
-      .updateOne({ _id: id }, update)
+      .findByIdAndUpdate(id, update)
       .lean()
       .exec()
 
@@ -49,7 +49,7 @@ export class UsersService {
   }
 
   async deleteUser(id: string): Promise<void> {
-    const deleted = await UserModel.deleteOne({ _id: id })
+    const deleted = await UserModel.findByIdAndDelete(id)
     if (!deleted)
       throw new HttpException(404, 'Không tìm thấy người dùng')
   }

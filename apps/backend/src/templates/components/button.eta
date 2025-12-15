@@ -1,0 +1,9 @@
+<mj-button
+  padding="12px 24px"
+  border-radius="8px"
+  background-color="#3B82F6"
+  color="#ffffff"
+  href="<%= it.href %>"
+>
+  <%= it.text %>
+</mj-button>

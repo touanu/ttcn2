@@ -1,0 +1,8 @@
+<mj-style>
+  @media (prefers-color-scheme: dark) {
+    .dark-bg { background-color:#0d1117 !important; }
+    .dark-text { color:#e5e7eb !important; }
+    .dark-card { background-color:#161b22 !important; border-color:#1f2937 !important; }
+    .dark-border { border-color:#1f2937 !important; }
+  }
+</mj-style>

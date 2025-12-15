@@ -56,15 +56,13 @@ Tạo tệp tin `.env` trong thư mục `config` của dự án và điền các
 BE_PORT = 3000
 FE_PORT = 3333
 
-## JWT / Token
-SECRET_KEY = yourSuperSecretKey
+# JWT / Token
+ACCESS_TOKEN_SECRET = yourSuperSecretKey
+INTERNAL_TOKEN_SECRET = internalSecretKey
 
-## LOGGING
+# LOGGING
 LOG_DIR = /logs
 LOG_LEVEL = info
-
-# SERVER URL
-API_SERVER_URL = https://api.yourdomain.com
 
 # CORS
 ORIGIN = http://localhost:3000
@@ -77,6 +75,13 @@ DB_HOST = localhost
 DB_PORT = 27017
 DB_USERNAME =
 DB_PASSWORD =
+
+# Nodemailer
+MAILDEV_ENABLED = true
+MAILER_HOST = localhost
+MAILER_PORT = 1025
+MAILER_USER = randomuser@test.org
+MAILER_PASSWORD =
 ```
 
 Xem chi tiết về cách cấu hình biến môi trường trong tệp tin [README của config](../config/README.md).

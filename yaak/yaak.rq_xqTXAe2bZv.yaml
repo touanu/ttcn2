@@ -1,0 +1,34 @@
+type: http_request
+model: http_request
+id: rq_xqTXAe2bZv
+createdAt: 2025-12-13T02:15:58.988301231
+updatedAt: 2025-12-15T03:05:05.734305763
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "sessionId": "693f79b5ab052298564562c1"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Authorization
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3SGpjdk0rM08xdXhXcnZVazFFVG9PemNzVEFhNmMwUGJzYmNSU09zd3FCSUFwOU4ySVhrSmthTFdHdEVSeXhTNUpReXVnRkdkTElzQmNQbUFFPQ') ]}
+  id: gBmhtBhHBy
+- enabled: true
+  name: ''
+  value: ''
+  id: mfdXuAICDH
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: KJNuemrXpU
+method: POST
+name: Logout
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/logout
+urlParameters: []

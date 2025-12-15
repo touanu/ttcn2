@@ -1,0 +1,51 @@
+<%
+  const COLORS = {
+    brand: "#3B82F6",
+    text: "#1f2937",
+    textLight: "#6b7280",
+    border: "#e5e7eb",
+    lightBg: "#ffffff",
+    background: "#f5f7fa",
+  };
+
+  const FONT = {
+    family: "Inter, Arial, sans-serif",
+    size: {
+      body: "16px",
+      small: "14px",
+      title: "24px",
+    }
+  };
+
+  const RADIUS = {
+    card: "12px",
+    button: "8px"
+  };
+
+  const SPACING = {
+    section: "20px",
+    cardPadding: "32px"
+  };
+%>
+
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family=<%= FONT.family %> />
+      <mj-text color="<%= COLORS.text %>" />
+      <mj-class name="btn" background-color="<%= COLORS.brand %>" color="#ffffff" padding="12px 24px" border-radius="<%= RADIUS.button %>" />
+    </mj-attributes>
+
+    <%- include('../themes/dark-mode') %>
+  </mj-head>
+
+  <mj-body background-color="<%= COLORS.background %>" css-class="dark-bg">
+
+    <%- include('../components/header', it) %>
+
+    <%~ it.body %>
+
+    <%- include('../components/footer', it); %>
+
+  </mj-body>
+</mjml>
