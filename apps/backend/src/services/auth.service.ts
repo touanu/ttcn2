@@ -1,6 +1,7 @@
 import type { AccessTokenData, ClientInfo, LoginCredential, LoginResponse, Token, TokenWithOTP, User } from '@shared/interfaces'
 import type { ObjectId } from 'mongoose'
-import { randomBytes } from 'node:crypto'
+import { Buffer } from 'node:buffer'
+import { randomBytes, randomInt, timingSafeEqual } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
 import { UserModel } from '@models/users.model'
@@ -79,14 +80,7 @@ export class AuthService {
     if (!ACCESS_TOKEN_SECRET)
       throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
 
-    // Tạo OTP từ các byte ngẫu nhiên
-    const bytes = randomBytes(Math.ceil(OTP_LENGTH * 0.5))
-    let otp = ''
-    for (let i = 0; otp.length < OTP_LENGTH && i < bytes.length; i++) {
-      otp += bytes[i].toString().padStart(3, '0')
-    }
-
-    otp = otp.slice(0, OTP_LENGTH)
+    const otp: string = randomInt(10 ** (OTP_LENGTH - 1), 10 ** OTP_LENGTH).toString()
 
     const expiresIn = OTP_EXPIRATION_TIME
     const token: string = sign({ otp }, ACCESS_TOKEN_SECRET, { expiresIn })
@@ -130,11 +124,9 @@ export class AuthService {
   */
   public async requestOTP(email: string): Promise<void> {
     const findUser = await UserModel.findOne({ email }).lean().exec()
-    if (!findUser)
-      throw new HttpException(404, `USER_NOT_FOUND`)
-
-    if (findUser.isEmailVerified)
-      throw new HttpException(400, `EMAIL_ALREADY_VERIFIED`)
+    if (!findUser || findUser.isEmailVerified) {
+      throw new HttpException(404, `USER_NOT_FOUND_OR_ALREADY_VERIFIED`)
+    }
 
     const tokenData = this.createOTP()
     const verifyUrl = `${FE_URL}/verify-email?token=${tokenData.token}`
@@ -156,15 +148,22 @@ export class AuthService {
       throw new HttpException(500, errorMessage)
     }
 
-    await UserModel.findOneAndUpdate(
-      { _id: findUser._id },
+    const updatedUser = await UserModel.findOneAndUpdate(
+      {
+        _id: findUser._id,
+        email,
+      },
       {
         $set: {
           isEmailVerified: false,
           emailVerificationToken: tokenData.token,
         },
       },
-    ).exec()
+      { new: true },
+    ).lean().exec()
+
+    if (!updatedUser)
+      throw new HttpException(409, `USER_STATE_CHANGED`)
   }
 
   /*
@@ -174,13 +173,17 @@ export class AuthService {
     * @throws HttpException - Nếu email đã tồn tại
   */
   public async signup(userData: User): Promise<User> {
-    const findUser = await UserModel.exists({ email: userData.email }).lean().exec()
+    const findUser = await UserModel
+      .exists({ username: userData.username, email: userData.email })
+      .lean()
+      .exec()
+
     if (findUser)
-      throw new HttpException(409, `USER_EMAIL_EXISTED`)
+      throw new HttpException(409, `USER_EMAIL_OR_USERNAME_EXISTED`)
 
-    userData.password = await hash(userData.password, 10)
+    const passwordHash = await hash(userData.password, 10)
 
-    await UserModel.create({ ...userData })
+    await UserModel.create({ ...userData, password: passwordHash })
     const { password, ...safeUserData } = userData
     return safeUserData as User
   }
@@ -282,7 +285,7 @@ export class AuthService {
       throw new HttpException(400, `NO_OTP_REQUESTED`)
 
     const decodedOtp: string = this.verifyOTPToken(findUser.emailVerificationToken)
-    if (decodedOtp !== otp)
+    if (timingSafeEqual(Buffer.from(decodedOtp), Buffer.from(otp)) === false)
       throw new HttpException(400, `INVALID_OTP`)
 
     findUser.isEmailVerified = true
@@ -306,11 +309,6 @@ export class AuthService {
     if (!isRefreshTokenMatching) {
       logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}`)
       throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
-    }
-
-    if (session.revoked) {
-      logger.warn(`Phát hiện sử dụng lại refresh token đã bị thu hồi\nSessionID: ${session._id.toString()}`)
-      throw new HttpException(401, 'REVOKED_REFRESH_TOKEN')
     }
 
     const findUser = await UserModel.findById(session.userId).lean().exec()
@@ -383,10 +381,17 @@ export class AuthService {
       throw new HttpException(500, errorMessage)
     }
 
-    await UserModel.updateOne(
-      { _id: findUser._id },
+    const updatedUser = await UserModel.findOneAndUpdate(
+      {
+        _id: findUser._id,
+        email,
+      },
       { $set: { passwordResetToken: tokenData.token } },
-    ).exec()
+      { new: true },
+    ).lean().exec()
+
+    if (!updatedUser)
+      throw new HttpException(409, `USER_STATE_CHANGED`)
   }
 
   /*
@@ -408,13 +413,22 @@ export class AuthService {
       throw new HttpException(400, `NO_PASSWORD_RESET_REQUESTED`)
 
     const decodedOtp: string = this.verifyOTPToken(findUser.passwordResetToken)
-    if (decodedOtp !== otp)
+    if (timingSafeEqual(Buffer.from(decodedOtp), Buffer.from(otp)) === false)
       throw new HttpException(400, `INVALID_OTP`)
 
     const hashedPassword = await hash(newPassword, 10)
-    await UserModel.updateOne(
-      { _id: findUser._id },
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      {
+        _id: findUser._id,
+        email,
+        passwordResetToken: findUser.passwordResetToken,
+      },
       { $set: { password: hashedPassword }, $unset: { passwordResetToken: '' } },
-    ).exec()
+      { new: true },
+    ).lean().exec()
+
+    if (!updatedUser)
+      throw new HttpException(409, `USER_STATE_CHANGED`)
   }
 }

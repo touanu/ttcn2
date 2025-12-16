@@ -1,6 +1,7 @@
 import type { Routes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { NotFoundMiddleware } from '@middlewares/notFound.middleware'
+import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
 import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, MAILDEV_ENABLED, NODE_ENV } from '@shared/config'
 import { dbConnection } from '@utils/database'
 import { logger, stream } from '@utils/logger'
@@ -8,7 +9,6 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import morgan from 'morgan'
@@ -56,14 +56,9 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(
-      rateLimit({
-        windowMs: 60_000,
-        limit: this.env === 'production' ? 20 : 1000,
-        standardHeaders: true,
-        legacyHeaders: false,
-        skip: req => this.env !== 'production' || ['127.0.0.1', '::1', '::ffff:127.0.0.1']
-          .includes(req.ip ?? ''),
-      }),
+      rateLimitMiddleware(
+        this.env === 'production' ? 100 : 1000,
+      ),
     )
 
     this.app.use(morgan(LOG_FORMAT || 'dev', { stream }))

@@ -30,22 +30,20 @@ export class UsersService {
   }
 
   async updateUser(id: string, update: User): Promise<User> {
-    const exists = await UserModel.findById(id).lean().exec()
-    if (!exists)
-      throw new HttpException(404, 'Không tìm thấy người dùng')
-
+    // Hash password if provided
     if (typeof update.password === 'string' && update.password.length > 0) {
       update = { ...update, password: await hash(update.password, 10) }
     }
 
+    // Use findByIdAndUpdate atomically to prevent race conditions
     const updated = await UserModel
-      .findByIdAndUpdate(id, update)
+      .findByIdAndUpdate(id, update, { new: true })
       .lean()
       .exec()
 
     if (!updated)
       throw new HttpException(404, 'Không tìm thấy người dùng')
-    return update
+    return updated as User
   }
 
   async deleteUser(id: string): Promise<void> {

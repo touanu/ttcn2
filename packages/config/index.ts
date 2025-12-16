@@ -55,6 +55,39 @@ const EnvSchema = z
     MAILER_PASSWORD: z.string().min(1).optional(),
   })
   .strip()
+  .superRefine((data, ctx) => {
+    // Trong môi trường production, các field mailer là bắt buộc
+    if (data.NODE_ENV === 'production') {
+      if (!data.MAILER_HOST) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['MAILER_HOST'],
+          message: 'MAILER_HOST_REQUIRED',
+        })
+      }
+      if (!data.MAILER_PORT) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['MAILER_PORT'],
+          message: 'MAILER_PORT_REQUIRED',
+        })
+      }
+      if (!data.MAILER_USER) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['MAILER_USER'],
+          message: 'MAILER_USER_REQUIRED',
+        })
+      }
+      if (!data.MAILER_PASSWORD) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['MAILER_PASSWORD'],
+          message: 'MAILER_PASSWORD_REQUIRED',
+        })
+      }
+    }
+  })
 
 /**
  * 3) Kiểm tra (thực thi khi module được import)
