@@ -1,40 +1,73 @@
-import type { RequestWithUser, User } from '@shared/interfaces'
+import type { LoginResponse, User } from '@shared/interfaces'
 import type { Request, RequestHandler, Response } from 'express'
 import { AuthService } from '@services/auth.service'
-import { NODE_ENV } from '@shared/config'
 import { asyncHandler } from '@utils/asyncHandler'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
 export class AuthController {
-  constructor(@inject(AuthService) private readonly authService: AuthService) {}
+  constructor(@inject(AuthService) private readonly authService: AuthService) { }
 
   public signUp: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userData: User = req.body
     const signUpUserData = await this.authService.signup(userData)
 
-    res.status(201).json({ data: signUpUserData, message: 'Đăng ký thành công' })
+    res.status(201).json({ data: signUpUserData, message: 'REGISTER_SUCCESS' })
   })
 
   public logIn: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const loginData: User = req.body
-    const { cookie, user } = await this.authService.login(loginData)
+    const response = await this.authService.login(loginData)
 
-    res.setHeader('Set-Cookie', [cookie])
-    res.status(200).json({ data: user, message: 'Đăng nhập thành công' })
+    res.status(200).json({ data: response, message: 'LOGIN_SUCCESS' })
   })
 
   public logOut: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const userReq = req as RequestWithUser
-    const user = userReq.user
-    await this.authService.logout(user)
+    const { sessionId } = req.body
+    await this.authService.logout(sessionId)
 
-    res.clearCookie('Authorization', {
-      httpOnly: true,
-      path: '/',
-      sameSite: 'lax',
-      secure: NODE_ENV === 'production',
-    })
-    res.status(200).json({ message: 'Đã đăng xuất' })
+    res.status(200).json({ message: 'LOGGED_OUT' })
+  })
+
+  public refreshSession: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { sessionId, refreshToken } = req.body
+    const response: LoginResponse = await this.authService.refreshSession(sessionId, refreshToken)
+
+    res.status(200).json({ data: response, message: 'ACCESS_TOKEN_REFRESHED' })
+  })
+
+  public requestEmailVerificationOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body
+    await this.authService.requestOTP(email)
+
+    res.status(200).json({ message: 'EMAIL_VERIFICATION_OTP_SENT' })
+  })
+
+  public verifyEmailWithOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { email, otp } = req.body
+    await this.authService.verifyEmailWithOTP(email, otp)
+
+    res.status(200).json({ message: 'EMAIL_VERIFIED' })
+  })
+
+  public verifyEmailWithToken: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { verificationToken } = req.body
+    await this.authService.verifyEmailWithToken(verificationToken)
+
+    res.status(200).json({ message: 'EMAIL_VERIFIED' })
+  })
+
+  public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body
+    await this.authService.requestPasswordReset(email)
+
+    res.status(200).json({ message: 'PASSWORD_RESET_OTP_SENT' })
+  })
+
+  public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { email, otp, newPassword } = req.body
+    await this.authService.resetPassword(email, otp, newPassword)
+
+    res.status(200).json({ message: 'PASSWORD_RESET_SUCCESS' })
   })
 }

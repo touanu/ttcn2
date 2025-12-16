@@ -1,4 +1,4 @@
-import type { Routes } from '@shared/interfaces'
+import type { Routes } from '@interfaces/routes.interface'
 import { UsersController } from '@controllers/users.controller'
 import { createUserSchema, updateUserSchema } from '@dtos/users.dto'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'

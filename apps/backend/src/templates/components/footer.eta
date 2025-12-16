@@ -1,0 +1,11 @@
+<%
+  const year = new Date().getFullYear();
+%>
+
+<mj-section>
+  <mj-column>
+    <mj-text font-size="12px" align="center" color="#6b7280" css-class="dark-text">
+      © <%= year %> <%= it.appName %>. All rights reserved.
+    </mj-text>
+  </mj-column>
+</mj-section>

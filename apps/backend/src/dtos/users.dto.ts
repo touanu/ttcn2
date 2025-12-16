@@ -1,15 +1,22 @@
 import { z } from 'zod'
 
-// Schema chung cho mật khẩu
-export const passwordSchema = z
-  .string()
-  .min(9, { message: 'Mật khẩu phải có ít nhất 9 ký tự.' })
-  .max(32, { message: 'Mật khẩu tối đa 32 ký tự.' })
+// Schema chung
+export const usernameSchema = z.string()
+  .min(3, 'USERNAME_MIN_LENGTH_REQUIRED')
+  .max(30, 'USERNAME_MAX_LENGTH_REQUIRED')
+export const passwordSchema = z.string()
+  .min(9, 'PASSWORD_MIN_LENGTH_REQUIRED')
+  .max(32, 'PASSWORD_MAX_LENGTH_REQUIRED')
 
 // DTO đăng ký thành viên (dùng chung cho signup và login)
 export const createUserSchema = z.object({
-  email: z.email({ message: 'Định dạng email không hợp lệ.' }),
+  username: usernameSchema,
   password: passwordSchema,
+  email: z.email('EMAIL_INVALID_FORMAT'),
+  fullName: z.string()
+    .min(3, 'FULLNAME_MIN_LENGTH_REQUIRED')
+    .max(100, 'FULLNAME_MAX_LENGTH_REQUIRED'),
+  phoneNumber: z.e164('PHONE_NUMBER_INVALID_FORMAT').optional(),
 })
 
 export type CreateUserDto = z.infer<typeof createUserSchema>

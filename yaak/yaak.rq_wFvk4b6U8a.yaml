@@ -1,0 +1,26 @@
+type: http_request
+model: http_request
+id: rq_wFvk4b6U8a
+createdAt: 2025-12-11T12:21:34.261654401
+updatedAt: 2025-12-14T08:20:24.377220434
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "verificationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvdHAiOiIzODMzMTEiLCJpYXQiOjE3NjU1OTA2NDksImV4cCI6MTc2NTU5MTI0OX0.5WlRjl43NStK8b9oXgSmk-gCbAnwWFLa-SasGIXN4ts"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: Z8q2DYTSFP
+method: POST
+name: Token Verify Email
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/verify-email-token
+urlParameters: []

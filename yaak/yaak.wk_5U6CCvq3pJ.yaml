@@ -1,0 +1,14 @@
+type: workspace
+model: workspace
+id: wk_5U6CCvq3pJ
+createdAt: 2025-12-11T01:09:51.536926210
+updatedAt: 2025-12-11T01:10:01.507019195
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: ttcn2
+encryptionKeyChallenge: eUE0azNuQwHF5vhWmLWyTLk0/TUCeqyWaxy9CA2B3u26BHijhTnn2q3vd7k2EQ/dkfDvCydCnAZoLJpLB9BW60dLvqLLUrIbohgqqnYbZLOYyEblSIRW7k8/Wrl95m6SZdQ=
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0

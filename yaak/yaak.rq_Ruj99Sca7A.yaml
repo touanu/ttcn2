@@ -1,0 +1,35 @@
+type: http_request
+model: http_request
+id: rq_Ruj99Sca7A
+createdAt: 2025-12-14T08:20:57.003947665
+updatedAt: 2025-12-15T03:11:01.701563084
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "sessionId": "693f7c3398df5ef8284f16aa",
+      "refreshToken": "684c10016fede39dd3f972b7b47cd26366bd3d9c2e2f43a76ea31f58bd894bebef49f03398dd0cd375f4c2dcb7ce4c58f8ee88a72aeac054025c5f827c5589e7"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Authorization
+  value: ${[ secure(value=b64'WUVOQ19lVUUwYXpOdVF3R0NlVFpUblhnVDU4M0gvY3Q4T0NyQ0ZGSDlERkpzMGxUU0piRGxzekk4UkpyVEhmVXZ0aHRNVTEzYWIvMk90ckduOFVncnRNQU9UN1Mrb2pnPQ') ]}
+  id: GkBUuN3tGy
+- enabled: true
+  name: ''
+  value: ''
+  id: y44XAMrqrE
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: zaQeIjJmus
+method: POST
+name: Refresh Token
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/refresh
+urlParameters: []

@@ -12,14 +12,12 @@ BE_PORT = 3000
 FE_PORT = 3333
 
 ## JWT / Token
-SECRET_KEY = secretkey123
+ACCESS_TOKEN_SECRET = secretkey123
+INTERNAL_TOKEN_SECRET = secretkey456
 
 ## LOGGING
 LOG_DIR = /logs
 LOG_LEVEL = info
-
-# SERVER URL
-API_SERVER_URL = https://api.yourdomain.com
 
 # CORS
 ORIGIN = http://localhost:3000

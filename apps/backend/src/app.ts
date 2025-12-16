@@ -1,14 +1,14 @@
-import type { Routes } from '@shared/interfaces'
+import type { Routes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { NotFoundMiddleware } from '@middlewares/notFound.middleware'
-import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, NODE_ENV } from '@shared/config'
+import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
+import { BE_PORT, CORS_ORIGIN_LIST, CREDENTIALS, LOG_FORMAT, MAILDEV_ENABLED, NODE_ENV } from '@shared/config'
 import { dbConnection } from '@utils/database'
 import { logger, stream } from '@utils/logger'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import morgan from 'morgan'
@@ -28,6 +28,10 @@ class App {
     this.initializeMiddlewares()
     this.initializeRoutes(routes, apiPrefix)
     this.initializeErrorHandling()
+
+    if (MAILDEV_ENABLED) {
+      this.initializeMaildev()
+    }
   }
 
   public listen() {
@@ -52,14 +56,9 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(
-      rateLimit({
-        windowMs: 60_000,
-        limit: this.env === 'production' ? 100 : 1000,
-        standardHeaders: true,
-        legacyHeaders: false,
-        skip: req => this.env !== 'production' || ['127.0.0.1', '::1', '::ffff:127.0.0.1']
-          .includes(req.ip ?? ''),
-      }),
+      rateLimitMiddleware(
+        this.env === 'production' ? 100 : 1000,
+      ),
     )
 
     this.app.use(morgan(LOG_FORMAT || 'dev', { stream }))
@@ -115,6 +114,21 @@ class App {
   private initializeErrorHandling() {
     this.app.use(NotFoundMiddleware)
     this.app.use(ErrorMiddleware)
+  }
+
+  private initializeMaildev() {
+    // Chỉ khởi chạy MailDev trong môi trường phát triển
+    import('maildev').then(({ default: MailDev }) => {
+      const maildev = new MailDev({
+        smtp: 1025,
+        web: 1080,
+        silent: this.env === 'production',
+      })
+      maildev.listen()
+      logger.info('🚀 MailDev đang chạy tại http://localhost:1080')
+    }).catch((error) => {
+      logger.error('❌ Không thể khởi động MailDev:', error)
+    })
   }
 }
 

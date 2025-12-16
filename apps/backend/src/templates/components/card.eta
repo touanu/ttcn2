@@ -1,0 +1,5 @@
+<mj-section padding="20px">
+  <mj-column css-class="dark-card" background-color="#ffffff" border-radius="12px" padding="32px" border="1px solid #e5e7eb">
+    <%= it.content %>
+  </mj-column>
+</mj-section>

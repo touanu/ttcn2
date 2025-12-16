@@ -24,32 +24,30 @@ export class UsersService {
       throw new HttpException(409, 'Email đã tồn tại')
 
     const hashedPassword = await hash(user.password, 10)
-    const created: User = { id: String(Date.now()), email: user.email, password: hashedPassword }
-    await UserModel.create(created)
+    const created: User = { ...user, password: hashedPassword }
+    await UserModel.create({ ...created })
     return created
   }
 
   async updateUser(id: string, update: User): Promise<User> {
-    const exists = await UserModel.findById(id).lean().exec()
-    if (!exists)
-      throw new HttpException(404, 'Không tìm thấy người dùng')
-
+    // Hash password if provided
     if (typeof update.password === 'string' && update.password.length > 0) {
       update = { ...update, password: await hash(update.password, 10) }
     }
 
+    // Use findByIdAndUpdate atomically to prevent race conditions
     const updated = await UserModel
-      .updateOne({ _id: id }, update)
+      .findByIdAndUpdate(id, update, { new: true })
       .lean()
       .exec()
 
     if (!updated)
       throw new HttpException(404, 'Không tìm thấy người dùng')
-    return update
+    return updated as User
   }
 
   async deleteUser(id: string): Promise<void> {
-    const deleted = await UserModel.deleteOne({ _id: id })
+    const deleted = await UserModel.findByIdAndDelete(id)
     if (!deleted)
       throw new HttpException(404, 'Không tìm thấy người dùng')
   }

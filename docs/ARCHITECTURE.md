@@ -197,7 +197,6 @@ flowchart TB
   subgraph BE["Backend"]
     BE1[NodeJS]
     BE2[Express]
-    BE3[Authentication]
   end
 
   subgraph DB["Database"]
@@ -237,13 +236,26 @@ erDiagram
     ObjectId _id PK
     string username UK
     string email UK
-    bool isEmailConfirmed
+    bool isEmailVerified
     string passwordHash
-    string fullname
+    string fullName
     string phoneNumber
-    bool isPhoneConfirmed
+    bool isPhoneVerified
     string role
     string profilePicture
+    date createdAt
+    date updatedAt
+  }
+
+  SESSION {
+    ObjectId _id
+    ObjectId userId
+    string refreshTokenHash
+    string ipAddress
+    string userAgent
+    string deviceInfo
+    bool revoked
+    date revokedAt
     date createdAt
     date updatedAt
   }
@@ -313,6 +325,7 @@ erDiagram
     date createdAt
   }
 
+  USER ||--o{ SESSION : has
   USER ||--o{ COURSE : creates
   COURSE ||--o{ LESSON : contains
   LESSON ||--o{ MEDIA : uses
@@ -337,7 +350,8 @@ graph LR
         B[POST /auth/login]
         C[POST /auth/logout]
         D[POST /auth/refresh]
-        E[POST /auth/verify-email]
+        E[POST /auth/verify-email-otp]
+        [POST /auth/verify-email-token]
         F[POST /auth/forgot-password]
         G[POST /auth/reset-password]
         H[GET /users/me]
@@ -424,6 +438,10 @@ graph LR
         ZAD[GET /admin/payments]
     end
 ```
+
+### BFF Endpoints
+
+To-do: Cập nhật sau
 
 ### Luồng giao tiếp chính
 

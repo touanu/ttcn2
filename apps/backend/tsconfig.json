@@ -9,7 +9,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "paths": {
-      "@/*": ["*"],
       "@controllers/*": ["controllers/*"],
       "@dtos/*": ["dtos/*"],
       "@exceptions/*": ["exceptions/*"],
@@ -18,7 +17,8 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@/*": ["*"]
     },
     "resolveJsonModule": true,
     "allowJs": false,

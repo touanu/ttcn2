@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_mgfidVmNxS
+createdAt: 2025-12-11T11:35:56.152844027
+updatedAt: 2025-12-11T11:39:02.043755428
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "username": "${[ username ]}",
+      "password": "${[ password ]}"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: u9uDmQrE5C
+method: POST
+name: Login
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/login
+urlParameters: []

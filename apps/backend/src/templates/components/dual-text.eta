@@ -1,0 +1,11 @@
+<!-- Vietnamese -->
+<mj-text font-size="16px" css-class="dark-text">
+  <strong><%= it.viTitle %></strong><br/>
+  <%= it.viText %>
+</mj-text>
+
+<!-- English -->
+<mj-text font-size="16px" css-class="dark-text" padding-top="16px">
+  <strong><%= it.enTitle %></strong><br/>
+  <%= it.enText %>
+</mj-text>

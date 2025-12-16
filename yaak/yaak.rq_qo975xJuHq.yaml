@@ -1,0 +1,30 @@
+type: http_request
+model: http_request
+id: rq_qo975xJuHq
+createdAt: 2025-12-11T01:10:57.245694721
+updatedAt: 2025-12-15T06:29:12.703354281
+workspaceId: wk_5U6CCvq3pJ
+folderId: fl_KKkHUzqC5j
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "username": "${[ username ]}",
+      "email": "${[ email ]}",
+      "fullName": "${[ fullName ]}",
+      "phoneNumber": "${[ phoneNumber ]}",
+      "password": "${[ password ]}",
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 66dMRaRgmh
+method: POST
+name: Register
+sortPriority: -1765415457245.0
+url: ${[ BE_API_URL ]}/auth/register
+urlParameters: []
