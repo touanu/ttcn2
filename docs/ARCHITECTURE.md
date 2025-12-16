@@ -351,7 +351,7 @@ graph LR
         C[POST /auth/logout]
         D[POST /auth/refresh]
         E[POST /auth/verify-email-otp]
-        [POST /auth/verify-email-token]
+        ZAC[POST /auth/verify-email-token]
         F[POST /auth/forgot-password]
         G[POST /auth/reset-password]
         H[GET /users/me]
