@@ -47,6 +47,12 @@
     "pcss",
     "postcss"
   ],
-  "vite.devCommand": "ni run dev",
-  "vite.buildCommand": "ni run build"
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]]
 }
