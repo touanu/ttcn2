@@ -2,12 +2,13 @@
 import * as locales from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
+const route = useRoute()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
 useHead({
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} - %siteName` : '%siteName'
+    return titleChunk ? `${titleChunk} - Englearn` : 'Englearn'
   },
   meta: [
     {
@@ -16,7 +17,7 @@ useHead({
     },
     {
       property: 'og:title',
-      content: `${route.meta.title} - %siteName`,
+      content: `${route.meta.title} - Englearn`,
     },
   ],
   link: [

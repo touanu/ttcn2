@@ -1,6 +1,6 @@
 ---
 description: 'VueJS 3 development standards and best practices with Composition API and TypeScript'
-applyTo: 'app/frontend/**/*.vue, app/frontend/**/*.ts, app/frontend/**/*.js, app/frontend/**/*.scss'
+applyTo: 'apps/frontend/**/*.vue, apps/frontend/**/*.ts, apps/frontend/**/*.js, apps/frontend/**/*.scss'
 ---
 
 # VueJS 3
@@ -12,7 +12,6 @@ Hướng dẫn xây dựng ứng dụng VueJS 3 chất lượng cao với Compos
 - Vue 3.x với Composition API làm mặc định
 - TypeScript để đảm bảo an toàn kiểu dữ liệu
 - Single File Components (`.vue`) với cú pháp `<script setup>`
-- Công cụ build hiện đại (khuyến nghị dùng Vite)
 - Pinia để quản lý trạng thái ứng dụng
 - Tuân theo hướng dẫn và thực hành tốt nhất chính thức của Vue
 

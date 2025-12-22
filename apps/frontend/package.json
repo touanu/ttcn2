@@ -34,7 +34,8 @@
     "nuxt-security": "^2.5.0",
     "typescript": "^5.9.3",
     "vue": "^3.5.25",
-    "vue-router": "^4.6.4"
+    "vue-router": "^4.6.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.81",

@@ -93,14 +93,7 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
         class="h-8"
       />
 
-      <UButton
-        color="neutral"
-        variant="link"
-        icon="i-ph-sign-in-bold"
-        class="cursor-pointer"
-      >
-        <span class="hidden sm:inline">{{ $t('BUTTON_LOGIN_TEXT') }}</span>
-      </UButton>
+      <AuthModal />
     </template>
 
     <template #body>
