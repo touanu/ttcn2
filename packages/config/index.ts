@@ -141,12 +141,3 @@ export const CORS_ORIGIN_LIST
   = env.CORS_ORIGINS?.split(',')
     .map(s => s.trim())
     .filter(Boolean) ?? []
-
-// Tùy chỉnh thông điệp lỗi của Zod
-z.config({
-  customError: (issue) => {
-    if (issue.code === 'invalid_type') {
-      return `INVALID_TYPE: Expected ${issue.expected}, received ${issue.received} in ${issue.path?.join('.')}`
-    }
-  },
-})
