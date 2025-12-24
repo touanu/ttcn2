@@ -16,7 +16,6 @@ export const createUserSchema = z.object({
   fullName: z.string()
     .min(3, 'FULLNAME_MIN_LENGTH_REQUIRED')
     .max(100, 'FULLNAME_MAX_LENGTH_REQUIRED'),
-  phoneNumber: z.e164('PHONE_NUMBER_INVALID_FORMAT').optional(),
 })
 
 export type CreateUserDto = z.infer<typeof createUserSchema>

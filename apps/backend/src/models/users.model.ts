@@ -40,16 +40,6 @@ const UserSchema: Schema = new Schema<User>({
     type: String,
     required: true,
   },
-  phoneNumber: {
-    type: String,
-    required: false,
-    unique: true,
-    sparse: true,
-  },
-  isPhoneNumberVerified: {
-    type: Boolean,
-    default: false,
-  },
   role: {
     type: String,
     enum: ['student', 'teacher', 'admin', 'superadmin'],
@@ -68,9 +58,5 @@ const UserSchema: Schema = new Schema<User>({
     default: Date.now,
   },
 })
-
-UserSchema.index({ email: 1 }, { unique: true })
-UserSchema.index({ emailVerificationToken: 1 }, { unique: true, sparse: true })
-UserSchema.index({ passwordResetToken: 1 }, { unique: true, sparse: true })
 
 export const UserModel = model<User>('User', UserSchema)

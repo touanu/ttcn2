@@ -9,8 +9,6 @@ export interface User {
   password: string
   passwordResetToken?: string
   fullName: string
-  phoneNumber?: string
-  isPhoneNumberVerified?: boolean
   role?: 'student' | 'teacher' | 'admin' | 'superadmin'
   profilePictureUrl?: string
   createdAt?: Date
