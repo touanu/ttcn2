@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
-import { z } from 'zod'
+import type { LoginSchema, OtpSchema, RegisterSchema } from '#shared/schemas/auth.schema'
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { ResponseBody } from '@shared/interfaces'
+import LoginForm from './LoginForm.vue'
+import OtpForm from './OtpForm.vue'
+import RegisterForm from './RegisterForm.vue'
 
 const open = ref<boolean>(false)
-const currentForm = ref<'login' | 'register'>('login')
+const currentForm = ref<'login' | 'register' | 'otp'>('login')
+const userEmail = ref<string>('')
+const isLoading = ref<boolean>(false)
+const { fetch: refreshSession } = useUserSession()
 
 function switchToRegister(): void {
   currentForm.value = 'register'
@@ -13,92 +20,121 @@ function switchToLogin(): void {
   currentForm.value = 'login'
 }
 
+function switchToOtp(): void {
+  currentForm.value = 'otp'
+}
+
 function closeModal(): void {
   open.value = false
   setTimeout(() => {
     currentForm.value = 'login'
+    userEmail.value = ''
+    isLoading.value = false
   }, 300) // Close animation
 }
 
-// Login schema and fields
-const loginSchema = z.object({
-  username: z.string($t('VALIDATION_USERNAME_REQUIRED')).min(3, $t('VALIDATION_USERNAME_MIN', { min: 3 })),
-  password: z.string($t('VALIDATION_PASSWORD_REQUIRED')).min(8, $t('VALIDATION_PASSWORD_MIN', { min: 8 })),
-})
+async function onLoginSubmit(payload: FormSubmitEvent<LoginSchema>): Promise<void> {
+  try {
+    isLoading.value = true
+    const res = await $fetch<ResponseBody>('/api/auth/login', {
+      method: 'POST',
+      body: payload.data,
+    })
 
-type LoginSchema = z.output<typeof loginSchema>
+    if (!res.success) {
+      throw new Error(res.message || 'LOGIN_FAILED')
+    }
 
-const loginFields: AuthFormField[] = [{
-  name: 'username',
-  type: 'text',
-  label: $t('USERNAME_LABEL'),
-  placeholder: $t('USERNAME_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'password',
-  label: $t('PASSWORD_LABEL'),
-  type: 'password',
-  placeholder: $t('PASSWORD_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'remember',
-  label: $t('REMEMBER_ME_LABEL'),
-  type: 'checkbox',
-}]
-
-const registerSchema = z.object({
-  name: z.string($t('VALIDATION_NAME_REQUIRED')).min(2, $t('VALIDATION_NAME_MIN', { min: 2 })),
-  username: z.string($t('VALIDATION_USERNAME_REQUIRED')).min(3, $t('VALIDATION_USERNAME_MIN', { min: 3 })),
-  email: z.email($t('VALIDATION_EMAIL_INVALID')),
-  password: z.string($t('VALIDATION_PASSWORD_REQUIRED')).min(8, $t('VALIDATION_PASSWORD_MIN', { min: 8 })),
-  confirmPassword: z.string($t('VALIDATION_CONFIRM_PASSWORD_REQUIRED')),
-}).refine(data => data.password === data.confirmPassword, {
-  message: $t('VALIDATION_PASSWORDS_MATCH'),
-  path: ['confirmPassword'],
-})
-
-type RegisterSchema = z.output<typeof registerSchema>
-
-const registerFields: AuthFormField[] = [{
-  name: 'name',
-  type: 'text',
-  label: $t('REGISTER_NAME_LABEL'),
-  placeholder: $t('REGISTER_NAME_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'username',
-  type: 'text',
-  label: $t('USERNAME_LABEL'),
-  placeholder: $t('USERNAME_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'email',
-  type: 'email',
-  label: $t('EMAIL_LABEL'),
-  placeholder: $t('EMAIL_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'password',
-  label: $t('PASSWORD_LABEL'),
-  type: 'password',
-  placeholder: $t('PASSWORD_PLACEHOLDER'),
-  required: true,
-}, {
-  name: 'confirmPassword',
-  label: $t('CONFIRM_PASSWORD_LABEL'),
-  type: 'password',
-  placeholder: $t('CONFIRM_PASSWORD_PLACEHOLDER'),
-  required: true,
-}]
-
-function onLoginSubmit(payload: FormSubmitEvent<LoginSchema>): void {
-  // TODO: Implement login logic
-  console.warn('Login form submitted:', payload)
+    closeModal()
+    await refreshSession()
+    await navigateTo('/')
+    console.warn('Login successful:', res.data)
+  }
+  catch (error) {
+    console.error('Login failed:', error)
+  }
+  finally {
+    isLoading.value = false
+  }
 }
 
-function onRegisterSubmit(payload: FormSubmitEvent<RegisterSchema>): void {
-  // TODO: Implement registration logic
-  console.warn('Register form submitted:', payload)
+async function onRegisterSubmit(payload: FormSubmitEvent<RegisterSchema>): Promise<void> {
+  try {
+    isLoading.value = true
+    userEmail.value = payload.data.email
+
+    const { data, error } = await useAPI('/auth/register', {
+      method: 'POST',
+      body: payload.data,
+    })
+
+    if (error.value) {
+      throw error.value
+    }
+
+    // Switch to OTP verification
+    switchToOtp()
+    console.warn('Registration successful, verify OTP:', data.value)
+  }
+  catch (error) {
+    console.error('Registration failed:', error)
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+async function onOtpSubmit(payload: FormSubmitEvent<OtpSchema>): Promise<void> {
+  try {
+    isLoading.value = true
+
+    const { data, error } = await useAPI('/auth/verify-otp', {
+      method: 'POST',
+      body: {
+        email: userEmail.value,
+        otp: payload.data.otp,
+      },
+    })
+
+    if (error.value) {
+      throw error.value
+    }
+
+    // Handle successful verification
+    closeModal()
+    console.warn('OTP verification successful:', data.value)
+  }
+  catch (error) {
+    console.error('OTP verification failed:', error)
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+async function resendOtp(): Promise<void> {
+  try {
+    isLoading.value = true
+
+    const { data, error } = await $fetch<ResponseBody>('/auth/resend-otp', {
+      method: 'POST',
+      body: {
+        email: userEmail.value,
+      },
+    })
+
+    if (error) {
+      throw error
+    }
+
+    console.warn('OTP resent to:', userEmail.value, data.value)
+  }
+  catch (error) {
+    console.error('Failed to resend OTP:', error)
+  }
+  finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -106,6 +142,7 @@ function onRegisterSubmit(payload: FormSubmitEvent<RegisterSchema>): void {
   <UModal
     v-model:open="open"
     :transition="true"
+    :scrollable="true"
   >
     <UButton
       color="neutral"
@@ -132,64 +169,27 @@ function onRegisterSubmit(payload: FormSubmitEvent<RegisterSchema>): void {
           appear
         >
           <div v-if="currentForm === 'login'" key="login">
-            <UAuthForm
-              :schema="loginSchema"
-              :title="$t('LOGIN_MODAL_TITLE')"
-              :description="$t('LOGIN_MODAL_DESCRIPTION')"
-              icon="i-lucide-user"
-              :fields="loginFields"
+            <LoginForm
               @submit="onLoginSubmit"
-            >
-              <template #description>
-                {{ $t('NO_ACCOUNT_TEXT') }}
-                <ULink
-                  class="text-primary font-medium cursor-pointer hover:underline"
-                  @click.prevent="switchToRegister"
-                >
-                  {{ $t('BUTTON_REGISTER_TEXT') }}
-                </ULink>.
-              </template>
-
-              <template #password-hint>
-                <ULink to="#" class="text-primary font-medium" tabindex="-1">
-                  {{ $t('FORGOT_PASSWORD_TEXT') }}
-                </ULink>
-              </template>
-
-              <template #footer>
-                {{ $t('TERMS_OF_SERVICE_TEXT') }} <ULink to="#" class="text-primary font-medium">
-                  {{ $t('SUPPORT_TERMS_OF_SERVICE') }}
-                </ULink>.
-              </template>
-            </UAuthForm>
+              @switch-to-register="switchToRegister"
+            />
           </div>
 
-          <div v-else key="register">
-            <UAuthForm
-              :schema="registerSchema"
-              :title="$t('REGISTER_MODAL_TITLE')"
-              :description="$t('REGISTER_MODAL_DESCRIPTION')"
-              icon="i-lucide-user-plus"
-              :fields="registerFields"
-              :submit-button="{ label: $t('BUTTON_REGISTER_TEXT') }"
+          <div v-else-if="currentForm === 'register'" key="register">
+            <RegisterForm
               @submit="onRegisterSubmit"
-            >
-              <template #description>
-                {{ $t('ALREADY_HAVE_ACCOUNT_TEXT') }}
-                <ULink
-                  class="text-primary font-medium cursor-pointer hover:underline"
-                  @click.prevent="switchToLogin"
-                >
-                  {{ $t('BUTTON_LOGIN_TEXT') }}
-                </ULink>.
-              </template>
+              @switch-to-login="switchToLogin"
+            />
+          </div>
 
-              <template #footer>
-                {{ $t('TERMS_OF_SERVICE_TEXT') }} <ULink to="#" class="text-primary font-medium">
-                  {{ $t('SUPPORT_TERMS_OF_SERVICE') }}
-                </ULink>.
-              </template>
-            </UAuthForm>
+          <div v-else-if="currentForm === 'otp'" key="otp">
+            <OtpForm
+              :email="userEmail"
+              :is-resending="isLoading"
+              @submit="onOtpSubmit"
+              @resend-otp="resendOtp"
+              @back-to-register="switchToRegister"
+            />
           </div>
         </Transition>
       </div>

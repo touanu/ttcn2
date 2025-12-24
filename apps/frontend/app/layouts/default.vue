@@ -3,9 +3,11 @@ import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 
 const { setLocale, getLocaleCookie } = useI18n()
 const route = useRoute()
+const { loggedIn, user } = useUserSession()
 
 const currentLanguageIcon = ref('')
-function selectLanguage(language: 'vi' | 'en', icon: string) {
+
+async function selectLanguage(language: 'vi' | 'en', icon: string) {
   setLocale(language)
   currentLanguageIcon.value = icon
 }
@@ -61,6 +63,61 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
     active: route.path.startsWith('/blog'),
   },
 ])
+
+const userActionItems = computed<DropdownMenuItem[]>(() => [
+  {
+    label: $t('USER_DROPDOWN_PROFILE'),
+    to: '/profile',
+    icon: 'i-ph-user-circle',
+  },
+  {
+    label: $t('USER_DROPDOWN_SETTINGS'),
+    to: '/settings',
+    icon: 'i-ph-gear',
+  },
+  {
+    label: $t('USER_DROPDOWN_LOGOUT'),
+    onClick: async () => {
+      const { error } = await useAPI('/auth/logout', { method: 'POST' })
+      if (error.value) {
+        console.error('Logout failed:', error.value)
+        return
+      }
+      await navigateTo('/')
+    },
+    icon: 'i-ph-sign-out',
+  },
+])
+
+const combinedItems = computed<NavigationMenuItem[]>(() => [
+  {
+    label: $t('NAVIGATION_MENU_TITLE'),
+    type: 'label',
+  },
+  ...navigaionItems.value,
+])
+if (loggedIn.value && user.value) {
+  userActionItems.value.toReversed().forEach((item) => {
+    combinedItems.value
+      .unshift({
+        label: item.label,
+        onClick: item.onClick,
+        icon: item.icon,
+      })
+  })
+}
+else {
+  combinedItems.value.unshift({
+    label: $t('LOGIN_BUTTON_TEXT'),
+    icon: 'i-ph-sign-in-bold',
+    type: 'link',
+    to: '/login',
+  })
+}
+combinedItems.value.unshift({
+  label: $t('USER_ACTION_MENU_TITLE'),
+  type: 'label',
+})
 </script>
 
 <template>
@@ -90,10 +147,45 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
 
       <USeparator
         orientation="vertical"
-        class="h-8"
+        class="h-8 m-2"
       />
 
-      <AuthModal />
+      <div
+        v-if="loggedIn && user"
+        class="items-center gap-2 hidden sm:flex"
+      >
+        <UUser
+          :name="user.name || user.id"
+          :description="user.role || 'Student'"
+          :avatar="{
+            src: 'https://i.pravatar.cc/150?u=john-doe',
+          }"
+          :chip="{
+            color: 'primary',
+            position: 'top-right',
+          }"
+
+          class="capitalize"
+        />
+        <UDropdownMenu
+          :items="userActionItems"
+          :content="{
+            align: 'end',
+            side: 'bottom',
+            sideOffset: 10,
+          }"
+        >
+          <UButton
+            color="neutral"
+            variant="link"
+            class="hover:bg-elevated cursor-pointer"
+            icon="i-ph-dots-three-vertical"
+          />
+        </UDropdownMenu>
+      </div>
+      <div v-else class="hidden sm:block">
+        <AuthModal />
+      </div>
     </template>
 
     <template #body>
@@ -103,7 +195,7 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
       />
 
       <UNavigationMenu
-        :items="navigaionItems"
+        :items="combinedItems"
         orientation="vertical"
       />
     </template>
@@ -125,16 +217,16 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
 
         <div class="text-muted text-sm">
           <label>{{ $t('INFO_PHONE_NUMBER') }}: </label>
-          <NuxtLink to="tel:0987654321" class="hover:underline">
+          <ULink to="tel:0987654321" class="hover:underline">
             0987654321
-          </NuxtLink>
+          </ULink>
 
           <br>
 
           <label>{{ $t('INFO_EMAIL') }}: </label>
-          <NuxtLink to="mailto:info@englearn.com" class="hover:underline">
+          <ULink to="mailto:info@englearn.com" class="hover:underline">
             info@englearn.com
-          </NuxtLink>
+          </ULink>
 
           <br>
 
@@ -149,24 +241,24 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
         </h3>
         <ul class="flex flex-col gap-1 text-sm">
           <li>
-            <NuxtLink to="/about" class="hover:underline">
+            <ULink to="/about" class="hover:underline">
               {{ $t('ABOUT_LINK') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/contact" class="hover:underline">
+            <ULink to="/contact" class="hover:underline">
               {{ $t('ABOUT_CONTACT_LINK') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/team" class="hover:underline">
+            <ULink to="/team" class="hover:underline">
               {{ $t('ABOUT_TEAM_LINK') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/careers" class="hover:underline">
+            <ULink to="/careers" class="hover:underline">
               {{ $t('ABOUT_CAREERS_LINK') }}
-            </NuxtLink>
+            </ULink>
           </li>
         </ul>
       </div>
@@ -177,24 +269,24 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
         </h3>
         <ul class="flex flex-col gap-1 text-sm">
           <li>
-            <NuxtLink to="/help-center" class="hover:underline">
+            <ULink to="/help-center" class="hover:underline">
               {{ $t('SUPPORT_HELP_CENTER') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/terms" class="hover:underline">
+            <ULink to="/terms" class="hover:underline">
               {{ $t('SUPPORT_TERMS_OF_SERVICE') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/privacy" class="hover:underline">
+            <ULink to="/privacy" class="hover:underline">
               {{ $t('SUPPORT_PRIVACY_POLICY') }}
-            </NuxtLink>
+            </ULink>
           </li>
           <li>
-            <NuxtLink to="/payment-policy" class="hover:underline">
+            <ULink to="/payment-policy" class="hover:underline">
               {{ $t('SUPPORT_PAYMENT_POLICY') }}
-            </NuxtLink>
+            </ULink>
           </li>
         </ul>
       </div>

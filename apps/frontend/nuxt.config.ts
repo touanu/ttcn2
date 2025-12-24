@@ -1,8 +1,11 @@
-import { FE_PORT, NODE_ENV } from '@shared/config'
+import { BE_URL, FE_PORT, NODE_ENV } from '@shared/config'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  runtimeConfig: {
+    beApiBaseUrl: `${BE_URL}/api/v1`,
+  },
   devtools: {
     enabled: NODE_ENV === 'development',
     vscode: {
@@ -24,6 +27,7 @@ export default defineNuxtConfig({
     'nuxt-security',
     '@nuxt/test-utils/module',
     '@nuxtjs/i18n',
+    'nuxt-auth-utils',
   ],
   eslint: {
     config: {
