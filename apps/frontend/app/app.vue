@@ -7,9 +7,7 @@ const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
 useHead({
-  titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} - Englearn` : 'Englearn'
-  },
+  title: route.meta.title ? `${route.meta.title} - Englearn` : 'Englearn',
   meta: [
     {
       name: 'viewport',
