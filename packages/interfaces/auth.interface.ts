@@ -4,6 +4,7 @@ import type { User } from './users.interface'
 export interface AccessTokenData {
   id: string
   role?: string
+  name?: string
 }
 
 export interface InternalTokenData {
@@ -37,11 +38,16 @@ export interface ClientInfo {
 export interface LoginCredential {
   username: string
   password: string
+  rememberMe?: boolean
   info?: ClientInfo
 }
 
-export interface LoginResponse {
+export interface RefreshTokenData {
   refreshToken: Token
   accessToken: Token
   sessionId: string
+}
+
+export interface LoginData extends RefreshTokenData {
+  user: AccessTokenData
 }

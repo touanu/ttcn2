@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_qo975xJuHq
 createdAt: 2025-12-11T01:10:57.245694721
-updatedAt: 2025-12-22T02:38:41.750428566
+updatedAt: 2025-12-23T01:31:26.931446476
 workspaceId: wk_5U6CCvq3pJ
 folderId: fl_KKkHUzqC5j
 authentication: {}
@@ -13,8 +13,7 @@ body:
       "username": "${[ username ]}",
       "email": "${[ email ]}",
       "fullName": "${[ fullName ]}",
-      "password": "${[ password ]}",
-      "confirmPassword": "${[ password ]}"
+      "password": "${[ password ]}"
     }
 bodyType: application/json
 description: ''

@@ -1,4 +1,4 @@
-import type { LoginResponse, User } from '@shared/interfaces'
+import type { LoginCredential, LoginData, RefreshTokenData, SuccessResponseBody, User } from '@shared/interfaces'
 import type { Request, RequestHandler, Response } from 'express'
 import { AuthService } from '@services/auth.service'
 import { asyncHandler } from '@utils/asyncHandler'
@@ -12,62 +12,116 @@ export class AuthController {
     const userData: User = req.body
     const signUpUserData = await this.authService.signup(userData)
 
-    res.status(201).json({ data: signUpUserData, message: 'REGISTER_SUCCESS' })
+    const response: SuccessResponseBody<User> = {
+      success: true,
+      data: signUpUserData,
+      message: 'REGISTER_SUCCESS',
+    }
+
+    res.status(201).json(response)
   })
 
   public logIn: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const loginData: User = req.body
-    const response = await this.authService.login(loginData)
+    const loginData: LoginCredential = req.body
+    const data: LoginData = await this.authService.login(loginData)
 
-    res.status(200).json({ data: response, message: 'LOGIN_SUCCESS' })
+    const response: SuccessResponseBody<LoginData> = {
+      success: true,
+      data,
+      message: 'LOGIN_SUCCESS',
+    }
+
+    res.status(200).json(response)
   })
 
   public logOut: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { sessionId } = req.body
     await this.authService.logout(sessionId)
 
-    res.status(200).json({ message: 'LOGGED_OUT' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'LOGOUT_SUCCESS',
+    }
+
+    res.status(200).json(response)
   })
 
   public refreshSession: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { sessionId, refreshToken } = req.body
-    const response: LoginResponse = await this.authService.refreshSession(sessionId, refreshToken)
+    const data: RefreshTokenData = await this.authService.refreshSession(sessionId, refreshToken)
 
-    res.status(200).json({ data: response, message: 'ACCESS_TOKEN_REFRESHED' })
+    const response: SuccessResponseBody<RefreshTokenData> = {
+      success: true,
+      data,
+      message: 'ACCESS_TOKEN_REFRESHED',
+    }
+
+    res.status(200).json(response)
   })
 
   public requestEmailVerificationOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body
     await this.authService.requestOTP(email)
 
-    res.status(200).json({ message: 'EMAIL_VERIFICATION_OTP_SENT' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'EMAIL_VERIFICATION_OTP_SENT',
+    }
+
+    res.status(200).json(response)
   })
 
   public verifyEmailWithOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp } = req.body
     await this.authService.verifyEmailWithOTP(email, otp)
 
-    res.status(200).json({ message: 'EMAIL_VERIFIED' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'EMAIL_VERIFIED',
+    }
+
+    res.status(200).json(response)
   })
 
   public verifyEmailWithToken: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { verificationToken } = req.body
     await this.authService.verifyEmailWithToken(verificationToken)
 
-    res.status(200).json({ message: 'EMAIL_VERIFIED' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'EMAIL_VERIFIED',
+    }
+
+    res.status(200).json(response)
   })
 
   public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body
     await this.authService.requestPasswordReset(email)
 
-    res.status(200).json({ message: 'PASSWORD_RESET_OTP_SENT' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'PASSWORD_RESET_OTP_SENT',
+    }
+
+    res.status(200).json(response)
   })
 
   public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp, newPassword } = req.body
     await this.authService.resetPassword(email, otp, newPassword)
 
-    res.status(200).json({ message: 'PASSWORD_RESET_SUCCESS' })
+    const response: SuccessResponseBody<null> = {
+      success: true,
+      data: null,
+      message: 'PASSWORD_RESET_SUCCESS',
+    }
+
+    res.status(200).json(response)
   })
 }
