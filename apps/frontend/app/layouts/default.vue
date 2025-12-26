@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
+import type { ResponseBody } from '@shared/interfaces'
 
 const { setLocale, getLocaleCookie } = useI18n()
 const route = useRoute()
-const { loggedIn, user } = useUserSession()
+const { loggedIn, user, fetch: fetchSession } = useUserSession()
 
 const currentLanguageIcon = ref('')
 
@@ -37,7 +38,11 @@ onMounted(() => {
   })
 })
 
-const navigaionItems = computed<NavigationMenuItem[]>(() => [
+const navigationItems: NavigationMenuItem[] = [
+  {
+    label: $t('NAVIGATION_MENU_TITLE'),
+    type: 'label',
+  },
   {
     label: $t('NAV_HOME'),
     to: '/',
@@ -62,9 +67,16 @@ const navigaionItems = computed<NavigationMenuItem[]>(() => [
     icon: 'i-ph-newspaper',
     active: route.path.startsWith('/blog'),
   },
-])
+]
 
-const userActionItems = computed<DropdownMenuItem[]>(() => [
+const loginItem: NavigationMenuItem = {
+  label: $t('NAV_LOGIN'),
+  to: '/login',
+  icon: 'i-ph-sign-in',
+  active: route.path.startsWith('/login'),
+}
+
+const userActionItems: DropdownMenuItem[] = [
   {
     label: $t('USER_DROPDOWN_PROFILE'),
     to: '/profile',
@@ -78,45 +90,31 @@ const userActionItems = computed<DropdownMenuItem[]>(() => [
   {
     label: $t('USER_DROPDOWN_LOGOUT'),
     onClick: async () => {
-      const { error } = await useAPI('/auth/logout', { method: 'POST' })
-      if (error.value) {
-        console.error('Logout failed:', error.value)
-        return
-      }
+      const res = await $fetch<ResponseBody>('/api/auth/logout', { method: 'POST' })
+      if (!res.success)
+        console.error('Logout failed:', res.message)
+
+      fetchSession()
       await navigateTo('/')
     },
     icon: 'i-ph-sign-out',
+    class: 'cursor-pointer',
   },
-])
+]
 
-const combinedItems = computed<NavigationMenuItem[]>(() => [
-  {
-    label: $t('NAVIGATION_MENU_TITLE'),
-    type: 'label',
-  },
-  ...navigaionItems.value,
-])
-if (loggedIn.value && user.value) {
-  userActionItems.value.toReversed().forEach((item) => {
-    combinedItems.value
-      .unshift({
-        label: item.label,
-        onClick: item.onClick,
-        icon: item.icon,
-      })
-  })
-}
-else {
-  combinedItems.value.unshift({
-    label: $t('LOGIN_BUTTON_TEXT'),
-    icon: 'i-ph-sign-in-bold',
-    type: 'link',
-    to: '/login',
-  })
-}
-combinedItems.value.unshift({
-  label: $t('USER_ACTION_MENU_TITLE'),
-  type: 'label',
+const navigationUserActionMenuItems = computed(() => {
+  const items: NavigationMenuItem[] = [
+    {
+      type: 'label',
+      label: $t('USER_ACTION_MENU_TITLE'),
+    },
+  ]
+
+  if (loggedIn.value)
+    items.push(...toNavigationMenuItem(userActionItems))
+  else
+    items.push(loginItem)
+  return items
 })
 </script>
 
@@ -130,7 +128,7 @@ combinedItems.value.unshift({
     </template>
 
     <UNavigationMenu
-      :items="navigaionItems"
+      :items="navigationItems"
     />
 
     <template #right>
@@ -158,7 +156,8 @@ combinedItems.value.unshift({
           :name="user.name || user.id"
           :description="user.role || 'Student'"
           :avatar="{
-            src: 'https://i.pravatar.cc/150?u=john-doe',
+            src: '',
+            icon: 'i-ph-user-circle',
           }"
           :chip="{
             color: 'primary',
@@ -195,7 +194,12 @@ combinedItems.value.unshift({
       />
 
       <UNavigationMenu
-        :items="combinedItems"
+        :items="navigationUserActionMenuItems"
+        orientation="vertical"
+      />
+
+      <UNavigationMenu
+        :items="navigationItems"
         orientation="vertical"
       />
     </template>

@@ -74,7 +74,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<RegisterSchema>): Promi
 
     // Switch to OTP verification
     switchToOtp()
-    console.warn('Registration successful, verify OTP:', data.value)
+    console.warn('Registration successful, verify OTP:', data)
   }
   catch (error) {
     console.error('Registration failed:', error)
@@ -127,7 +127,7 @@ async function resendOtp(): Promise<void> {
       throw error
     }
 
-    console.warn('OTP resent to:', userEmail.value, data.value)
+    console.warn('OTP resent to:', userEmail.value, data)
   }
   catch (error) {
     console.error('Failed to resend OTP:', error)
