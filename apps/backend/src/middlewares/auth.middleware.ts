@@ -1,8 +1,8 @@
-import type { InternalTokenData, RequestWithUser } from '@shared/interfaces'
+import type { AccessTokenPayload, RequestWithUser } from '@shared/interfaces'
 import type { NextFunction, Request, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
-import { INTERNAL_TOKEN_SECRET } from '@shared/config'
+import { ACCESS_TOKEN_SECRET } from '@shared/config'
 import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken'
 
 /**
@@ -31,29 +31,27 @@ function getAuthorization(req: RequestWithUser) {
 export async function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     const userReq = req as RequestWithUser
-    const token = getAuthorization(userReq)
-    if (!token)
-      return next(new HttpException(401, 'TOKEN_NOT_FOUND'))
+    const accessToken = getAuthorization(userReq)
 
-    let payload: InternalTokenData
+    if (!accessToken)
+      return next(new HttpException(401, 'ACCESS_TOKEN_NOT_FOUND'))
+
+    let payload: AccessTokenPayload
     try {
-      payload = verify(token, INTERNAL_TOKEN_SECRET) as InternalTokenData
+      payload = verify(accessToken, ACCESS_TOKEN_SECRET) as AccessTokenPayload
     }
     catch (err) {
-      if (err instanceof TokenExpiredError) {
-        return next(new HttpException(401, 'TOKEN_EXPIRED'))
-      }
-      if (err instanceof JsonWebTokenError) {
-        return next(new HttpException(401, 'TOKEN_INVALID'))
-      }
+      if (err instanceof TokenExpiredError)
+        return next(new HttpException(401, 'ACCESS_TOKEN_EXPIRED'))
+
+      if (err instanceof JsonWebTokenError)
+        return next(new HttpException(401, 'ACCESS_TOKEN_INVALID'))
+
       return next(new HttpException(401, 'AUTHENTICATION_FAILED'))
     }
 
-    if (payload.iss && payload.iss !== 'bff')
-      return next(new HttpException(401, 'TOKEN_INVALID_ISSUER'))
-
     if (!payload.id)
-      return next(new HttpException(401, 'TOKEN_INVALID'))
+      return next(new HttpException(401, 'ACCESS_TOKEN_INVALID'))
 
     const findUser = await UserModel.findById(String(payload.id)).lean().exec()
     if (!findUser)

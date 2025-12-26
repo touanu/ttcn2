@@ -1,4 +1,4 @@
-import type { AccessTokenData, ClientInfo, LoginCredential, LoginData, RefreshTokenData, Token, TokenWithOTP, User } from '@shared/interfaces'
+import type { AccessTokenPayload, ClientInfo, LoginCredential, LoginData, RefreshTokenData, Token, TokenWithOTP, User } from '@shared/interfaces'
 import type { ObjectId } from 'mongoose'
 import { Buffer } from 'node:buffer'
 import { randomBytes, randomInt, timingSafeEqual } from 'node:crypto'
@@ -30,7 +30,7 @@ export class AuthService {
       throw new HttpException(500, 'CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
     }
 
-    const dataStoredInToken: AccessTokenData = { id: user._id.toString(), role: user.role }
+    const dataStoredInToken: AccessTokenPayload = { id: user._id.toString(), role: user.role }
     const expiresIn = ACCESS_TOKEN_EXPIRATION_TIME
     const token = sign(dataStoredInToken, ACCESS_TOKEN_SECRET, { expiresIn })
     return { expiresIn, token }
@@ -214,7 +214,7 @@ export class AuthService {
       findUser._id,
       loginData.info || {},
     )
-    const user: AccessTokenData = {
+    const user: AccessTokenPayload = {
       id: findUser._id.toString(),
       role: findUser.role,
       name: findUser.fullName,

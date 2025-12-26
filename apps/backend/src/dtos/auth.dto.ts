@@ -1,4 +1,3 @@
-import { Types } from 'mongoose'
 import z from 'zod'
 import { passwordSchema, usernameSchema } from './users.dto'
 
@@ -20,10 +19,10 @@ export const emailTokenVerificationSchema = z.object({
 })
 
 export const logOutSchema = z.object({
-  sessionId: z.string().min(1, 'SESSION_ID_REQUIRED').refine(
-    val => Types.ObjectId.isValid(val),
-    'SESSION_ID_INVALID_FORMAT',
-  ),
+  sessionId: z
+    .string()
+    .min(1, 'SESSION_ID_REQUIRED')
+    .regex(/^[0-9a-f]{24}$/, 'SESSION_ID_INVALID_FORMAT'),
 })
 
 export const refreshTokenSchema = logOutSchema.extend({

@@ -38,7 +38,6 @@ export class AuthRoute implements Routes {
     this.router.post(
       `${this.path}/refresh`,
       rateLimitMiddleware(30, true),
-      AuthMiddleware,
       ValidationMiddleware(refreshTokenSchema),
       this.authController.refreshSession,
     )
