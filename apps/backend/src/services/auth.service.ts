@@ -1,16 +1,14 @@
-import type { AccessTokenPayload, ClientInfo, LoginCredential, LoginData, RefreshTokenData, Token, TokenWithOTP, User } from '@shared/interfaces'
+import type { AccessTokenPayload, ClientInfo, LoginCredential, LoginData, RefreshTokenData, Token, User } from '@shared/interfaces'
 import type { ObjectId } from 'mongoose'
-import { Buffer } from 'node:buffer'
-import { randomBytes, randomInt, timingSafeEqual } from 'node:crypto'
+import { randomBytes } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
 import { UserModel } from '@models/users.model'
-import { ACCESS_TOKEN_SECRET, FE_URL } from '@shared/config'
-import { ACCESS_TOKEN_EXPIRATION_TIME, OTP_EXPIRATION_TIME, OTP_LENGTH, REFRESH_TOKEN_EXPIRATION_TIME } from '@shared/constants'
+import { ACCESS_TOKEN_SECRET } from '@shared/config'
+import { ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_EXPIRATION_TIME } from '@shared/constants'
 import { logger } from '@utils/logger'
-import { sendMail } from '@utils/mailer'
 import { compare, hash } from 'bcryptjs'
-import { sign, verify } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { injectable } from 'tsyringe'
 
 @injectable()
@@ -69,101 +67,6 @@ export class AuthService {
     })
 
     return session._id.toString()
-  }
-
-  /**
-   * Tạo OTP và token chứa OTP
-   * @returns TokenDataWithOTP - Dữ liệu token bao gồm token, OTP và thời gian hết hạn
-   * @throws Error - Nếu không tìm thấy SECRET_KEY trong biến môi trường
-   */
-  private createOTP(): TokenWithOTP {
-    if (!ACCESS_TOKEN_SECRET)
-      throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
-
-    const otp: string = randomInt(10 ** (OTP_LENGTH - 1), 10 ** OTP_LENGTH).toString()
-
-    const expiresIn = OTP_EXPIRATION_TIME
-    const token: string = sign({ otp }, ACCESS_TOKEN_SECRET, { expiresIn })
-    return { expiresIn, token, otp }
-  }
-
-  /**
-   * Giải mã và xác minh token OTP
-   * @param token - Token OTP cần xác minh
-   * @returns string - Mã OTP đã giải mã
-   * @throws HttpException - Nếu token không hợp lệ hoặc đã hết hạn
-   */
-  private verifyOTPToken(token: string): string {
-    let decodedOtp: string
-    try {
-      const decoded = verify(token, ACCESS_TOKEN_SECRET) as { otp: string }
-      decodedOtp = decoded.otp
-    }
-    catch (error) {
-      const errorMessage = (error as Error).message
-      logger.warn(`Lỗi khi giải mã OTP: ${errorMessage}`)
-
-      // Kiểm tra nếu token đã hết hạn
-      if (errorMessage.includes('jwt expired')) {
-        throw new HttpException(400, `OTP_EXPIRED`)
-      }
-
-      // Các lỗi khác (token không hợp lệ, sai định dạng, etc.)
-      throw new HttpException(400, `INVALID_OTP_TOKEN`)
-    }
-
-    return decodedOtp
-  }
-
-  /**
-   * Yêu cầu OTP để xác nhận email
-   * @param email - Địa chỉ email của người dùng
-   * @returns Promise<void>
-   * @throws HttpException - Nếu không tìm thấy người dùng với email đã cho
-   * @throws HttpException - Nếu có lỗi trong quá trình gửi email
-   */
-  public async requestOTP(email: string): Promise<void> {
-    const findUser = await UserModel.findOne({ email }).lean().exec()
-    if (!findUser || findUser.isEmailVerified) {
-      throw new HttpException(404, `USER_NOT_FOUND_OR_ALREADY_VERIFIED`)
-    }
-
-    const tokenData = this.createOTP()
-    const verifyUrl = `${FE_URL}/verify-email?token=${tokenData.token}`
-
-    const mailData = {
-      verifyUrl,
-      currentYear: new Date().getFullYear(),
-      bannerUrl: `${FE_URL}/email-banner.png`,
-      expiresInMinutes: tokenData.expiresIn / 60,
-      username: findUser.fullName || 'Người dùng',
-      otp: tokenData.otp,
-    }
-
-    try {
-      await sendMail(email, 'Yêu cầu xác nhận email', 'emailVerification', mailData)
-    }
-    catch (error) {
-      const errorMessage = error instanceof Error ? error.message : `EMAIL_SENDING_ERROR`
-      throw new HttpException(500, errorMessage)
-    }
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-      {
-        _id: findUser._id,
-        email,
-      },
-      {
-        $set: {
-          isEmailVerified: false,
-          emailVerificationToken: tokenData.token,
-        },
-      },
-      { new: true },
-    ).lean().exec()
-
-    if (!updatedUser)
-      throw new HttpException(409, `USER_STATE_CHANGED`)
   }
 
   /**
@@ -255,55 +158,6 @@ export class AuthService {
   }
 
   /**
-   * Xác nhận email bằng token
-   * @param token - Token xác nhận email
-   * @return Promise<void>
-   * @throws HttpException - Nếu không tìm thấy người dùng với token đã cho
-   * @throws HttpException - Nếu token không hợp lệ hoặc đã hết hạn
-   */
-  public async verifyEmailWithToken(token: string): Promise<void> {
-    const findUser = await UserModel.findOne({ emailVerificationToken: token }).exec()
-    if (!findUser)
-      throw new HttpException(404, `INVALID_VERIFICATION_TOKEN`)
-
-    if (!findUser.emailVerificationToken)
-      throw new HttpException(400, `NO_TOKEN_REQUESTED`)
-
-    // Chắc chắn rằng token hợp lệ
-    this.verifyOTPToken(findUser.emailVerificationToken)
-
-    findUser.isEmailVerified = true
-    findUser.emailVerificationToken = undefined
-    await findUser.save()
-  }
-
-  /**
-   * Xác nhận email bằng OTP
-   * @param email - Địa chỉ email của người dùng
-   * @param otp - Mã OTP để xác nhận email
-   * @return Promise<void>
-   * @throws HttpException - Nếu không tìm thấy người dùng với email đã cho
-   * @throws HttpException - Nếu không có yêu cầu OTP
-   * @throws HttpException - Nếu OTP không hợp lệ
-   */
-  public async verifyEmailWithOTP(email: string, otp: string): Promise<void> {
-    const findUser = await UserModel.findOne({ email }).exec()
-    if (!findUser)
-      throw new HttpException(404, `USER_NOT_FOUND`)
-
-    if (!findUser.emailVerificationToken)
-      throw new HttpException(400, `NO_OTP_REQUESTED`)
-
-    const decodedOtp: string = this.verifyOTPToken(findUser.emailVerificationToken)
-    if (timingSafeEqual(Buffer.from(decodedOtp), Buffer.from(otp)) === false)
-      throw new HttpException(400, `INVALID_OTP`)
-
-    findUser.isEmailVerified = true
-    findUser.emailVerificationToken = undefined
-    await findUser.save()
-  }
-
-  /**
    * Tạo mới access token sử dụng refresh token
    * @param sessionId - ID của phiên đăng nhập cần tạo mới access token
    * @param refreshToken - Refresh token của người dùng
@@ -358,88 +212,5 @@ export class AuthService {
       refreshToken: newRefreshToken,
       sessionId: newSessionId,
     }
-  }
-
-  /**
-   * Yêu cầu đặt lại mật khẩu
-   * @param email - Địa chỉ email của người dùng
-   * @return Promise<void>
-   * @throws HttpException - Nếu không tìm thấy người dùng với email đã cho
-   * @throws HttpException - Nếu có lỗi trong quá trình gửi email
-   */
-  public async requestPasswordReset(email: string): Promise<void> {
-    const findUser = await UserModel.findOne({ email }).lean().exec()
-    if (!findUser)
-      throw new HttpException(404, `USER_NOT_FOUND`)
-
-    const tokenData = this.createOTP()
-    const resetUrl = `${FE_URL}/reset-password?token=${tokenData.token}`
-    const mailData = {
-      resetUrl,
-      currentYear: new Date().getFullYear(),
-      logoUrl: `${FE_URL}/logo.png`,
-      bannerUrl: `${FE_URL}/email-banner.png`,
-      expiresInMinutes: tokenData.expiresIn / 60,
-      username: findUser.fullName || 'Người dùng',
-      otp: tokenData.otp,
-    }
-
-    try {
-      await sendMail(email, 'Yêu cầu đặt lại mật khẩu', 'passwordReset', mailData)
-    }
-    catch (error) {
-      const errorMessage = error instanceof Error ? error.message : `EMAIL_SENDING_ERROR`
-      throw new HttpException(500, errorMessage)
-    }
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-      {
-        _id: findUser._id,
-        email,
-      },
-      { $set: { passwordResetToken: tokenData.token } },
-      { new: true },
-    ).lean().exec()
-
-    if (!updatedUser)
-      throw new HttpException(409, `USER_STATE_CHANGED`)
-  }
-
-  /**
-   * Đặt lại mật khẩu bằng OTP
-   * @param email - Địa chỉ email của người dùng
-   * @param otp - Mã OTP để đặt lại mật khẩu
-   * @param newPassword - Mật khẩu mới
-   * @return Promise<void>
-   * @throws HttpException - Nếu không tìm thấy người dùng với email đã cho
-   * @throws HttpException - Nếu không có yêu cầu đặt lại mật khẩu
-   * @throws HttpException - Nếu OTP không hợp lệ
-   */
-  public async resetPassword(email: string, otp: string, newPassword: string): Promise<void> {
-    const findUser = await UserModel.findOne({ email }).lean().exec()
-    if (!findUser)
-      throw new HttpException(404, `USER_NOT_FOUND`)
-
-    if (!findUser.passwordResetToken)
-      throw new HttpException(400, `NO_PASSWORD_RESET_REQUESTED`)
-
-    const decodedOtp: string = this.verifyOTPToken(findUser.passwordResetToken)
-    if (timingSafeEqual(Buffer.from(decodedOtp), Buffer.from(otp)) === false)
-      throw new HttpException(400, `INVALID_OTP`)
-
-    const hashedPassword = await hash(newPassword, 10)
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-      {
-        _id: findUser._id,
-        email,
-        passwordResetToken: findUser.passwordResetToken,
-      },
-      { $set: { password: hashedPassword }, $unset: { passwordResetToken: '' } },
-      { new: true },
-    ).lean().exec()
-
-    if (!updatedUser)
-      throw new HttpException(409, `USER_STATE_CHANGED`)
   }
 }

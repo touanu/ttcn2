@@ -2,16 +2,17 @@ type: http_request
 model: http_request
 id: rq_iT35XxcY4H
 createdAt: 2025-12-13T01:43:32.123552177
-updatedAt: 2025-12-15T04:59:20.902480596
+updatedAt: 2025-12-27T13:59:39.791742133
 workspaceId: wk_5U6CCvq3pJ
-folderId: fl_KKkHUzqC5j
+folderId: fl_ncLGfgsYtC
 authentication: {}
 authenticationType: null
 body:
   text: |-
     {
       "email": "${[ email ]}",
-      "otp": "399805"
+      "otp": "",
+      "hash": "$2b$10$.bFclTgl7QIlIkMwDimVauGhNzHt2NV9QjOAPl0WKGewm371wsHdq"
     }
 bodyType: application/json
 description: ''
@@ -21,7 +22,7 @@ headers:
   value: application/json
   id: dmmwN0MGJj
 method: POST
-name: OTP Verify Email
-sortPriority: -1765415457245.0
-url: ${[ BE_API_URL ]}/auth/verify-email-otp
+name: Verify Email
+sortPriority: 1000.0
+url: ${[ BE_API_URL ]}/users/verify-email
 urlParameters: []

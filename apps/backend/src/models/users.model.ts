@@ -1,4 +1,5 @@
 import type { User } from '@shared/interfaces'
+import { USER_ROLES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 
 const UserSchema: Schema = new Schema<User>({
@@ -14,13 +15,6 @@ const UserSchema: Schema = new Schema<User>({
     unique: true,
     trim: true,
   },
-  emailVerificationToken: {
-    type: String,
-    required: false,
-    unique: true,
-    trim: true,
-    sparse: true,
-  },
   isEmailVerified: {
     type: Boolean,
     default: false,
@@ -29,20 +23,13 @@ const UserSchema: Schema = new Schema<User>({
     type: String,
     required: true,
   },
-  passwordResetToken: {
-    type: String,
-    required: false,
-    unique: true,
-    trim: true,
-    sparse: true,
-  },
   fullName: {
     type: String,
     required: true,
   },
   role: {
     type: String,
-    enum: ['student', 'teacher', 'admin', 'superadmin'],
+    enum: USER_ROLES,
     default: 'student',
   },
   profilePictureUrl: {

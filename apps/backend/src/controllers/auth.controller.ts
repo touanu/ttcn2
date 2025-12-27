@@ -6,7 +6,9 @@ import { inject, injectable } from 'tsyringe'
 
 @injectable()
 export class AuthController {
-  constructor(@inject(AuthService) private readonly authService: AuthService) { }
+  constructor(
+    @inject(AuthService) private readonly authService: AuthService,
+  ) { }
 
   public signUp: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userData: User = req.body
@@ -55,71 +57,6 @@ export class AuthController {
       success: true,
       data,
       message: 'ACCESS_TOKEN_REFRESHED',
-    }
-
-    res.status(200).json(response)
-  })
-
-  public requestEmailVerificationOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body
-    await this.authService.requestOTP(email)
-
-    const response: SuccessResponseBody<null> = {
-      success: true,
-      data: null,
-      message: 'EMAIL_VERIFICATION_OTP_SENT',
-    }
-
-    res.status(200).json(response)
-  })
-
-  public verifyEmailWithOTP: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email, otp } = req.body
-    await this.authService.verifyEmailWithOTP(email, otp)
-
-    const response: SuccessResponseBody<null> = {
-      success: true,
-      data: null,
-      message: 'EMAIL_VERIFIED',
-    }
-
-    res.status(200).json(response)
-  })
-
-  public verifyEmailWithToken: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { verificationToken } = req.body
-    await this.authService.verifyEmailWithToken(verificationToken)
-
-    const response: SuccessResponseBody<null> = {
-      success: true,
-      data: null,
-      message: 'EMAIL_VERIFIED',
-    }
-
-    res.status(200).json(response)
-  })
-
-  public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body
-    await this.authService.requestPasswordReset(email)
-
-    const response: SuccessResponseBody<null> = {
-      success: true,
-      data: null,
-      message: 'PASSWORD_RESET_OTP_SENT',
-    }
-
-    res.status(200).json(response)
-  })
-
-  public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email, otp, newPassword } = req.body
-    await this.authService.resetPassword(email, otp, newPassword)
-
-    const response: SuccessResponseBody<null> = {
-      success: true,
-      data: null,
-      message: 'PASSWORD_RESET_SUCCESS',
     }
 
     res.status(200).json(response)

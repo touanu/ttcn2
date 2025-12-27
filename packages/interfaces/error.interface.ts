@@ -19,5 +19,5 @@ export interface ErrorResponseBody extends ResponseBody {
 
 export interface SuccessResponseBody<T> extends ResponseBody {
   success: true
-  data: T
+  data?: T
 }
