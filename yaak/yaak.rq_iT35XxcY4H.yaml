@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_iT35XxcY4H
 createdAt: 2025-12-13T01:43:32.123552177
-updatedAt: 2025-12-27T13:59:39.791742133
+updatedAt: 2025-12-27T14:42:48.862163371
 workspaceId: wk_5U6CCvq3pJ
 folderId: fl_ncLGfgsYtC
 authentication: {}
@@ -23,6 +23,6 @@ headers:
   id: dmmwN0MGJj
 method: POST
 name: Verify Email
-sortPriority: 1000.0
+sortPriority: 2000.0
 url: ${[ BE_API_URL ]}/users/verify-email
 urlParameters: []

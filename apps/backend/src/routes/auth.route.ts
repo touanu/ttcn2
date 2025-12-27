@@ -5,7 +5,6 @@ import {
   logOutSchema,
   refreshTokenSchema,
 } from '@dtos/auth.dto'
-import { createUserSchema } from '@dtos/users.dto'
 import { AuthMiddleware } from '@middlewares/auth.middleware'
 import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'
@@ -22,11 +21,6 @@ export class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(
-      `${this.path}/register`,
-      ValidationMiddleware(createUserSchema),
-      this.authController.signUp,
-    )
     this.router.post(
       `${this.path}/login`,
       rateLimitMiddleware(10, true),

@@ -1,9 +1,17 @@
-import type { AccessTokenPayload, ClientInfo, LoginCredential, LoginData, RefreshTokenData, Token, User } from '@shared/interfaces'
+import type { Session } from '@models/sessions.model'
+import type {
+  AccessTokenPayload,
+  ClientInfo,
+  LoginCredential,
+  LoginData,
+  RefreshTokenData,
+  Token,
+} from '@shared/interfaces'
+import type { UserDB } from '@shared/types'
 import type { ObjectId } from 'mongoose'
 import { randomBytes } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
-import { UserModel } from '@models/users.model'
 import { ACCESS_TOKEN_SECRET } from '@shared/config'
 import { ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_EXPIRATION_TIME } from '@shared/constants'
 import { logger } from '@utils/logger'
@@ -15,20 +23,20 @@ import { injectable } from 'tsyringe'
 export class AuthService {
   /**
    * Tạo JWT token cho người dùng đã đăng nhập
-   * @param user - Đối tượng người dùng
+   * @param payload - Dữ liệu người dùng để lưu trong token
    * @returns TokenData - Dữ liệu token bao gồm token và thời gian hết hạn
    * @throws Error - Nếu không tìm thấy SECRET_KEY trong biến môi trường
    * @throws Error - Nếu người dùng không có ID
    */
-  private createAccessToken(user: User): Token {
+  private createAccessToken(payload: AccessTokenPayload): Token {
     if (!ACCESS_TOKEN_SECRET)
       throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
 
-    if (user._id === undefined) {
+    if (payload.id === undefined) {
       throw new HttpException(500, 'CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
     }
 
-    const dataStoredInToken: AccessTokenPayload = { id: user._id.toString(), role: user.role }
+    const dataStoredInToken: AccessTokenPayload = { id: payload.id, role: payload.role }
     const expiresIn = ACCESS_TOKEN_EXPIRATION_TIME
     const token = sign(dataStoredInToken, ACCESS_TOKEN_SECRET, { expiresIn })
     return { expiresIn, token }
@@ -70,25 +78,44 @@ export class AuthService {
   }
 
   /**
-   * Đăng ký người dùng mới
-   * @param userData - Dữ liệu người dùng bao gồm email và mật khẩu
-   * @return Promise<User> - Đối tượng người dùng đã đăng ký
-   * @throws HttpException - Nếu email đã tồn tại
+   * Tạo dữ liệu refresh token mới
+   * @param userPayload - Dữ liệu người dùng để lưu trong token
+   * @param userId - ID của người dùng
+   * @param clientInfo - Thông tin về thiết bị và địa chỉ IP của người dùng
+   * @returns Dữ liệu refresh token bao gồm access token, refresh token và session ID
    */
-  public async signup(userData: User): Promise<User> {
-    const findUser = await UserModel
-      .exists({ username: userData.username, email: userData.email })
-      .lean()
-      .exec()
+  private async createRefreshTokenData(
+    userPayload: AccessTokenPayload,
+    userId: ObjectId,
+    clientInfo: ClientInfo,
+  ): Promise<RefreshTokenData> {
+    // Tạo access token và refresh token mới
+    const newAccessToken = this.createAccessToken(userPayload)
+    const newRefreshToken = this.createRefreshToken()
+    const newSessionId = await this.createSession(
+      newRefreshToken,
+      userId,
+      clientInfo,
+    )
 
-    if (findUser)
-      throw new HttpException(409, `USER_EMAIL_OR_USERNAME_EXISTED`)
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      sessionId: newSessionId,
+    }
+  }
 
-    const passwordHash = await hash(userData.password, 10)
-
-    await UserModel.create({ ...userData, password: passwordHash })
-    const { password, ...safeUserData } = userData
-    return safeUserData as User
+  /**
+   * Lấy thông tin phiên đăng nhập theo ID
+   * @param sessionId - ID của phiên đăng nhập
+   * @returns Promise<Session> - Thông tin phiên đăng nhập
+   * @throws HttpException - Nếu không tìm thấy phiên đăng nhập
+   */
+  public async getSessionById(sessionId: string): Promise<Session> {
+    const session = await SessionModel.findById(sessionId).lean().exec()
+    if (!session)
+      throw new HttpException(401, 'INVALID_SESSION_ID')
+    return session
   }
 
   /**
@@ -98,37 +125,30 @@ export class AuthService {
    * @throws HttpException - Nếu email hoặc mật khẩu không đúng
    * @throws HttpException - Nếu email chưa được xác nhận
    */
-  public async login(loginData: LoginCredential): Promise<LoginData> {
-    const findUser = await UserModel.findOne({ username: loginData.username }).lean().exec()
-    if (!findUser)
-      throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
-
-    const isPasswordMatching = await compare(loginData.password, findUser.password)
+  public async login(
+    loginData: LoginCredential,
+    user: UserDB,
+  ): Promise<LoginData> {
+    const isPasswordMatching = await compare(loginData.password, user.password)
     if (!isPasswordMatching)
       throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
 
-    if (!findUser.isEmailVerified)
+    if (!user.isEmailVerified)
       throw new HttpException(401, 'EMAIL_NOT_VERIFIED')
 
-    const refreshToken = this.createRefreshToken()
-    const accessToken = this.createAccessToken(findUser)
-    const sessionId = await this.createSession(
-      refreshToken,
-      findUser._id,
-      loginData.info || {},
-    )
-    const user: AccessTokenPayload = {
-      id: findUser._id.toString(),
-      role: findUser.role,
-      name: findUser.fullName,
+    const userPayload: AccessTokenPayload = {
+      id: user._id.toString(),
+      role: user.role,
+      name: user.fullName,
     }
 
-    return {
-      accessToken,
-      refreshToken,
-      sessionId,
-      user,
-    }
+    const refreshTokenData = await this.createRefreshTokenData(
+      userPayload,
+      user._id,
+      loginData.info || {},
+    )
+
+    return { user: userPayload, ...refreshTokenData }
   }
 
   /**
@@ -158,39 +178,35 @@ export class AuthService {
   }
 
   /**
-   * Tạo mới access token sử dụng refresh token
-   * @param sessionId - ID của phiên đăng nhập cần tạo mới access token
-   * @param refreshToken - Refresh token của người dùng
-   * @return Promise<TokenData> - Dữ liệu token bao gồm token và thời gian hết hạn
-   * @throws HttpException - Nếu refresh token không hợp lệ hoặc đã bị thu hồi
-   * @throws HttpException - Nếu không tìm thấy người dùng liên kết với phiên đăng nhập
+   * Làm mới phiên đăng nhập bằng cách cấp phát access token và refresh token mới
+   * @param user - Đối tượng người dùng
+   * @param session - Đối tượng phiên đăng nhập
+   * @param refreshToken - Refresh token hiện tại của người dùng
+   * @returns Promise<RefreshTokenData> - Dữ liệu refresh token mới bao gồm access token, refresh token và session ID
+   * @throws HttpException - Nếu refresh token không hợp lệ hoặc phiên đăng nhập đã bị thu hồi
    */
-  public async refreshSession(sessionId: string, refreshToken: string): Promise<RefreshTokenData> {
-    const session = await SessionModel.findById(sessionId).lean().exec()
-    if (!session)
-      throw new HttpException(401, 'INVALID_SESSION_ID')
-
+  public async refreshSession(user: UserDB, session: Session, refreshToken: string): Promise<RefreshTokenData> {
     const isRefreshTokenMatching = await compare(refreshToken, session.refreshTokenHash)
-    if (!isRefreshTokenMatching) {
+    if (!isRefreshTokenMatching || session.revoked) {
       logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}`)
       throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
     }
 
-    const findUser = await UserModel.findById(session.userId).lean().exec()
-    if (!findUser)
-      throw new HttpException(404, `USER_NOT_FOUND`)
+    const userPayload: AccessTokenPayload = {
+      id: user._id.toString(),
+      role: user.role,
+      name: user.fullName,
+    }
 
     // Tạo access token và refresh token mới
-    const newAccessToken = this.createAccessToken(findUser)
-    const newRefreshToken = this.createRefreshToken()
-    const newSessionId = await this.createSession(
-      newRefreshToken,
-      findUser._id,
+    const refreshTokenData = await this.createRefreshTokenData(
+      userPayload,
+      user._id,
       {
-        userAgent: session.userAgent || '',
         ipAddress: session.ipAddress || '',
+        userAgent: session.userAgent || '',
         deviceInfo: session.deviceInfo || '',
-      } as ClientInfo,
+      },
     )
 
     // Thu hồi phiên đăng nhập cũ
@@ -205,12 +221,8 @@ export class AuthService {
       throw new HttpException(401, 'REVOKED_REFRESH_TOKEN')
     }
 
-    logger.info(`Đã thu hồi phiên đăng nhập cũ\nOld SessionID: ${session._id.toString()}\nNew SessionID: ${newSessionId}`)
+    logger.info(`Đã thu hồi phiên đăng nhập cũ\nOld SessionID: ${session._id.toString()}\nNew SessionID: ${refreshTokenData.sessionId}`)
 
-    return {
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-      sessionId: newSessionId,
-    }
+    return refreshTokenData
   }
 }

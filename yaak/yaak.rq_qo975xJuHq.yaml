@@ -2,9 +2,9 @@ type: http_request
 model: http_request
 id: rq_qo975xJuHq
 createdAt: 2025-12-11T01:10:57.245694721
-updatedAt: 2025-12-27T09:51:11.020065923
+updatedAt: 2025-12-27T14:42:52.613425460
 workspaceId: wk_5U6CCvq3pJ
-folderId: fl_KKkHUzqC5j
+folderId: fl_ncLGfgsYtC
 authentication: {}
 authenticationType: null
 body:
@@ -25,5 +25,5 @@ headers:
 method: POST
 name: Register
 sortPriority: 0.0
-url: ${[ BE_API_URL ]}/auth/register
+url: ${[ BE_API_URL ]}/users
 urlParameters: []

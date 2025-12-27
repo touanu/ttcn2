@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_6gW4euSm9W
 createdAt: 2025-12-12T09:36:27.356231312
-updatedAt: 2025-12-27T10:08:16.762164375
+updatedAt: 2025-12-27T14:42:48.856925374
 workspaceId: wk_5U6CCvq3pJ
 folderId: fl_ncLGfgsYtC
 authentication: {}
@@ -21,6 +21,6 @@ headers:
   id: A2Fp3xmhHt
 method: POST
 name: RQ Verify Email
-sortPriority: 0.0
+sortPriority: 1000.0
 url: ${[ BE_API_URL ]}/users/request-verify-email
 urlParameters: []

@@ -2,7 +2,7 @@ import type { UserRole } from '@shared/types'
 import type { ObjectId } from 'mongoose'
 
 export interface User {
-  _id: ObjectId
+  _id?: ObjectId
   username: string
   email: string
   isEmailVerified?: boolean

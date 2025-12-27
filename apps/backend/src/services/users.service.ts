@@ -1,4 +1,5 @@
 import type { User } from '@shared/interfaces/users.interface'
+import type { UserDB } from '@shared/types'
 import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
@@ -7,22 +8,29 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export class UsersService {
-  async getUserById(id: string): Promise<User> {
-    const user = await UserModel.findById(id).lean<User>().exec()
+  async getUserById(id: string): Promise<UserDB> {
+    const user = await UserModel.findById(id).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'USER_NOT_FOUND')
     return user
   }
 
-  async getUserByEmail(email: string): Promise<User> {
-    const user = await UserModel.findOne({ email }).lean<User>().exec()
+  async findUserByUsername(username: string): Promise<UserDB> {
+    const user = await UserModel.findOne({ username }).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'USER_NOT_FOUND')
     return user
   }
 
-  async getAllUsers(): Promise<User[]> {
-    const users = await UserModel.find().lean<User[]>().exec()
+  async getUserByEmail(email: string): Promise<UserDB> {
+    const user = await UserModel.findOne({ email }).lean<UserDB>().exec()
+    if (!user)
+      throw new HttpException(404, 'USER_NOT_FOUND')
+    return user
+  }
+
+  async getAllUsers(): Promise<UserDB[]> {
+    const users = await UserModel.find().lean<UserDB[]>().exec()
     return users
   }
 
@@ -40,7 +48,9 @@ export class UsersService {
     const hashedPassword = await hash(user.password, 10)
     const created: User = { ...user, password: hashedPassword }
     await UserModel.create({ ...created })
-    return created
+
+    const { password, ...safeUserData } = created
+    return safeUserData as User
   }
 
   async updateUserPassword(id: ObjectId, newPassword: string): Promise<void> {
@@ -54,7 +64,7 @@ export class UsersService {
       throw new HttpException(404, 'USER_NOT_FOUND')
   }
 
-  async updateUser(id: string, update: Partial<User>): Promise<User> {
+  async updateUser(id: string, update: Partial<User>): Promise<UserDB> {
     if (typeof update.password === 'string' && update.password.length > 0) {
       update = { ...update, password: await hash(update.password, 10) }
     }
@@ -67,7 +77,7 @@ export class UsersService {
     if (!updated)
       throw new HttpException(404, 'USER_NOT_FOUND')
 
-    return updated as User
+    return updated
   }
 
   async deleteUser(id: string): Promise<void> {
