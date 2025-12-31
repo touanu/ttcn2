@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
-import { configDir } from '@shared/utils'
+import { configDir } from '@shared/utils/currentDirectory'
 import { config } from 'dotenv'
 import { z } from 'zod'
 

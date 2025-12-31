@@ -1,2 +1,5 @@
-export * from './currentDirectory'
+// Không tương thích với Nuxt
+// import bằng '@shared/utils/currentDirectory
+// export * from './currentDirectory'
+
 export * from './validation'
