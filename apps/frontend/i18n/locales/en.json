@@ -75,5 +75,17 @@
   "BACK_TO_REGISTER": "Back to Registration",
   "USER_DROPDOWN_PROFILE": "Profile",
   "USER_DROPDOWN_SETTINGS": "Settings",
-  "USER_DROPDOWN_LOGOUT": "Logout"
+  "USER_DROPDOWN_LOGOUT": "Logout",
+  "NAVIGATION_MENU_TITLE": "Navigation",
+  "USER_ACTION_MENU_TITLE": "User Actions",
+  "ERROR_TITLE": "Error",
+  "SUCCESS_TITLE": "Success",
+  "LOGIN_FAILED": "Please check your information and try again.",
+  "REGISTRATION_FAILED": "Please check your information and try again.",
+  "REGISTRATION_SUCCESS": "Please check your email to verify your account.",
+  "INTERNAL_SERVER_ERROR": "Internal server error. Please try again later.",
+  "PASSWORD_UPPERCASE_REQUIRED": "Password must contain at least one uppercase letter.",
+  "PASSWORD_SPECIAL_CHARACTER_REQUIRED": "Password must contain at least one special character.",
+  "PASSWORD_NUMBER_REQUIRED": "Password must contain at least {min} number.",
+  "USER_EMAIL_OR_USERNAME_EXISTED": "Email or username already exists."
 }

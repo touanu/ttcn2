@@ -1,4 +1,5 @@
-import type { SuccessResponseBody, User } from '@shared/interfaces'
+import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/interfaces'
+import type { UserDB } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { OtpService } from '@services/otp.service'
@@ -76,8 +77,16 @@ export class UsersController {
   })
 
   public requestEmailVerification: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    let { email, username } = req.body
+
+    let user: UserDB
+    if (username) {
+      user = await this.userService.findUserByUsername(username)
+      email = user.email
+    }
+    else {
+      user = await this.userService.getUserByEmail(email)
+    }
 
     if (user.isEmailVerified)
       throw new HttpException(409, 'EMAIL_ALREADY_VERIFIED')
@@ -85,9 +94,10 @@ export class UsersController {
     const { otp, hashedOTP } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION')
     this.otpService.sendEmailVerificationMail(email, user.fullName, otp, hashedOTP)
 
-    const response: SuccessResponseBody<undefined> = {
+    const response: RequestVerifyEmailResponse = {
       success: true,
       message: 'EMAIL_VERIFICATION_OTP_SENT',
+      data: { email },
     }
 
     res.status(200).json(response)

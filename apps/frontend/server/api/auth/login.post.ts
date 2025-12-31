@@ -1,11 +1,12 @@
 import type { LoginCredential, LoginData, ResponseBody, SuccessResponseBody } from '@shared/interfaces'
-import { loginSchema } from '#shared/schemas/auth.schema'
+import { loginUserSchema } from '@shared/schemas/auth'
 import { UAParser } from 'ua-parser-js'
+import { translate } from '~~/server/utils/translate'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
-  const user: LoginCredential = await readValidatedBody(event, loginSchema.parse)
+  const user: LoginCredential = await readValidatedBody(event, loginUserSchema.parse)
 
   const userAgent = event.node.req.headers['user-agent'] || ''
   const parsedUA = UAParser(userAgent)
@@ -21,10 +22,6 @@ export default defineEventHandler(async (event) => {
       body: user,
     })
 
-    if (!res.success) {
-      throw new Error(res.message || 'LOGIN_FAILED')
-    }
-
     const loginData = res.data as LoginData
 
     await setUserSession(event, {
@@ -38,11 +35,15 @@ export default defineEventHandler(async (event) => {
 
     return { success: true, message: 'LOGIN_SUCCESS' } as SuccessResponseBody<null>
   }
-  catch (error) {
-    console.error('Đăng nhập thất bại:', error)
+  catch (error: any) {
+    logger.error('Login error:', error)
     throw createError({
-      status: 401,
-      message: 'BAD_CREDENTIALS',
+      statusCode: error.statusCode || 500,
+      statusMessage: error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR'),
+      message: error.data?.error?.message
+        ? await translate(event, error.data?.error?.message)
+        : await translate(event, 'INTERNAL_SERVER_ERROR'),
+      data: { errorCode: error.data?.error?.message },
     })
   }
 })

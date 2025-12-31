@@ -1,4 +1,5 @@
 import { ACCESS_TOKEN_SECRET, BE_URL, FE_PORT, NODE_ENV } from '@shared/config'
+import { OTP_LENGTH } from '@shared/constants'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -6,6 +7,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     beApiBaseUrl: `${BE_URL}/api/v1`,
     accessTokenSecret: ACCESS_TOKEN_SECRET,
+    public: {
+      otpLength: OTP_LENGTH,
+    },
   },
   devtools: {
     enabled: NODE_ENV === 'development',
@@ -55,6 +59,8 @@ export default defineNuxtConfig({
       name: 'English',
       file: { path: 'en.json', cache: NODE_ENV === 'production' },
     }],
+    experimental: {
+      localeDetector: 'localeDetector.ts',
+    },
   },
-
 })

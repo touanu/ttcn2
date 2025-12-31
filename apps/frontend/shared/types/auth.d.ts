@@ -1,14 +1,9 @@
 import type { AccessTokenPayload } from '@shared/interfaces'
 
-// shared/types/auth.d.ts
 declare module '#auth-utils' {
-  interface User extends AccessTokenPayload {
+  interface User extends AccessTokenPayload {}
 
-  }
-
-  interface UserSession {
-
-  }
+  interface UserSession {}
 
   interface SecureSessionData {
     accessToken: string

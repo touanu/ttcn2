@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import type { OtpSchema } from '#shared/schemas/auth.schema'
 import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
-import { otpSchema } from '#shared/schemas/auth.schema'
+import type { OtpOnlyDto } from '@shared/schemas/otp'
+import { hideRealEmailAddress } from '@shared/utils'
 
 const props = defineProps<{
   email: string
   isResending?: boolean
 }>()
-
 const emit = defineEmits<{
-  submit: [payload: FormSubmitEvent<OtpSchema>]
+  submit: [payload: FormSubmitEvent<OtpOnlyDto>]
   resendOtp: []
   backToRegister: []
 }>()
-
+const { public: { otpLength } } = useRuntimeConfig()
 const countdown = ref(60)
 const isCountingDown = ref(false)
 
 const otpFields: AuthFormField[] = [{
   name: 'otp',
-  type: 'text',
+  type: 'otp',
   label: $t('OTP_LABEL'),
-  placeholder: $t('OTP_PLACEHOLDER'),
+  placeholder: '○',
+  length: otpLength,
   required: true,
 }]
 
-function onSubmit(payload: FormSubmitEvent<OtpSchema>): void {
+function onSubmit(payload: FormSubmitEvent<OtpOnlyDto>): void {
   emit('submit', payload)
 }
 
@@ -50,12 +50,6 @@ function startCountdown(): void {
   }, 1000)
 }
 
-const validateForm = createFormValidator(otpSchema)
-
-function backToRegister(): void {
-  emit('backToRegister')
-}
-
 onMounted(() => {
   startCountdown()
 })
@@ -63,20 +57,16 @@ onMounted(() => {
 
 <template>
   <UAuthForm
-    :schema="otpSchema"
-    :validate="validateForm"
     :title="$t('OTP_VERIFICATION_TITLE')"
-    :description="$t('OTP_VERIFICATION_DESCRIPTION', { email: props.email })"
+    :description="$t('OTP_VERIFICATION_DESCRIPTION', { email: hideRealEmailAddress(props.email) })"
     icon="i-lucide-mail-check"
     :fields="otpFields"
-    :submit-button="{
-      label: $t('BUTTON_VERIFY_OTP'),
-      loading: props.isResending,
-    }"
+    class="items-center"
+    :validate-on="[]"
     @submit="onSubmit"
   >
     <template #description>
-      {{ $t('OTP_SENT_TO_EMAIL', { email: props.email }) }}
+      {{ $t('OTP_SENT_TO_EMAIL', { email: hideRealEmailAddress(props.email) }) }}
     </template>
 
     <template #footer>
@@ -92,15 +82,6 @@ onMounted(() => {
             @click="resendOtp"
           >
             {{ $t('RESEND_OTP_BUTTON') }}
-          </UButton>
-        </div>
-        <div>
-          <UButton
-            variant="link"
-            color="neutral"
-            @click="backToRegister"
-          >
-            {{ $t('BACK_TO_REGISTER') }}
           </UButton>
         </div>
       </div>

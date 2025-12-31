@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { RegisterSchema } from '#shared/schemas/auth.schema'
 import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
-import { registerSchema } from '#shared/schemas/auth.schema'
+import type { CreateUserDto } from '@shared/schemas/user'
+import { createUserSchema } from '@shared/schemas/user'
 
 const emit = defineEmits<{
-  submit: [payload: FormSubmitEvent<RegisterSchema>]
+  submit: [payload: FormSubmitEvent<CreateUserDto>]
   switchToLogin: []
 }>()
 
@@ -32,17 +32,11 @@ const registerFields: AuthFormField[] = [{
   type: 'password',
   placeholder: $t('PASSWORD_PLACEHOLDER'),
   required: true,
-}, {
-  name: 'confirmPassword',
-  label: $t('CONFIRM_PASSWORD_LABEL'),
-  type: 'password',
-  placeholder: $t('CONFIRM_PASSWORD_PLACEHOLDER'),
-  required: true,
 }]
 
-const validateForm = createFormValidator(registerSchema)
+const validateForm = createFormValidator(createUserSchema)
 
-function onSubmit(payload: FormSubmitEvent<RegisterSchema>): void {
+function onSubmit(payload: FormSubmitEvent<CreateUserDto>): void {
   emit('submit', payload)
 }
 
@@ -53,7 +47,7 @@ function switchToLogin(): void {
 
 <template>
   <UAuthForm
-    :schema="registerSchema"
+    :schema="createUserSchema"
     :validate="validateForm"
     :title="$t('REGISTER_MODAL_TITLE')"
     :description="$t('REGISTER_MODAL_DESCRIPTION')"

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
       throw createError({ status: 401, message: 'UNAUTHORIZED' })
     }
 
-    const res = await $fetch<ResponseBody>(`${config.beApiBaseUrl}/auth/logout`, {
+    await $fetch<ResponseBody>(`${config.beApiBaseUrl}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -21,17 +21,15 @@ export default defineEventHandler(async (event) => {
       body: { sessionId },
     })
 
-    if (!res.success)
-      throw new Error(res.message || 'LOGOUT_FAILED')
-
     await clearUserSession(event)
     return { success: true, message: 'LOGOUT_SUCCESS' } as SuccessResponseBody<null>
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Đăng xuất thất bại:', error)
     throw createError({
-      status: 500,
-      message: 'LOGOUT_FAILED',
+      statusCode: error.statusCode || 500,
+      statusMessage: error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR'),
+      message: await translate(event, error.data.error.message),
     })
   }
 })

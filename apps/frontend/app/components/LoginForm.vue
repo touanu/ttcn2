@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { LoginSchema } from '#shared/schemas/auth.schema'
 import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
-import { loginSchema } from '#shared/schemas/auth.schema'
+import type { LoginUserDto } from '@shared/schemas/auth'
+import { loginUserSchema } from '@shared/schemas/auth'
 
 const emit = defineEmits<{
-  submit: [payload: FormSubmitEvent<LoginSchema>]
+  submit: [payload: FormSubmitEvent<LoginUserDto>]
   switchToRegister: []
 }>()
 
@@ -26,9 +26,9 @@ const loginFields: AuthFormField[] = [{
   type: 'checkbox',
 }]
 
-const validateForm = createFormValidator(loginSchema)
+const validateForm = createFormValidator(loginUserSchema)
 
-function onSubmit(payload: FormSubmitEvent<LoginSchema>): void {
+function onSubmit(payload: FormSubmitEvent<LoginUserDto>): void {
   emit('submit', payload)
 }
 
@@ -39,7 +39,7 @@ function switchToRegister(): void {
 
 <template>
   <UAuthForm
-    :schema="loginSchema"
+    :schema="loginUserSchema"
     :validate="validateForm"
     :title="$t('LOGIN_MODAL_TITLE')"
     :description="$t('LOGIN_MODAL_DESCRIPTION')"
