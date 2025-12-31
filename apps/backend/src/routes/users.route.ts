@@ -1,9 +1,15 @@
 import type { Routes } from '@interfaces/routes.interface'
 import { UsersController } from '@controllers/users.controller'
-import { emailVerificationSchema, passwordResetSchema } from '@dtos/otp.dto'
-import { createUserSchema, emailOnlySchema, updateUserSchema } from '@dtos/users.dto'
 import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'
+import {
+  createUserSchema,
+  emailOnlySchema,
+  emailVerificationSchema,
+  passwordResetSchema,
+  requestVerifyEmailSchema,
+  updateUserSchema,
+} from '@shared/schemas'
 import { Router } from 'express'
 import { inject, injectable } from 'tsyringe'
 
@@ -41,7 +47,7 @@ export class UsersRoute implements Routes {
     )
     this.router.post(
       `${this.path}/request-verify-email`,
-      ValidationMiddleware(emailOnlySchema),
+      ValidationMiddleware(requestVerifyEmailSchema),
       this.userController.requestEmailVerification,
     )
     this.router.post(

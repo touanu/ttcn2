@@ -7,6 +7,7 @@ settings:
 overrides:
   '@shared/config': workspace:*
   '@shared/interfaces': workspace:*
+  '@shared/schemas': workspace:*
   '@shared/types': workspace:*
   '@shared/utils': workspace:*
   '@shared/constants': workspace:*
@@ -71,6 +72,9 @@ importers:
       '@shared/interfaces':
         specifier: workspace:*
         version: link:../../packages/interfaces
+      '@shared/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@shared/types':
         specifier: workspace:*
         version: link:../../packages/types

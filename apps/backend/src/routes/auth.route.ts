@@ -1,13 +1,13 @@
 import type { Routes } from '@interfaces/routes.interface'
 import { AuthController } from '@controllers/auth.controller'
+import { AuthMiddleware } from '@middlewares/auth.middleware'
+import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
+import { ValidationMiddleware } from '@middlewares/validation.middleware'
 import {
   loginUserSchema,
   logOutSchema,
   refreshTokenSchema,
-} from '@dtos/auth.dto'
-import { AuthMiddleware } from '@middlewares/auth.middleware'
-import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
-import { ValidationMiddleware } from '@middlewares/validation.middleware'
+} from '@shared/schemas'
 import { Router } from 'express'
 import { inject, injectable } from 'tsyringe'
 

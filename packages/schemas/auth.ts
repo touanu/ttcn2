@@ -1,10 +1,12 @@
 import z from 'zod'
-import { passwordSchema, usernameSchema } from './users.dto'
+import { passwordSchema, usernameSchema } from './user'
 
 export const loginUserSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
 })
+
+export type LoginUserDto = z.infer<typeof loginUserSchema>
 
 export const logOutSchema = z.object({
   sessionId: z

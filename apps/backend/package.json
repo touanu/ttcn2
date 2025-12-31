@@ -13,6 +13,7 @@
     "@shared/config": "*",
     "@shared/constants": "*",
     "@shared/interfaces": "*",
+    "@shared/schemas": "*",
     "@shared/types": "*",
     "@shared/utils": "*",
     "@zod/core": "^0.11.6",
