@@ -91,8 +91,8 @@ export class UsersController {
     if (user.isEmailVerified)
       throw new HttpException(409, 'EMAIL_ALREADY_VERIFIED')
 
-    const { otp, hashedOTP } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION')
-    this.otpService.sendEmailVerificationMail(email, user.fullName, otp, hashedOTP)
+    const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION', true)
+    this.otpService.sendEmailVerificationMail(email, user.fullName, otp, verificationToken)
 
     const response: RequestVerifyEmailResponse = {
       success: true,
@@ -104,13 +104,13 @@ export class UsersController {
   })
 
   public verifyEmail: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email, otp, hash } = req.body
+    const { email, otp } = req.body
     const user = await this.userService.getUserByEmail(email)
 
     if (user.isEmailVerified)
       throw new HttpException(409, 'EMAIL_ALREADY_VERIFIED')
 
-    await this.otpService.verifyOTP(user._id, 'EMAIL_VERIFICATION', otp, hash)
+    await this.otpService.verifyOTP(user._id, 'EMAIL_VERIFICATION', otp)
     await this.userService.updateUser(user._id.toString(), { isEmailVerified: true })
 
     const response: SuccessResponseBody<undefined> = {
@@ -125,8 +125,8 @@ export class UsersController {
     const { email } = req.body
     const user = await this.userService.getUserByEmail(email)
 
-    const { otp, hashedOTP } = await this.otpService.requestOTP(user._id, 'PASSWORD_RESET')
-    this.otpService.sendPasswordResetMail(email, user.fullName, otp, hashedOTP)
+    const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'PASSWORD_RESET', true)
+    this.otpService.sendPasswordResetMail(email, user.fullName, otp, verificationToken)
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
@@ -137,11 +137,40 @@ export class UsersController {
   })
 
   public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { email, otp, hash, newPassword } = req.body
+    const { email, otp, newPassword } = req.body
     const user = await this.userService.getUserByEmail(email)
 
-    await this.otpService.verifyOTP(user._id, 'PASSWORD_RESET', otp, hash)
+    await this.otpService.verifyOTP(user._id, 'PASSWORD_RESET', otp)
     await this.userService.updateUser(user._id.toString(), { password: newPassword })
+
+    const response: SuccessResponseBody<undefined> = {
+      success: true,
+      message: 'PASSWORD_RESET_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  public verifyEmailByToken: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { token } = req.params
+
+    const userId = await this.otpService.verifyToken(token, 'EMAIL_VERIFICATION')
+    await this.userService.updateUser(userId.toString(), { isEmailVerified: true })
+
+    const response: SuccessResponseBody<undefined> = {
+      success: true,
+      message: 'EMAIL_VERIFIED',
+    }
+
+    res.status(200).json(response)
+  })
+
+  public verifyPasswordResetToken: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const { token } = req.params
+    const { newPassword } = req.body
+
+    const userId = await this.otpService.verifyToken(token, 'PASSWORD_RESET')
+    await this.userService.updateUser(userId.toString(), { password: newPassword })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,

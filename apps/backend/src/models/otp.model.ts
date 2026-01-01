@@ -14,6 +14,13 @@ const OTPSchema = new Schema({
     required: true,
     trim: true,
   },
+  verificationToken: {
+    type: String,
+    required: false,
+    trim: true,
+    unique: true,
+    sparse: true,
+  },
   otpType: {
     type: String,
     enum: otpTypes,

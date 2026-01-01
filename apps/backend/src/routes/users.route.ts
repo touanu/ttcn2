@@ -6,6 +6,7 @@ import {
   createUserSchema,
   emailOnlySchema,
   emailVerificationSchema,
+  passwordResetByTokenSchema,
   passwordResetSchema,
   requestVerifyEmailSchema,
   updateUserSchema,
@@ -66,6 +67,17 @@ export class UsersRoute implements Routes {
       rateLimitMiddleware(10, true),
       ValidationMiddleware(passwordResetSchema),
       this.userController.resetPassword,
+    )
+    this.router.get(
+      `${this.path}/verify-email/:token`,
+      rateLimitMiddleware(10, true),
+      this.userController.verifyEmailByToken,
+    )
+    this.router.post(
+      `${this.path}/reset-password/:token`,
+      rateLimitMiddleware(10, true),
+      ValidationMiddleware(passwordResetByTokenSchema),
+      this.userController.verifyPasswordResetToken,
     )
   }
 }

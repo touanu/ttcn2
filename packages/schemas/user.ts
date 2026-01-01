@@ -47,6 +47,11 @@ export const passwordResetSchema = emailVerificationSchema.safeExtend({
 })
 export type PasswordResetDto = z.infer<typeof passwordResetSchema>
 
+export const passwordResetByTokenSchema = z.object({
+  newPassword: passwordSchema,
+})
+export type PasswordResetByTokenDto = z.infer<typeof passwordResetByTokenSchema>
+
 export const requestVerifyEmailSchema = z.object({
   email: emptyAsNull(emailSchema.nullish()),
   username: emptyAsNull(usernameSchema.nullish()),
