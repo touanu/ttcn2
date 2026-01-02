@@ -1,31 +1,26 @@
 import type { AccessTokenPayload, RefreshTokenData, ResponseBody } from '@shared/interfaces'
+import type { H3Event } from 'h3'
 import jwt from 'jsonwebtoken'
 
 const appliedPaths = [
   '/api/auth/logout',
 ]
 
-async function refreshAccessToken(sessionId: string, refreshToken: string): Promise<RefreshTokenData> {
-  const { beApiBaseUrl } = useRuntimeConfig()
-  try {
-    const res = await $fetch<ResponseBody>(`${beApiBaseUrl}/auth/refresh`, {
-      method: 'POST',
-      credentials: 'include',
-      body: {
-        sessionId,
-        refreshToken,
-      },
-    })
+async function refreshAccessToken(
+  event: H3Event,
+  sessionId: string,
+  refreshToken: string,
+): Promise<RefreshTokenData> {
+  const res = await useAPI<ResponseBody>(event, `/auth/refresh`, {
+    method: 'POST',
+    credentials: 'include',
+    body: {
+      sessionId,
+      refreshToken,
+    },
+  })
 
-    if (!res.success || !res.data) {
-      throw new Error(res.message || 'Đã có lỗi xảy ra')
-    }
-
-    return res.data as RefreshTokenData
-  }
-  catch {
-    throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
-  }
+  return res.data as RefreshTokenData
 }
 
 export default defineEventHandler(async (event) => {
@@ -52,14 +47,14 @@ export default defineEventHandler(async (event) => {
   }
   catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      const tokenData = await refreshAccessToken(session.id, session.secure.refreshToken)
+      const tokenData = await refreshAccessToken(event, session.id, session.secure.refreshToken)
       session.secure.accessToken = tokenData.accessToken.token
       session.secure.refreshToken = tokenData.refreshToken.token
       session.id = tokenData.sessionId
       await setUserSession(event, session)
     }
     else {
-      console.error('Xác thực access token thất bại:', error)
+      logger.error('Xác thực access token thất bại:', error)
       await clearUserSession(event)
       throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
     }

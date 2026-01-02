@@ -1,33 +1,24 @@
-import type { ResponseBody, SuccessResponseBody } from '@shared/interfaces'
+import type { SuccessResponseBody } from '@shared/interfaces'
 import { requestVerifyEmailSchema } from '@shared/schemas/user'
 
 export default defineEventHandler(async (event) => {
-  const { beApiBaseUrl } = useRuntimeConfig()
   const { email, username } = await readValidatedBody(event, requestVerifyEmailSchema.parse)
 
-  try {
-    const res = await $fetch<ResponseBody>(`${beApiBaseUrl}/users/request-verify-email`, {
+  const rqVerifyEmailResponse = await useAPI<{ email: string }>(
+    event,
+    `/users/request-verify-email`,
+    {
       method: 'POST',
       body: {
         email,
         username,
       },
-    })
+    },
+  )
 
-    const rqVerifyEmailResponse = res as SuccessResponseBody<{ email: string }>
-
-    return {
-      success: true,
-      message: 'AUTH.OTP.RESEND_SUCCESS',
-      data: { email: rqVerifyEmailResponse.data?.email },
-    } as SuccessResponseBody<{ email: string }>
-  }
-  catch (error: any) {
-    console.error('Yêu cầu gửi lại OTP thất bại:', error)
-    throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR'),
-      message: await translate(event, error.data.error.message),
-    })
-  }
+  return {
+    success: true,
+    message: await translate(event, 'AUTH.OTP.RESEND_SUCCESS'),
+    data: { email: rqVerifyEmailResponse.email },
+  } as SuccessResponseBody<{ email: string }>
 })
