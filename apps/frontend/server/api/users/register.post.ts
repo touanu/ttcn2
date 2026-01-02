@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: 'REGISTER_SUCCESS',
+      message: 'AUTH.REGISTER.SUCCESS',
       data: { email: rqVerifyEmailResponse.data?.email },
     } as RequestVerifyEmailResponse
   }

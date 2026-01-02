@@ -131,10 +131,10 @@ export class AuthService {
   ): Promise<LoginData> {
     const isPasswordMatching = await compare(loginData.password, user.password)
     if (!isPasswordMatching)
-      throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
+      throw new HttpException(401, 'AUTH.LOGIN.WRONG_CREDENTIALS')
 
     if (!user.isEmailVerified)
-      throw new HttpException(401, 'EMAIL_NOT_VERIFIED')
+      throw new HttpException(401, 'AUTH.EMAIL_NOT_VERIFIED')
 
     const userPayload: AccessTokenPayload = {
       id: user._id.toString(),

@@ -34,7 +34,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
     const accessToken = getAuthorization(userReq)
 
     if (!accessToken)
-      return next(new HttpException(401, 'ACCESS_TOKEN_NOT_FOUND'))
+      return next(new HttpException(401, 'AUTH.ACCESS_TOKEN_NOT_FOUND'))
 
     let payload: AccessTokenPayload
     try {
@@ -42,20 +42,20 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
     }
     catch (err) {
       if (err instanceof TokenExpiredError)
-        return next(new HttpException(401, 'ACCESS_TOKEN_EXPIRED'))
+        return next(new HttpException(401, 'AUTH.ACCESS_TOKEN_EXPIRED'))
 
       if (err instanceof JsonWebTokenError)
-        return next(new HttpException(401, 'ACCESS_TOKEN_INVALID'))
+        return next(new HttpException(401, 'AUTH.ACCESS_TOKEN_INVALID'))
 
-      return next(new HttpException(401, 'AUTHENTICATION_FAILED'))
+      return next(new HttpException(401, 'AUTH.AUTHENTICATION_FAILED'))
     }
 
     if (!payload.id)
-      return next(new HttpException(401, 'ACCESS_TOKEN_INVALID'))
+      return next(new HttpException(401, 'AUTH.ACCESS_TOKEN_INVALID'))
 
     const findUser = await UserModel.findById(String(payload.id)).lean().exec()
     if (!findUser)
-      return next(new HttpException(401, 'USER_NOT_FOUND'))
+      return next(new HttpException(401, 'AUTH.USER_NOT_FOUND'))
 
     userReq.user = findUser
     next()

@@ -23,9 +23,8 @@ async function refreshAccessToken(sessionId: string, refreshToken: string): Prom
 
     return res.data as RefreshTokenData
   }
-  catch (err) {
-    console.error('Làm mới access token thất bại:', err)
-    throw createError({ status: 401, message: 'UNAUTHORIZED' })
+  catch {
+    throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
   }
 }
 
@@ -39,7 +38,7 @@ export default defineEventHandler(async (event) => {
   const { accessTokenSecret } = useRuntimeConfig()
 
   if (!session || !session.user || !session.secure || !session.secure.accessToken || !session.secure.refreshToken) {
-    throw createError({ status: 401, message: 'UNAUTHORIZED' })
+    throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
   }
 
   const accessToken = session.secure.accessToken
@@ -49,7 +48,7 @@ export default defineEventHandler(async (event) => {
     payload = jwt.verify(accessToken, accessTokenSecret) as AccessTokenPayload
 
     if (!payload.id)
-      throw new Error('ACCESS_TOKEN_INVALID')
+      throw new Error('AUTH.ACCESS_TOKEN_INVALID')
   }
   catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -62,7 +61,7 @@ export default defineEventHandler(async (event) => {
     else {
       console.error('Xác thực access token thất bại:', error)
       await clearUserSession(event)
-      throw createError({ status: 401, message: 'UNAUTHORIZED' })
+      throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
     }
   }
 })

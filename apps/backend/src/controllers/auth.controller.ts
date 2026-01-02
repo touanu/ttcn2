@@ -20,7 +20,7 @@ export class AuthController {
     const response: SuccessResponseBody<User> = {
       success: true,
       data: signUpUserData,
-      message: 'REGISTER_SUCCESS',
+      message: 'AUTH.REGISTER.SUCCESS',
     }
 
     res.status(201).json(response)
@@ -31,14 +31,14 @@ export class AuthController {
     const findUser = await this.userService.findUserByUsername(loginData.username)
 
     if (!findUser)
-      throw new HttpException(401, 'WRONG_USERNAME_OR_PASSWORD')
+      throw new HttpException(401, 'AUTH.LOGIN.WRONG_CREDENTIALS')
 
     const data: LoginData = await this.authService.login(loginData, findUser)
 
     const response: SuccessResponseBody<LoginData> = {
       success: true,
       data,
-      message: 'LOGIN_SUCCESS',
+      message: 'AUTH.LOGIN.SUCCESS',
     }
 
     res.status(200).json(response)
@@ -51,7 +51,7 @@ export class AuthController {
     const response: SuccessResponseBody<null> = {
       success: true,
       data: null,
-      message: 'LOGOUT_SUCCESS',
+      message: 'AUTH.LOGOUT.SUCCESS',
     }
 
     res.status(200).json(response)
@@ -66,7 +66,7 @@ export class AuthController {
     const response: SuccessResponseBody<RefreshTokenData> = {
       success: true,
       data,
-      message: 'ACCESS_TOKEN_REFRESHED',
+      message: 'AUTH.ACCESS_TOKEN_REFRESHED',
     }
 
     res.status(200).json(response)

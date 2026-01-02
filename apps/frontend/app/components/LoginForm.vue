@@ -11,18 +11,18 @@ const emit = defineEmits<{
 const loginFields: AuthFormField[] = [{
   name: 'username',
   type: 'text',
-  label: $t('USERNAME_LABEL'),
-  placeholder: $t('USERNAME_PLACEHOLDER'),
+  label: $t('FORMS.USERNAME.LABEL'),
+  placeholder: $t('FORMS.USERNAME.PLACEHOLDER'),
   required: true,
 }, {
   name: 'password',
-  label: $t('PASSWORD_LABEL'),
+  label: $t('FORMS.PASSWORD.LABEL'),
   type: 'password',
-  placeholder: $t('PASSWORD_PLACEHOLDER'),
+  placeholder: $t('FORMS.PASSWORD.PLACEHOLDER'),
   required: true,
 }, {
   name: 'remember',
-  label: $t('REMEMBER_ME_LABEL'),
+  label: $t('FORMS.REMEMBER_ME'),
   type: 'checkbox',
 }]
 
@@ -41,31 +41,31 @@ function switchToRegister(): void {
   <UAuthForm
     :schema="loginUserSchema"
     :validate="validateForm"
-    :title="$t('LOGIN_MODAL_TITLE')"
-    :description="$t('LOGIN_MODAL_DESCRIPTION')"
+    :title="$t('AUTH.LOGIN.TITLE')"
+    :description="$t('AUTH.LOGIN.DESCRIPTION')"
     icon="i-lucide-user"
     :fields="loginFields"
     @submit="onSubmit"
   >
     <template #description>
-      {{ $t('NO_ACCOUNT_TEXT') }}
+      {{ $t('AUTH.LOGIN.NO_ACCOUNT') }}
       <ULink
         class="text-primary font-medium cursor-pointer hover:underline"
         @click.prevent="switchToRegister"
       >
-        {{ $t('BUTTON_REGISTER_TEXT') }}
+        {{ $t('AUTH.BUTTON.REGISTER') }}
       </ULink>.
     </template>
 
     <template #password-hint>
       <ULink to="#" class="text-primary font-medium" tabindex="-1">
-        {{ $t('FORGOT_PASSWORD_TEXT') }}
+        {{ $t('AUTH.LOGIN.FORGOT_PASSWORD') }}
       </ULink>
     </template>
 
     <template #footer>
-      {{ $t('TERMS_OF_SERVICE_TEXT') }} <ULink to="#" class="text-primary font-medium">
-        {{ $t('SUPPORT_TERMS_OF_SERVICE') }}
+      {{ $t('AUTH.TERMS_AGREEMENT') }} <ULink to="#" class="text-primary font-medium">
+        {{ $t('LEGAL.TERMS_OF_SERVICE') }}
       </ULink>.
     </template>
   </UAuthForm>

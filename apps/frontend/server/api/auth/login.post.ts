@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
       },
     })
 
-    return { success: true, message: 'LOGIN_SUCCESS' } as SuccessResponseBody<null>
+    return { success: true, message: 'AUTH.LOGIN.SUCCESS' } as SuccessResponseBody<null>
   }
   catch (error: any) {
     logger.error('Login error:', error)

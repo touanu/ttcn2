@@ -19,7 +19,7 @@ export class UsersController {
     const response: SuccessResponseBody<User[]> = {
       success: true,
       data: users,
-      message: 'GET_USERS_SUCCESS',
+      message: 'USERS.GET_ALL_SUCCESS',
     }
 
     res.status(200).json(response)
@@ -32,7 +32,7 @@ export class UsersController {
     const response: SuccessResponseBody<User> = {
       success: true,
       data: user,
-      message: 'GET_USER_SUCCESS',
+      message: 'USERS.GET_SUCCESS',
     }
 
     res.status(200).json(response)
@@ -45,7 +45,7 @@ export class UsersController {
     const response: SuccessResponseBody<User> = {
       success: true,
       data: user,
-      message: 'CREATE_USER_SUCCESS',
+      message: 'USERS.CREATE_SUCCESS',
     }
 
     res.status(201).json(response)
@@ -59,7 +59,7 @@ export class UsersController {
     const response: SuccessResponseBody<User> = {
       success: true,
       data: user,
-      message: 'UPDATE_USER_SUCCESS',
+      message: 'USERS.UPDATE_SUCCESS',
     }
 
     res.status(200).json(response)
@@ -71,7 +71,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'DELETE_USER_SUCCESS',
+      message: 'USERS.DELETE_SUCCESS',
     }
     res.status(204).json(response)
   })
@@ -89,14 +89,14 @@ export class UsersController {
     }
 
     if (user.isEmailVerified)
-      throw new HttpException(409, 'EMAIL_ALREADY_VERIFIED')
+      throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
 
     const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION', true)
     this.otpService.sendEmailVerificationMail(email, user.fullName, otp, verificationToken)
 
     const response: RequestVerifyEmailResponse = {
       success: true,
-      message: 'EMAIL_VERIFICATION_OTP_SENT',
+      message: 'AUTH.OTP.EMAIL_VERIFICATION_OTP_SENT',
       data: { email },
     }
 
@@ -108,14 +108,14 @@ export class UsersController {
     const user = await this.userService.getUserByEmail(email)
 
     if (user.isEmailVerified)
-      throw new HttpException(409, 'EMAIL_ALREADY_VERIFIED')
+      throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
 
     await this.otpService.verifyOTP(user._id, 'EMAIL_VERIFICATION', otp)
     await this.userService.updateUser(user._id.toString(), { isEmailVerified: true })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'EMAIL_VERIFIED',
+      message: 'AUTH.OTP.EMAIL_VERIFIED',
     }
 
     res.status(200).json(response)
@@ -130,7 +130,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'PASSWORD_RESET_OTP_SENT',
+      message: 'AUTH.PASSWORD_RESET.OTP_SENT',
     }
 
     res.status(200).json(response)
@@ -145,7 +145,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'PASSWORD_RESET_SUCCESS',
+      message: 'AUTH.PASSWORD_RESET.SUCCESS',
     }
 
     res.status(200).json(response)
@@ -159,7 +159,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'EMAIL_VERIFIED',
+      message: 'AUTH.OTP.EMAIL_VERIFIED',
     }
 
     res.status(200).json(response)
@@ -174,7 +174,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
-      message: 'PASSWORD_RESET_SUCCESS',
+      message: 'AUTH.PASSWORD_RESET.SUCCESS',
     }
 
     res.status(200).json(response)

@@ -19,7 +19,7 @@ const isCountingDown = ref(false)
 const otpFields: AuthFormField[] = [{
   name: 'otp',
   type: 'otp',
-  label: $t('OTP_LABEL'),
+  label: $t('AUTH.OTP.LABEL'),
   placeholder: '○',
   length: otpLength,
   required: true,
@@ -57,8 +57,8 @@ onMounted(() => {
 
 <template>
   <UAuthForm
-    :title="$t('OTP_VERIFICATION_TITLE')"
-    :description="$t('OTP_VERIFICATION_DESCRIPTION', { email: hideRealEmailAddress(props.email) })"
+    :title="$t('AUTH.OTP.TITLE')"
+    :description="$t('AUTH.OTP.DESCRIPTION', { email: hideRealEmailAddress(props.email) })"
     icon="i-lucide-mail-check"
     :fields="otpFields"
     class="items-center"
@@ -66,13 +66,13 @@ onMounted(() => {
     @submit="onSubmit"
   >
     <template #description>
-      {{ $t('OTP_SENT_TO_EMAIL', { email: hideRealEmailAddress(props.email) }) }}
+      {{ $t('AUTH.OTP.SENT_TO_EMAIL', { email: hideRealEmailAddress(props.email) }) }}
     </template>
 
     <template #footer>
       <div class="space-y-2 text-center">
         <div v-if="isCountingDown">
-          {{ $t('RESEND_OTP_COUNTDOWN', { seconds: countdown }) }}
+          {{ $t('AUTH.OTP.RESEND_COUNTDOWN', { seconds: countdown }) }}
         </div>
         <div v-else>
           <UButton
@@ -81,7 +81,7 @@ onMounted(() => {
             :loading="props.isResending"
             @click="resendOtp"
           >
-            {{ $t('RESEND_OTP_BUTTON') }}
+            {{ $t('AUTH.OTP.RESEND_BUTTON') }}
           </UButton>
         </div>
       </div>

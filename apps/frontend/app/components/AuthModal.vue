@@ -42,7 +42,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
 
     toast.add({
       title: $t('SUCCESS_TITLE'),
-      description: $t('LOGIN_SUCCESS'),
+      description: $t('AUTH.LOGIN.SUCCESS'),
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
@@ -66,7 +66,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
       if (res.error) {
         toast.add({
           title: $t('ERROR_TITLE'),
-          description: getFirstTranslation(res.message) || $t('RESEND_OTP_FAILED'),
+          description: getFirstTranslation(res.message) || $t('AUTH.OTP.RESEND_FAILED'),
           icon: 'i-lucide-alert-circle',
           color: 'error',
         })
@@ -81,7 +81,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
 
     toast.add({
       title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('LOGIN_FAILED'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.LOGIN.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
@@ -105,7 +105,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promis
 
     toast.add({
       title: $t('SUCCESS_TITLE'),
-      description: $t('REGISTRATION_SUCCESS'),
+      description: $t('AUTH.REGISTER.SUCCESS'),
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
@@ -117,7 +117,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promis
     console.error('Registration failed:', error)
     toast.add({
       title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('REGISTRATION_FAILED'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.REGISTER.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
@@ -145,7 +145,7 @@ async function onOtpSubmit(payload: FormSubmitEvent<OtpOnlyDto>): Promise<void> 
 
     toast.add({
       title: $t('SUCCESS_TITLE'),
-      description: $t('EMAIL_VERIFICATION_SUCCESS'),
+      description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
@@ -157,7 +157,7 @@ async function onOtpSubmit(payload: FormSubmitEvent<OtpOnlyDto>): Promise<void> 
     console.error('OTP verification failed:', error)
     toast.add({
       title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('OTP_VERIFICATION_FAILED'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.VERIFICATION_FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
@@ -180,7 +180,7 @@ async function resendOtp(): Promise<void> {
 
     toast.add({
       title: $t('SUCCESS_TITLE'),
-      description: $t('RESEND_OTP_SUCCESS'),
+      description: $t('AUTH.OTP.RESEND_SUCCESS'),
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
@@ -189,7 +189,7 @@ async function resendOtp(): Promise<void> {
     console.error('Failed to resend OTP:', error)
     toast.add({
       title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('RESEND_OTP_FAILED'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.RESEND_FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
@@ -213,7 +213,7 @@ async function resendOtp(): Promise<void> {
       class="cursor-pointer"
       @click="open = true"
     >
-      <span class="hidden sm:inline">{{ $t('BUTTON_LOGIN_TEXT') }}</span>
+      <span class="hidden sm:inline">{{ $t('AUTH.BUTTON.LOGIN') }}</span>
     </UButton>
 
     <template #content>

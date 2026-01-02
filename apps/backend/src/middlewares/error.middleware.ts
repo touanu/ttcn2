@@ -39,9 +39,9 @@ function toHttpException(err: unknown): HttpException {
   }
 
   if (isTokenExpiredError(err))
-    return new HttpException(401, 'TOKEN_EXPIRED')
+    return new HttpException(401, 'AUTH.TOKEN_EXPIRED')
   if (isJsonWebTokenError(err))
-    return new HttpException(401, 'INVALID_TOKEN')
+    return new HttpException(401, 'AUTH.INVALID_TOKEN')
 
   const e = err as Error | undefined
   return new HttpException(500, e?.message || 'INTERNAL_SERVER_ERROR')

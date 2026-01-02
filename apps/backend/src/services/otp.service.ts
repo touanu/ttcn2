@@ -55,12 +55,12 @@ export class OtpService {
       .sort({ createdAt: -1 })
 
     if (!otpRecord)
-      throw new HttpException(400, 'INVALID_OR_EXPIRED_OTP')
+      throw new HttpException(400, 'AUTH.OTP.INVALID_OR_EXPIRED')
 
     const isValid = await compare(otp, otpRecord.otpHash)
 
     if (!isValid)
-      throw new HttpException(400, 'INVALID_OR_EXPIRED_OTP')
+      throw new HttpException(400, 'AUTH.OTP.INVALID_OR_EXPIRED')
 
     otpRecord.used = true
     await otpRecord.save()
@@ -79,7 +79,7 @@ export class OtpService {
       .findOne({ verificationToken: token, otpType: type, used: false })
 
     if (!otpRecord)
-      throw new HttpException(400, 'INVALID_OR_EXPIRED_TOKEN')
+      throw new HttpException(400, 'AUTH.INVALID_TOKEN')
 
     otpRecord.used = true
     await otpRecord.save()

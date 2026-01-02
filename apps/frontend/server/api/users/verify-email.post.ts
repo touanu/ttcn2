@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       },
     })
 
-    return { success: true, message: 'EMAIL_VERIFICATION_SUCCESS' } as SuccessResponseBody<null>
+    return { success: true, message: 'AUTH.OTP.VERIFICATION_SUCCESS' } as SuccessResponseBody<null>
   }
   catch (error: any) {
     console.error('Xác minh email thất bại:', error)

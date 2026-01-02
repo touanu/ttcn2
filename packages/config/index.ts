@@ -62,28 +62,28 @@ const EnvSchema = z
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_HOST'],
-          message: 'MAILER_HOST_REQUIRED',
+          message: 'CONFIG.MAILER_HOST_REQUIRED',
         })
       }
       if (!data.MAILER_PORT) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_PORT'],
-          message: 'MAILER_PORT_REQUIRED',
+          message: 'CONFIG.MAILER_PORT_REQUIRED',
         })
       }
       if (!data.MAILER_USER) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_USER'],
-          message: 'MAILER_USER_REQUIRED',
+          message: 'CONFIG.MAILER_USER_REQUIRED',
         })
       }
       if (!data.MAILER_PASSWORD) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_PASSWORD'],
-          message: 'MAILER_PASSWORD_REQUIRED',
+          message: 'CONFIG.MAILER_PASSWORD_REQUIRED',
         })
       }
     }

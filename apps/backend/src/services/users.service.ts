@@ -11,21 +11,21 @@ export class UsersService {
   async getUserById(id: string): Promise<UserDB> {
     const user = await UserModel.findById(id).lean<UserDB>().exec()
     if (!user)
-      throw new HttpException(404, 'USER_NOT_FOUND')
+      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
   async findUserByUsername(username: string): Promise<UserDB> {
     const user = await UserModel.findOne({ username }).lean<UserDB>().exec()
     if (!user)
-      throw new HttpException(404, 'USER_NOT_FOUND')
+      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
   async getUserByEmail(email: string): Promise<UserDB> {
     const user = await UserModel.findOne({ email }).lean<UserDB>().exec()
     if (!user)
-      throw new HttpException(404, 'USER_NOT_FOUND')
+      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
@@ -43,7 +43,7 @@ export class UsersService {
     }).lean().exec()
 
     if (exists)
-      throw new HttpException(409, 'USER_EMAIL_OR_USERNAME_EXISTED')
+      throw new HttpException(409, 'AUTH.REGISTER.USER_EXISTS')
 
     const hashedPassword = await hash(user.password, 10)
     const created: User = { ...user, password: hashedPassword }
@@ -83,6 +83,6 @@ export class UsersService {
   async deleteUser(id: string): Promise<void> {
     const deleted = await UserModel.findByIdAndDelete(id)
     if (!deleted)
-      throw new HttpException(404, 'USER_NOT_FOUND')
+      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
   }
 }

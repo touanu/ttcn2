@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const sessionId = session.secure?.sessionId
 
     if (!session || !session.user || !accessToken || !sessionId) {
-      throw createError({ status: 401, message: 'UNAUTHORIZED' })
+      throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
     }
 
     await $fetch<ResponseBody>(`${config.beApiBaseUrl}/auth/logout`, {
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     })
 
     await clearUserSession(event)
-    return { success: true, message: 'LOGOUT_SUCCESS' } as SuccessResponseBody<null>
+    return { success: true, message: 'AUTH.LOGOUT.SUCCESS' } as SuccessResponseBody<null>
   }
   catch (error: any) {
     console.error('Đăng xuất thất bại:', error)

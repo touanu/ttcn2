@@ -101,6 +101,7 @@ docs/                # Documentation files
 - **Imports:** Use absolute imports with path aliases (`@/`, `@controllers/`, etc.)
 - **Vue:** Composition API with `<script setup>` syntax
 - **State:** Use Pinia stores with TypeScript
+- **Commenting:** JSDoc style for functions and classes, only comment on complex logic, hack or important notes, makes use of variable name and logic to explain
 
 ### Path Aliases
 

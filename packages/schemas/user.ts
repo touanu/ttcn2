@@ -4,18 +4,18 @@ import { otpVerificationSchema } from './otp'
 
 // Schema chung
 export const usernameSchema = z
-  .string('VALIDATION_USERNAME_REQUIRED')
-  .min(3, 'VALIDATION_USERNAME_MIN')
+  .string('FORMS.USERNAME.REQUIRED')
+  .min(3, 'FORMS.USERNAME.MIN_LENGTH')
   .max(30, 'VALIDATION_USERNAME_MAX')
 export const passwordSchema = z
-  .string('VALIDATION_PASSWORD_REQUIRED')
-  .min(8, 'VALIDATION_PASSWORD_MIN')
+  .string('FORMS.PASSWORD.REQUIRED')
+  .min(8, 'FORMS.PASSWORD.MIN_LENGTH')
   .max(64, 'VALIDATION_PASSWORD_MAX')
-  .regex(/[A-Z]/, 'VALIDATION_PASSWORD_UPPERCASE_REQUIRED')
-  .regex(/[a-z]/, 'VALIDATION_PASSWORD_LOWERCASE_REQUIRED')
-  .regex(/\d/, 'VALIDATION_PASSWORD_NUMBER_REQUIRED')
-  .regex(/[\W_]/, 'VALIDATION_PASSWORD_SPECIAL_CHARACTER_REQUIRED')
-export const emailSchema = z.email('EMAIL_INVALID_FORMAT')
+  .regex(/[A-Z]/, 'FORMS.PASSWORD.UPPERCASE_REQUIRED')
+  .regex(/[a-z]/, 'FORMS.PASSWORD.LOWERCASE_REQUIRED')
+  .regex(/\d/, 'FORMS.PASSWORD.NUMBER_REQUIRED')
+  .regex(/[\W_]/, 'FORMS.PASSWORD.SPECIAL_CHARACTER_REQUIRED')
+export const emailSchema = z.email('FORMS.EMAIL.INVALID')
 
 // DTO đăng ký thành viên (dùng chung cho signup và login)
 export const createUserSchema = z.object({
@@ -23,8 +23,8 @@ export const createUserSchema = z.object({
   password: passwordSchema,
   email: emailSchema,
   fullName: z.string()
-    .min(3, 'VALIDATION_FULLNAME_MIN_LENGTH_REQUIRED')
-    .max(100, 'VALIDATION_FULLNAME_MAX_LENGTH_REQUIRED'),
+    .min(3, 'FORMS.FULLNAME.MIN_LENGTH')
+    .max(100, 'FORMS.FULLNAME.MAX_LENGTH'),
 })
 export type CreateUserDto = z.infer<typeof createUserSchema>
 
@@ -59,7 +59,7 @@ export const requestVerifyEmailSchema = z.object({
   if (!ctx.value.email && !ctx.value.username) {
     ctx.issues.push({
       code: 'custom',
-      message: 'VALIDATION_EITHER_EMAIL_OR_USERNAME_REQUIRED',
+      message: 'FORMS.EITHER_EMAIL_OR_USERNAME_REQUIRED',
       input: ctx.value,
     })
   }

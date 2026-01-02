@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: 'OTP_SENT_SUCCESS',
+      message: 'AUTH.OTP.RESEND_SUCCESS',
       data: { email: rqVerifyEmailResponse.data?.email },
     } as SuccessResponseBody<{ email: string }>
   }
