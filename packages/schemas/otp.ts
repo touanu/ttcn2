@@ -3,13 +3,13 @@ import { emptyAsNull } from '@shared/utils'
 import z from 'zod'
 
 // Schema chung
-export const otpSchema = z.string('OTP_REQUIRED')
-  .min(OTP_LENGTH, 'OTP_LENGTH_REQUIRED')
-  .max(OTP_LENGTH, 'OTP_LENGTH_REQUIRED')
-  .regex(/^\d+$/, 'INVALID_OTP_FORMAT')
+export const otpSchema = z.string('VALIDATION_OTP_REQUIRED')
+  .min(OTP_LENGTH, 'VALIDATION_OTP_MIN')
+  .max(OTP_LENGTH, 'VALIDATION_OTP_MAX')
+  .regex(/^\d+$/, 'VALIDATION_OTP_DIGITS_ONLY')
 
-export const hashSchema = z.string('HASH_REQUIRED')
-  .min(1, 'HASH_CANNOT_BE_EMPTY')
+export const hashSchema = z.string('VALIDATION_HASH_REQUIRED')
+  .min(1, 'VALIDATION_HASH_CANNOT_BE_EMPTY')
 
 // Schema dùng cho xác thực OTP
 export const otpOnlySchema = z.object({
@@ -29,7 +29,7 @@ export const otpVerificationSchema = z.object({
   if (!ctx.value.otp && !ctx.value.hash) {
     ctx.issues.push({
       code: 'custom',
-      message: 'EITHER_OTP_OR_HASH_REQUIRED',
+      message: 'VALIDATION_EITHER_OTP_OR_HASH_REQUIRED',
       input: ctx.value,
     })
   }

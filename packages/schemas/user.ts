@@ -12,9 +12,9 @@ export const passwordSchema = z
   .min(8, 'VALIDATION_PASSWORD_MIN')
   .max(64, 'VALIDATION_PASSWORD_MAX')
   .regex(/[A-Z]/, 'VALIDATION_PASSWORD_UPPERCASE_REQUIRED')
-  .regex(/[a-z]/, 'PASSWORD_LOWERCASE_REQUIRED')
-  .regex(/\d/, 'PASSWORD_NUMBER_REQUIRED')
-  .regex(/[\W_]/, 'PASSWORD_SPECIAL_CHARACTER_REQUIRED')
+  .regex(/[a-z]/, 'VALIDATION_PASSWORD_LOWERCASE_REQUIRED')
+  .regex(/\d/, 'VALIDATION_PASSWORD_NUMBER_REQUIRED')
+  .regex(/[\W_]/, 'VALIDATION_PASSWORD_SPECIAL_CHARACTER_REQUIRED')
 export const emailSchema = z.email('EMAIL_INVALID_FORMAT')
 
 // DTO đăng ký thành viên (dùng chung cho signup và login)
@@ -23,8 +23,8 @@ export const createUserSchema = z.object({
   password: passwordSchema,
   email: emailSchema,
   fullName: z.string()
-    .min(3, 'FULLNAME_MIN_LENGTH_REQUIRED')
-    .max(100, 'FULLNAME_MAX_LENGTH_REQUIRED'),
+    .min(3, 'VALIDATION_FULLNAME_MIN_LENGTH_REQUIRED')
+    .max(100, 'VALIDATION_FULLNAME_MAX_LENGTH_REQUIRED'),
 })
 export type CreateUserDto = z.infer<typeof createUserSchema>
 
@@ -59,7 +59,7 @@ export const requestVerifyEmailSchema = z.object({
   if (!ctx.value.email && !ctx.value.username) {
     ctx.issues.push({
       code: 'custom',
-      message: 'EITHER_EMAIL_OR_USERNAME_REQUIRED',
+      message: 'VALIDATION_EITHER_EMAIL_OR_USERNAME_REQUIRED',
       input: ctx.value,
     })
   }

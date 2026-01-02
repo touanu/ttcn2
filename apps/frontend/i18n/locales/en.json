@@ -84,8 +84,15 @@
   "REGISTRATION_FAILED": "Please check your information and try again.",
   "REGISTRATION_SUCCESS": "Please check your email to verify your account.",
   "INTERNAL_SERVER_ERROR": "Internal server error. Please try again later.",
-  "PASSWORD_UPPERCASE_REQUIRED": "Password must contain at least one uppercase letter.",
-  "PASSWORD_SPECIAL_CHARACTER_REQUIRED": "Password must contain at least one special character.",
-  "PASSWORD_NUMBER_REQUIRED": "Password must contain at least {min} number.",
-  "USER_EMAIL_OR_USERNAME_EXISTED": "Email or username already exists."
+  "VALIDATION_PASSWORD_UPPERCASE_REQUIRED": "Password must contain at least one uppercase letter.",
+  "VALIDATION_PASSWORD_SPECIAL_CHARACTER_REQUIRED": "Password must contain at least one special character.",
+  "VALIDATION_PASSWORD_NUMBER_REQUIRED": "Password must contain at least {min} number.",
+  "USER_EMAIL_OR_USERNAME_EXISTED": "Email or username already exists.",
+  "VALIDATION_PASSWORD_LOWERCASE_REQUIRED": "Password must contain at least one lowercase letter.",
+  "VALIDATION_EITHER_EMAIL_OR_USERNAME_REQUIRED": "Either email or username is required.",
+  "VALIDATION_FULLNAME_MIN_LENGTH_REQUIRED": "Full name must be at least {min} characters.",
+  "VALIDATION_FULLNAME_MAX_LENGTH_REQUIRED": "Full name must not exceed {max} characters.",
+  "VALIDATION_HASH_REQUIRED": "Hash is required.",
+  "VALIDATION_HASH_CANNOT_BE_EMPTY": "Hash cannot be empty.",
+  "VALIDATION_EITHER_OTP_OR_HASH_REQUIRED": "Either OTP or hash is required."
 }

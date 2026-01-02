@@ -79,9 +79,16 @@
   "REGISTRATION_FAILED": "Vui lòng kiểm tra thông tin của bạn và thử lại.",
   "REGISTRATION_SUCCESS": "Vui lòng kiểm tra email của bạn để xác thực tài khoản.",
   "INTERNAL_SERVER_ERROR": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
-  "PASSWORD_UPPERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa.",
-  "PASSWORD_SPECIAL_CHARACTER_REQUIRED": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
+  "VALIDATION_PASSWORD_UPPERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa.",
+  "VALIDATION_PASSWORD_SPECIAL_CHARACTER_REQUIRED": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
   "VALIDATION_PASSWORD_MIN_LENGTH": "Mật khẩu phải có ít nhất {min} ký tự.",
-  "PASSWORD_NUMBER_REQUIRED": "Mật khẩu phải chứa ít nhất {min} chữ số.",
-  "USER_EMAIL_OR_USERNAME_EXISTED": "Email hoặc tên người dùng đã tồn tại."
+  "VALIDATION_PASSWORD_NUMBER_REQUIRED": "Mật khẩu phải chứa ít nhất {min} chữ số.",
+  "USER_EMAIL_OR_USERNAME_EXISTED": "Email hoặc tên người dùng đã tồn tại.",
+  "VALIDATION_PASSWORD_LOWERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết thường.",
+  "VALIDATION_EITHER_EMAIL_OR_USERNAME_REQUIRED": "Cần cung cấp email hoặc tên người dùng.",
+  "VALIDATION_FULLNAME_MIN_LENGTH_REQUIRED": "Họ và tên phải có ít nhất {min} ký tự.",
+  "VALIDATION_FULLNAME_MAX_LENGTH_REQUIRED": "Họ và tên không được vượt quá {max} ký tự.",
+  "VALIDATION_HASH_REQUIRED": "Hash là bắt buộc.",
+  "VALIDATION_HASH_CANNOT_BE_EMPTY": "Hash không được để trống.",
+  "VALIDATION_EITHER_OTP_OR_HASH_REQUIRED": "Cần cung cấp OTP hoặc hash."
 }
