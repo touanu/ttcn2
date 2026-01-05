@@ -1,18 +1,20 @@
+import type { UserRole } from '@shared/types'
 import type { ObjectId } from 'mongoose'
+import type { SuccessResponseBody } from './error.interface'
 
 export interface User {
   _id?: ObjectId
   username: string
   email: string
-  emailVerificationToken?: string
   isEmailVerified?: boolean
   password: string
-  passwordResetToken?: string
   fullName: string
-  phoneNumber?: string
-  isPhoneNumberVerified?: boolean
-  role?: 'student' | 'teacher' | 'admin' | 'superadmin'
+  role?: UserRole
   profilePictureUrl?: string
   createdAt?: Date
   updatedAt?: Date
+}
+
+export interface RequestVerifyEmailResponse extends SuccessResponseBody<{ email: string }> {
+  data: { email: string }
 }

@@ -1,8 +1,12 @@
 import type { Document, InferSchemaType } from 'mongoose'
 import { SESSION_EXPIRATION_TIME } from '@shared/constants'
-import { model, Schema } from 'mongoose'
+import { model, Schema, Types } from 'mongoose'
 
 const SessionSchema = new Schema({
+  _id: {
+    type: Schema.Types.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -41,5 +45,5 @@ const SessionSchema = new Schema({
   timestamps: true,
 })
 
-export type SessionType = InferSchemaType<typeof SessionSchema>
-export const SessionModel = model<SessionType & Document>('Session', SessionSchema)
+export type Session = InferSchemaType<typeof SessionSchema>
+export const SessionModel = model<Session & Document>('Session', SessionSchema)

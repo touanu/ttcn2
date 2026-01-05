@@ -6,6 +6,7 @@ import process from 'node:process'
 import { AuthRoute } from '@routes/auth.route'
 import { UsersRoute } from '@routes/users.route'
 import { container } from 'tsyringe'
+import { z } from 'zod'
 import App from '@/app'
 import '@shared/config'
 
@@ -15,6 +16,15 @@ const routes
     container.resolve(UsersRoute),
     container.resolve(AuthRoute),
   ]
+
+// Tùy chỉnh thông điệp lỗi của Zod
+z.config({
+  customError: (issue) => {
+    if (issue.code === 'invalid_type') {
+      return `INVALID_TYPE: Expected ${issue.expected}, received ${issue.received} in ${issue.path?.join('.')}`
+    }
+  },
+})
 
 // Tạo instance của ứng dụng
 const appInstance = new App(routes)

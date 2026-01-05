@@ -5,6 +5,7 @@
   "private": true,
   "main": "index.ts",
   "dependencies": {
+    "@shared/types": "*",
     "tslib": "^2.8.1"
   }
 }

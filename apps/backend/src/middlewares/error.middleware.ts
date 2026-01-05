@@ -39,9 +39,9 @@ function toHttpException(err: unknown): HttpException {
   }
 
   if (isTokenExpiredError(err))
-    return new HttpException(401, 'TOKEN_EXPIRED')
+    return new HttpException(401, 'AUTH.TOKEN_EXPIRED')
   if (isJsonWebTokenError(err))
-    return new HttpException(401, 'INVALID_TOKEN')
+    return new HttpException(401, 'AUTH.INVALID_TOKEN')
 
   const e = err as Error | undefined
   return new HttpException(500, e?.message || 'INTERNAL_SERVER_ERROR')
@@ -53,15 +53,6 @@ function extractStack(err: unknown): string | undefined {
     return typeof s === 'string' ? s : undefined
   }
   return undefined
-}
-
-function formatResponseMessage(message: string): string {
-  // Chỉ giữ phần mã lỗi, bỏ phần mô tả chi tiết
-  // Ví dụ: "INVALID_INPUT: expected string, received undefined, PHONE_NUMBER_INVALID_FORMAT"
-  // thành "INVALID_INPUT,PHONE_NUMBER_INVALID_FORMAT"
-
-  const messageCodeRegex = /[A-Z0-9_]{3,}/g
-  return message.match(messageCodeRegex)?.join(',') || message
 }
 
 export function ErrorMiddleware(error: unknown, req: Request, res: Response, _next: NextFunction) {
@@ -79,7 +70,7 @@ export function ErrorMiddleware(error: unknown, req: Request, res: Response, _ne
     success: false,
     error: {
       code: status,
-      message: formatResponseMessage(message),
+      message,
     },
   }
 

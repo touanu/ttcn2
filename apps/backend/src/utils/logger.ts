@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import { LOG_DIR, LOG_LEVEL, NODE_ENV } from '@shared/config'
+import { backendDir } from '@shared/utils/currentDirectory'
 import pino from 'pino'
 
 // Thiết lập ghi log
@@ -8,22 +9,8 @@ const isProd = NODE_ENV === 'production'
 const logRoot = LOG_DIR || 'logs'
 const logLevel = LOG_LEVEL || 'info'
 
-// Điều chỉnh /logs dựa trên thư mục gốc của project (package.json)
-function findPackageRoot(startDir: string): string {
-  let dir = startDir
-  while (true) {
-    if (existsSync(join(dir, 'package.json')))
-      return dir
-    const parent = dirname(dir)
-    if (parent === dir)
-      return startDir // dự phòng
-    dir = parent
-  }
-}
-
 // Tạo thư mục để lưu log
-const appRoot = findPackageRoot(__dirname)
-const logDir = join(appRoot, logRoot)
+const logDir = join(backendDir, logRoot)
 if (!existsSync(logDir))
   mkdirSync(logDir, { recursive: true })
 

@@ -1,18 +1,20 @@
 import type { Request } from 'express'
 import type { User } from './users.interface'
 
-export interface AccessTokenData {
+export interface AccessTokenPayload extends TokenPayload {
   id: string
   role?: string
+  name?: string
 }
 
-export interface InternalTokenData {
-  id: string
-  role?: string
-  scopes: string[]
+export interface TokenPayload {
   iss?: string
+  sub?: string
+  aud?: string
   iat?: number
   exp?: number
+  nbf?: number
+  jti?: string
 }
 
 export interface Token {
@@ -37,11 +39,16 @@ export interface ClientInfo {
 export interface LoginCredential {
   username: string
   password: string
+  rememberMe?: boolean
   info?: ClientInfo
 }
 
-export interface LoginResponse {
+export interface RefreshTokenData {
   refreshToken: Token
   accessToken: Token
   sessionId: string
+}
+
+export interface LoginData extends RefreshTokenData {
+  user: AccessTokenPayload
 }

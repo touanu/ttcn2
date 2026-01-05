@@ -1,0 +1,189 @@
+{
+  "ERROR_TITLE": "Lỗi",
+  "SUCCESS_TITLE": "Thành công",
+  "GENERIC_ERROR": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+  "INTERNAL_SERVER_ERROR": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
+  "ROUTE_NOT_FOUND": "Không tìm thấy đường dẫn.",
+  "VALIDATION_FAILED": "Xác thực dữ liệu thất bại.",
+  "RATE_LIMIT_REACHED": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+  "NAVIGATION": {
+    "MENU_TITLE": "Điều Hướng",
+    "HOME": "Trang chủ",
+    "COURSES": "Khóa học",
+    "ROADMAP": "Lộ trình",
+    "BLOG": "Blog",
+    "USER": {
+      "ACTION_MENU_TITLE": "Hành Động Người Dùng",
+      "DROPDOWN": {
+        "PROFILE": "Hồ sơ của tôi",
+        "SETTINGS": "Cài đặt",
+        "LOGOUT": "Đăng xuất"
+      }
+    }
+  },
+  "AUTH": {
+    "UNAUTHORIZED": "Bạn không có quyền truy cập tài nguyên này.",
+    "USER_NOT_FOUND": "Không tìm thấy người dùng.",
+    "AUTHENTICATION_FAILED": "Xác thực thất bại.",
+    "ACCESS_TOKEN_NOT_FOUND": "Không tìm thấy access token.",
+    "ACCESS_TOKEN_EXPIRED": "Access token đã hết hạn.",
+    "ACCESS_TOKEN_INVALID": "Access token không hợp lệ.",
+    "TOKEN_EXPIRED": "Token đã hết hạn.",
+    "INVALID_TOKEN": "Token không hợp lệ hoặc đã hết hạn.",
+    "EMAIL_NOT_VERIFIED": "Email chưa được xác thực.",
+    "EMAIL_ALREADY_VERIFIED": "Email đã được xác thực rồi.",
+    "ACCESS_TOKEN_REFRESHED": "Làm mới access token thành công.",
+    "BUTTON": {
+      "LOGIN": "Đăng nhập",
+      "REGISTER": "Đăng ký"
+    },
+    "LOGIN": {
+      "TITLE": "Chào mừng bạn trở lại!",
+      "DESCRIPTION": "Đăng nhập để truy cập các khóa học và nội dung cá nhân hóa của bạn.",
+      "SUCCESS": "Đăng nhập thành công!",
+      "FAILED": "Vui lòng kiểm tra thông tin của bạn và thử lại.",
+      "WRONG_CREDENTIALS": "Tên đăng nhập hoặc mật khẩu không đúng.",
+      "FORGOT_PASSWORD": "Quên mật khẩu?",
+      "NO_ACCOUNT": "Chưa có tài khoản?"
+    },
+    "REGISTER": {
+      "TITLE": "Tham gia cùng chúng tôi ngay hôm nay!",
+      "DESCRIPTION": "Tạo tài khoản để bắt đầu học tập và khám phá các khóa học của chúng tôi.",
+      "SUCCESS": "Vui lòng kiểm tra email của bạn để xác thực tài khoản.",
+      "FAILED": "Vui lòng kiểm tra thông tin của bạn và thử lại.",
+      "ALREADY_HAVE_ACCOUNT": "Đã có tài khoản?",
+      "USER_EXISTS": "Email hoặc tên người dùng đã tồn tại."
+    },
+    "OTP": {
+      "LABEL": "Mã xác thực",
+      "PLACEHOLDER": "Nhập mã 6 chữ số",
+      "TITLE": "Xác thực Email",
+      "DESCRIPTION": "Vui lòng nhập mã xác thực được gửi đến email của bạn.",
+      "SENT_TO_EMAIL": "Chúng tôi đã gửi mã 6 chữ số đến {email}",
+      "BUTTON_VERIFY": "Xác thực Email",
+      "VERIFICATION_SUCCESS": "Xác thực email thành công!\nHãy quay lại đăng nhập để tiếp tục.",
+      "VERIFICATION_FAILED": "Xác thực OTP thất bại. Vui lòng thử lại.",
+      "INVALID_OR_EXPIRED": "Mã OTP không hợp lệ hoặc đã hết hạn.",
+      "RESEND_COUNTDOWN": "Gửi lại mã sau {seconds}s",
+      "RESEND_BUTTON": "Gửi lại mã",
+      "RESEND_SUCCESS": "Đã gửi lại mã OTP thành công!",
+      "RESEND_FAILED": "Gửi lại mã OTP thất bại. Vui lòng thử lại.",
+      "BACK_TO_REGISTER": "Quay lại đăng ký",
+      "EMAIL_VERIFIED": "Xác thực email thành công!",
+      "EMAIL_VERIFICATION_OTP_SENT": "Mã xác thực đã được gửi đến email của bạn.",
+      "BACK_TO_LOGIN": "Quay lại đăng nhập"
+    },
+    "PASSWORD_RESET": {
+      "TITLE": "Đặt lại mật khẩu của bạn",
+      "DESCRIPTION": "Vui lòng nhập mật khẩu mới cho tài khoản của bạn.",
+      "RESET_EMAIL_SENT": "Mã đặt lại mật khẩu đã được gửi đến email của bạn.",
+      "SUCCESS": "Đặt lại mật khẩu thành công!",
+      "FAILED": "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
+      "NEW_PASSWORD_LABEL": "Mật khẩu mới",
+      "NEW_PASSWORD_PLACEHOLDER": "Nhập mật khẩu mới của bạn",
+      "RESET_BUTTON": "Đặt lại mật khẩu",
+      "REMEMBER_PASSWORD": "Đã nhớ mật khẩu rồi?"
+    },
+    "TERMS_AGREEMENT": "Bằng cách đăng ký, bạn đồng ý với"
+  },
+  "USERS": {
+    "GET_SUCCESS": "Lấy thông tin người dùng thành công.",
+    "GET_ALL_SUCCESS": "Lấy danh sách người dùng thành công.",
+    "CREATE_SUCCESS": "Tạo người dùng thành công.",
+    "UPDATE_SUCCESS": "Cập nhật người dùng thành công.",
+    "DELETE_SUCCESS": "Xóa người dùng thành công."
+  },
+  "CONFIG": {
+    "MAILER_HOST_REQUIRED": "Mailer host là bắt buộc trong môi trường production.",
+    "MAILER_PORT_REQUIRED": "Mailer port là bắt buộc trong môi trường production.",
+    "MAILER_USER_REQUIRED": "Mailer user là bắt buộc trong môi trường production.",
+    "MAILER_PASSWORD_REQUIRED": "Mailer password là bắt buộc trong môi trường production."
+  },
+  "FORMS": {
+    "SEARCH_PLACEHOLDER": "Tìm kiếm gì đó...",
+    "EMAIL": {
+      "LABEL": "Địa chỉ email",
+      "PLACEHOLDER": "Nhập địa chỉ email của bạn",
+      "REQUIRED": "Email là bắt buộc.",
+      "INVALID": "Địa chỉ email không hợp lệ."
+    },
+    "PASSWORD": {
+      "LABEL": "Mật khẩu",
+      "PLACEHOLDER": "Nhập mật khẩu của bạn",
+      "REQUIRED": "Mật khẩu là bắt buộc.",
+      "MIN_LENGTH": "Mật khẩu phải có ít nhất {min} ký tự.",
+      "UPPERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa.",
+      "LOWERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết thường.",
+      "SPECIAL_CHARACTER_REQUIRED": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
+      "NUMBER_REQUIRED": "Mật khẩu phải chứa ít nhất {min} chữ số."
+    },
+    "CONFIRM_PASSWORD": {
+      "LABEL": "Xác nhận mật khẩu",
+      "PLACEHOLDER": "Xác nhận mật khẩu của bạn",
+      "MIN_LENGTH": "Xác nhận mật khẩu phải có ít nhất {min} ký tự.",
+      "DO_NOT_MATCH": "Mật khẩu không khớp."
+    },
+    "USERNAME": {
+      "LABEL": "Tên đăng nhập",
+      "PLACEHOLDER": "Nhập tên đăng nhập của bạn",
+      "REQUIRED": "Tên đăng nhập là bắt buộc.",
+      "MIN_LENGTH": "Tên đăng nhập phải có ít nhất {min} ký tự."
+    },
+    "FULLNAME": {
+      "LABEL": "Họ và tên",
+      "PLACEHOLDER": "Nhập họ và tên của bạn",
+      "REQUIRED": "Họ và tên là bắt buộc.",
+      "MIN_LENGTH": "Họ và tên phải có ít nhất {min} ký tự.",
+      "MAX_LENGTH": "Họ và tên không được vượt quá {max} ký tự."
+    },
+    "PHONE": {
+      "LABEL": "Số điện thoại",
+      "PLACEHOLDER": "Nhập số điện thoại của bạn",
+      "REQUIRED": "Số điện thoại là bắt buộc.",
+      "MIN_LENGTH": "Số điện thoại phải có ít nhất {min} chữ số."
+    },
+    "OTP": {
+      "REQUIRED": "Mã xác thực là bắt buộc.",
+      "MIN_LENGTH": "Mã xác thực phải có {min} chữ số.",
+      "MAX_LENGTH": "Mã xác thực phải có {max} chữ số.",
+      "DIGITS_ONLY": "Mã xác thực chỉ được chứa chữ số."
+    },
+    "HASH": {
+      "REQUIRED": "Hash là bắt buộc.",
+      "CANNOT_BE_EMPTY": "Hash không được để trống."
+    },
+    "REMEMBER_ME": "Ghi nhớ đăng nhập?",
+    "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Cần cung cấp email hoặc tên người dùng.",
+    "EITHER_OTP_OR_HASH_REQUIRED": "Cần cung cấp OTP hoặc hash."
+  },
+
+  "CONTACT": {
+    "PHONE_NUMBER": "Số điện thoại",
+    "EMAIL": "Email",
+    "ADDRESS": "Địa chỉ"
+  },
+  "LEGAL": {
+    "TERMS_OF_SERVICE": "Điều khoản dịch vụ",
+    "PRIVACY_POLICY": "Chính sách bảo mật",
+    "PAYMENT_POLICY": "Chính sách thanh toán"
+  },
+  "FOOTER": {
+    "ABOUT": {
+      "TITLE": "Về chúng tôi",
+      "LINK": "Giới thiệu",
+      "CONTACT": "Liên hệ",
+      "TEAM": "Đội ngũ",
+      "CAREERS": "Cơ hội nghề nghiệp"
+    },
+    "SUPPORT": {
+      "TITLE": "Hỗ trợ",
+      "HELP_CENTER": "Trung tâm trợ giúp"
+    },
+    "NEWSLETTER": {
+      "TITLE": "Đăng ký bản tin của chúng tôi",
+      "DESCRIPTION": "Nhận cập nhật mới nhất về khóa học và ưu đãi đặc biệt.",
+      "PLACEHOLDER": "Nhập email của bạn",
+      "BUTTON": "Đăng ký"
+    }
+  }
+}

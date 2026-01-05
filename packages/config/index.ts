@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
-import { configDir } from '@shared/utils'
+import { configDir } from '@shared/utils/currentDirectory'
 import { config } from 'dotenv'
 import { z } from 'zod'
 
@@ -62,28 +62,28 @@ const EnvSchema = z
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_HOST'],
-          message: 'MAILER_HOST_REQUIRED',
+          message: 'CONFIG.MAILER_HOST_REQUIRED',
         })
       }
       if (!data.MAILER_PORT) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_PORT'],
-          message: 'MAILER_PORT_REQUIRED',
+          message: 'CONFIG.MAILER_PORT_REQUIRED',
         })
       }
       if (!data.MAILER_USER) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_USER'],
-          message: 'MAILER_USER_REQUIRED',
+          message: 'CONFIG.MAILER_USER_REQUIRED',
         })
       }
       if (!data.MAILER_PASSWORD) {
         ctx.addIssue({
           code: 'custom',
           path: ['MAILER_PASSWORD'],
-          message: 'MAILER_PASSWORD_REQUIRED',
+          message: 'CONFIG.MAILER_PASSWORD_REQUIRED',
         })
       }
     }
@@ -141,12 +141,3 @@ export const CORS_ORIGIN_LIST
   = env.CORS_ORIGINS?.split(',')
     .map(s => s.trim())
     .filter(Boolean) ?? []
-
-// Tùy chỉnh thông điệp lỗi của Zod
-z.config({
-  customError: (issue) => {
-    if (issue.code === 'invalid_type') {
-      return `INVALID_TYPE: Expected ${issue.expected}, received ${issue.received} in ${issue.path?.join('.')}`
-    }
-  },
-})

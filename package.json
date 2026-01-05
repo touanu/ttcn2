@@ -6,58 +6,35 @@
     "apps/*",
     "packages/*"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "dev:backend": "cd apps/backend && nr dev",
     "dev:frontend": "cd apps/frontend && nr dev",
     "dev": "concurrently -n BE,FE -c cyan,magenta \"nr dev:backend\" \"nr dev:frontend\"",
-    "clean": "rm -rf node_modules apps/backend/node_modules apps/frontend/node_modules apps/frontend/.data apps/frontend/.nuxt",
+    "clean": "rimraf -g **/node_modules apps/backend/dist apps/backend/logs apps/frontend/.data apps/frontend/.nuxt",
     "generate:token": "node scripts/generateInternalToken.js"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^6.7.1",
+    "@antfu/eslint-config": "^6.7.3",
     "@antfu/ni": "^28.0.0",
     "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.2",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.0.0",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.51.0"
   },
   "devDependencies": {
-    "@types/node": "^25.0.2",
+    "@types/node": "^25.0.3",
     "lint-staged": "^16.2.7",
     "rimraf": "^6.1.2",
     "simple-git-hooks": "^2.13.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@scarf/scarf",
-      "@swc/core",
-      "@tailwindcss/oxide",
-      "bcrypt",
-      "better-sqlite3",
-      "esbuild",
-      "sharp",
-      "unrs-resolver",
-      "vue-demi",
-      "simple-git-hooks"
-    ],
-    "overrides": {
-      "@shared/config": "workspace:*",
-      "@shared/interfaces": "workspace:*",
-      "@shared/types": "workspace:*",
-      "@shared/utils": "workspace:*",
-      "@shared/constants": "workspace:*",
-      "vite": "npm:rolldown-vite@7.1.14"
-    }
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

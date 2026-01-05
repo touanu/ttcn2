@@ -1,0 +1,189 @@
+{
+  "ERROR_TITLE": "Error",
+  "SUCCESS_TITLE": "Success",
+  "GENERIC_ERROR": "An unexpected error occurred. Please try again later.",
+  "INTERNAL_SERVER_ERROR": "Internal server error. Please try again later.",
+  "ROUTE_NOT_FOUND": "Route not found.",
+  "VALIDATION_FAILED": "Validation failed.",
+  "RATE_LIMIT_REACHED": "Too many requests. Please try again later.",
+  "NAVIGATION": {
+    "MENU_TITLE": "Navigation",
+    "HOME": "Home",
+    "COURSES": "Courses",
+    "ROADMAP": "Roadmap",
+    "BLOG": "Blog",
+    "USER": {
+      "ACTION_MENU_TITLE": "User Actions",
+      "DROPDOWN": {
+        "PROFILE": "Profile",
+        "SETTINGS": "Settings",
+        "LOGOUT": "Logout"
+      }
+    }
+  },
+  "AUTH": {
+    "UNAUTHORIZED": "You are not authorized to access this resource.",
+    "USER_NOT_FOUND": "User not found.",
+    "AUTHENTICATION_FAILED": "Authentication failed.",
+    "ACCESS_TOKEN_NOT_FOUND": "Access token not found.",
+    "ACCESS_TOKEN_EXPIRED": "Access token expired.",
+    "ACCESS_TOKEN_INVALID": "Invalid access token.",
+    "TOKEN_EXPIRED": "Token has expired.",
+    "INVALID_TOKEN": "Invalid or expired token.",
+    "EMAIL_NOT_VERIFIED": "Email has not been verified yet.",
+    "EMAIL_ALREADY_VERIFIED": "Email has already been verified.",
+    "ACCESS_TOKEN_REFRESHED": "Access token refreshed successfully.",
+    "BUTTON": {
+      "LOGIN": "Login",
+      "REGISTER": "Register"
+    },
+    "LOGIN": {
+      "TITLE": "Welcome Back!",
+      "DESCRIPTION": "Log in to access your courses and personalized content.",
+      "SUCCESS": "Login successful!",
+      "FAILED": "Please check your information and try again.",
+      "WRONG_CREDENTIALS": "Wrong username or password.",
+      "FORGOT_PASSWORD": "Forgot Password?",
+      "NO_ACCOUNT": "Don't have an account?"
+    },
+    "REGISTER": {
+      "TITLE": "Join Us Today!",
+      "DESCRIPTION": "Create an account to start learning and exploring our courses.",
+      "SUCCESS": "Please check your email to verify your account.",
+      "FAILED": "Please check your information and try again.",
+      "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+      "USER_EXISTS": "Email or username already exists."
+    },
+    "LOGOUT": {
+      "SUCCESS": "Logout successful!"
+    },
+    "OTP": {
+      "LABEL": "Verification Code",
+      "PLACEHOLDER": "Enter 6-digit code",
+      "TITLE": "Verify Your Email",
+      "DESCRIPTION": "Please enter the verification code sent to your email.",
+      "SENT_TO_EMAIL": "We've sent a 6-digit code to {email}",
+      "BUTTON_VERIFY": "Verify Email",
+      "VERIFICATION_SUCCESS": "Email verification successful!\nPlease go back to login to continue.",
+      "VERIFICATION_FAILED": "OTP verification failed. Please try again.",
+      "INVALID_OR_EXPIRED": "Invalid or expired OTP code.",
+      "RESEND_COUNTDOWN": "Resend code in {seconds}s",
+      "RESEND_BUTTON": "Resend Code",
+      "RESEND_SUCCESS": "OTP code resent successfully!",
+      "RESEND_FAILED": "Failed to resend OTP code. Please try again.",
+      "BACK_TO_REGISTER": "Back to Registration",
+      "EMAIL_VERIFIED": "Email verified successfully!",
+      "EMAIL_VERIFICATION_OTP_SENT": "Verification code sent to your email.",
+      "BACK_TO_LOGIN": "Back to Login"
+    },
+    "PASSWORD_RESET": {
+      "OTP_SENT": "Password reset code sent to your email.",
+      "SUCCESS": "Password reset successfully!",
+      "FAILED": "Password reset failed. Please try again.",
+      "NEW_PASSWORD_LABEL": "New Password",
+      "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
+      "RESET_BUTTON": "Reset Password"
+    },
+    "TERMS_AGREEMENT": "By registering, you agree to our"
+  },
+  "USERS": {
+    "GET_SUCCESS": "User retrieved successfully.",
+    "GET_ALL_SUCCESS": "Users retrieved successfully.",
+    "CREATE_SUCCESS": "User created successfully.",
+    "UPDATE_SUCCESS": "User updated successfully.",
+    "DELETE_SUCCESS": "User deleted successfully."
+  },
+  "CONFIG": {
+    "MAILER_HOST_REQUIRED": "Mailer host is required in production.",
+    "MAILER_PORT_REQUIRED": "Mailer port is required in production.",
+    "MAILER_USER_REQUIRED": "Mailer user is required in production.",
+    "MAILER_PASSWORD_REQUIRED": "Mailer password is required in production."
+  },
+  "FORMS": {
+    "SEARCH_PLACEHOLDER": "Search something...",
+    "EMAIL": {
+      "LABEL": "Email Address",
+      "PLACEHOLDER": "Enter your email address",
+      "REQUIRED": "Email is required.",
+      "INVALID": "Invalid email address."
+    },
+    "PASSWORD": {
+      "LABEL": "Password",
+      "PLACEHOLDER": "Enter your password",
+      "REQUIRED": "Password is required.",
+      "MIN_LENGTH": "Password must be at least {min} characters.",
+      "UPPERCASE_REQUIRED": "Password must contain at least one uppercase letter.",
+      "LOWERCASE_REQUIRED": "Password must contain at least one lowercase letter.",
+      "SPECIAL_CHARACTER_REQUIRED": "Password must contain at least one special character.",
+      "NUMBER_REQUIRED": "Password must contain at least {min} number."
+    },
+    "CONFIRM_PASSWORD": {
+      "LABEL": "Confirm Password",
+      "PLACEHOLDER": "Confirm your password",
+      "MIN_LENGTH": "Confirm password must be at least {min} characters.",
+      "DO_NOT_MATCH": "Passwords do not match."
+    },
+    "USERNAME": {
+      "LABEL": "Username",
+      "PLACEHOLDER": "Enter your username",
+      "REQUIRED": "Username is required.",
+      "MIN_LENGTH": "Username must be at least {min} characters."
+    },
+    "FULLNAME": {
+      "LABEL": "Full Name",
+      "PLACEHOLDER": "Enter your full name",
+      "REQUIRED": "Name is required.",
+      "MIN_LENGTH": "Full name must be at least {min} characters.",
+      "MAX_LENGTH": "Full name must not exceed {max} characters."
+    },
+    "PHONE": {
+      "LABEL": "Phone Number",
+      "PLACEHOLDER": "Enter your phone number",
+      "REQUIRED": "Phone number is required.",
+      "MIN_LENGTH": "Phone number must be at least {min} digits."
+    },
+    "OTP": {
+      "REQUIRED": "Verification code is required.",
+      "MIN_LENGTH": "Verification code must be {min} digits.",
+      "MAX_LENGTH": "Verification code must be {max} digits.",
+      "DIGITS_ONLY": "Verification code must contain only digits."
+    },
+    "HASH": {
+      "REQUIRED": "Hash is required.",
+      "CANNOT_BE_EMPTY": "Hash cannot be empty."
+    },
+    "REMEMBER_ME": "Remember me?",
+    "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Either email or username is required.",
+    "EITHER_OTP_OR_HASH_REQUIRED": "Either OTP or hash is required."
+  },
+
+  "CONTACT": {
+    "PHONE_NUMBER": "Phone number",
+    "EMAIL": "Email",
+    "ADDRESS": "Address"
+  },
+  "LEGAL": {
+    "TERMS_OF_SERVICE": "Terms of Service",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "PAYMENT_POLICY": "Payment Policy"
+  },
+  "FOOTER": {
+    "ABOUT": {
+      "TITLE": "About Us",
+      "LINK": "About",
+      "CONTACT": "Contact",
+      "TEAM": "Team",
+      "CAREERS": "Careers"
+    },
+    "SUPPORT": {
+      "TITLE": "Support",
+      "HELP_CENTER": "Help Center"
+    },
+    "NEWSLETTER": {
+      "TITLE": "Subscribe to our newsletter",
+      "DESCRIPTION": "Get the latest updates on courses and special offers.",
+      "PLACEHOLDER": "Enter your email",
+      "BUTTON": "Subscribe"
+    }
+  }
+}

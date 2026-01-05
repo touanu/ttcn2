@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.ts",
   "dependencies": {
-    "zod": "^4.1.12",
-    "@shared/utils": "*"
+    "@shared/utils": "*",
+    "zod": "^4.2.1"
   }
 }
