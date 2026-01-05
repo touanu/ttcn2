@@ -2,10 +2,14 @@
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { ResponseBody, SuccessResponseBody } from '@shared/interfaces'
 import type { CreateUserDto, LoginUserDto, OtpOnlyDto } from '@shared/schemas'
+import type { EmailOnlyDto, PasswordOnlyDto } from '@shared/schemas/user'
+import type { OTPType } from '@shared/types/otp'
 
 const open = ref<boolean>(false)
-const currentForm = ref<'login' | 'register' | 'otp'>('login')
+const currentForm = ref<'login' | 'register' | 'otp' | 'forgot-password' | 'reset-password'>('login')
 const userEmail = ref<string>('')
+const verifiedOtp = ref<string>('')
+const otpMode = ref<OTPType>('EMAIL_VERIFICATION')
 const isLoading = ref<boolean>(false)
 const { fetch: refreshSession } = useUserSession()
 
@@ -19,8 +23,17 @@ function switchToLogin(): void {
   currentForm.value = 'login'
 }
 
-function switchToOtp(): void {
+function switchToOtp(mode: OTPType): void {
+  otpMode.value = mode
   currentForm.value = 'otp'
+}
+
+function switchToForgotPassword(): void {
+  currentForm.value = 'forgot-password'
+}
+
+function switchToResetPassword(): void {
+  currentForm.value = 'reset-password'
 }
 
 function closeModal(): void {
@@ -28,6 +41,7 @@ function closeModal(): void {
   setTimeout(() => {
     currentForm.value = 'login'
     userEmail.value = ''
+    verifiedOtp.value = ''
     isLoading.value = false
   }, 300) // Close animation
 }
@@ -54,7 +68,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
   catch (error: any) {
     console.error('Login failed:', error)
 
-    if (error.data?.data?.errorCode === 'EMAIL_NOT_VERIFIED') {
+    if (error.data?.data?.errorCode === 'AUTH.EMAIL_NOT_VERIFIED') {
       const res = await $fetch<ResponseBody>('/api/users/request-verify-email', {
         method: 'POST',
         body: {
@@ -76,7 +90,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
       const rqVerifyEmailResponse = res as SuccessResponseBody<{ email: string }>
       userEmail.value = rqVerifyEmailResponse.data?.email || payload.data.username
 
-      switchToOtp()
+      switchToOtp('EMAIL_VERIFICATION')
     }
 
     toast.add({
@@ -101,7 +115,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promis
     })
 
     const rqRegisterResponse = res as SuccessResponseBody<{ email: string }>
-    userEmail.value = rqRegisterResponse.data?.email || payload.data.username
+    userEmail.value = rqRegisterResponse.data?.email || payload.data.email
 
     toast.add({
       title: $t('SUCCESS_TITLE'),
@@ -111,7 +125,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promis
     })
 
     // Switch to OTP verification
-    switchToOtp()
+    switchToOtp('EMAIL_VERIFICATION')
   }
   catch (error: any) {
     console.error('Registration failed:', error)
@@ -135,23 +149,36 @@ async function onOtpSubmit(payload: FormSubmitEvent<OtpOnlyDto>): Promise<void> 
       ? payload.data.otp.join('')
       : payload.data.otp
 
-    await $fetch<ResponseBody>('/api/users/verify-email', {
-      method: 'POST',
-      body: {
-        email: userEmail.value,
-        otp: otpString,
-      },
-    })
+    if (otpMode.value === 'EMAIL_VERIFICATION') {
+      await $fetch<ResponseBody>('/api/users/verify-email', {
+        method: 'POST',
+        body: {
+          email: userEmail.value,
+          otp: otpString,
+        },
+      })
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
+      toast.add({
+        title: $t('SUCCESS_TITLE'),
+        description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      })
 
-    // Handle successful verification
-    closeModal()
+      closeModal()
+    }
+    else {
+      verifiedOtp.value = otpString
+
+      toast.add({
+        title: $t('SUCCESS_TITLE'),
+        description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      })
+
+      switchToResetPassword()
+    }
   }
   catch (error: any) {
     console.error('OTP verification failed:', error)
@@ -171,7 +198,11 @@ async function resendOtp(): Promise<void> {
   try {
     isLoading.value = true
 
-    await $fetch<ResponseBody>('/api/users/request-verify-email', {
+    const endpoint = otpMode.value === 'EMAIL_VERIFICATION'
+      ? '/api/users/request-verify-email'
+      : '/api/users/request-reset-password'
+
+    await $fetch<ResponseBody>(endpoint, {
       method: 'POST',
       body: {
         email: userEmail.value,
@@ -190,6 +221,77 @@ async function resendOtp(): Promise<void> {
     toast.add({
       title: $t('ERROR_TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.RESEND_FAILED'),
+      icon: 'i-lucide-alert-circle',
+      color: 'error',
+    })
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+async function onForgotPasswordSubmit(payload: FormSubmitEvent<EmailOnlyDto>): Promise<void> {
+  try {
+    isLoading.value = true
+
+    await $fetch<ResponseBody>('/api/users/request-reset-password', {
+      method: 'POST',
+      body: payload.data,
+    })
+
+    userEmail.value = payload.data.email
+
+    toast.add({
+      title: $t('SUCCESS_TITLE'),
+      description: $t('AUTH.PASSWORD_RESET.SUCCESS'),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    })
+
+    // Switch to OTP form for verification
+    switchToOtp('PASSWORD_RESET')
+  }
+  catch (error: any) {
+    console.error('Password reset failed:', error)
+    toast.add({
+      title: $t('ERROR_TITLE'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
+      icon: 'i-lucide-alert-circle',
+      color: 'error',
+    })
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>): Promise<void> {
+  try {
+    isLoading.value = true
+
+    await $fetch<ResponseBody>('/api/users/reset-password', {
+      method: 'POST',
+      body: {
+        email: userEmail.value,
+        otp: verifiedOtp.value,
+        newPassword: payload.data.newPassword,
+      },
+    })
+
+    toast.add({
+      title: $t('SUCCESS_TITLE'),
+      description: $t('AUTH.PASSWORD_RESET.SUCCESS'),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    })
+
+    switchToLogin()
+  }
+  catch (error: any) {
+    console.error('Reset password failed:', error)
+    toast.add({
+      title: $t('ERROR_TITLE'),
+      description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
@@ -222,7 +324,7 @@ async function resendOtp(): Promise<void> {
           icon="i-ph-x-bold"
           color="neutral"
           variant="outline"
-          class="rounded-full absolute top-4 right-4 z-10"
+          class="rounded-full absolute top-0 right-0 z-10"
           @click="closeModal"
         />
         <Transition
@@ -232,13 +334,16 @@ async function resendOtp(): Promise<void> {
         >
           <div v-if="currentForm === 'login'" key="login">
             <LoginForm
+              :loading="isLoading"
               @submit="onLoginSubmit"
               @switch-to-register="switchToRegister"
+              @switch-to-forgot-password="switchToForgotPassword"
             />
           </div>
 
           <div v-else-if="currentForm === 'register'" key="register">
             <RegisterForm
+              :loading="isLoading"
               @submit="onRegisterSubmit"
               @switch-to-login="switchToLogin"
             />
@@ -247,9 +352,27 @@ async function resendOtp(): Promise<void> {
           <div v-else-if="currentForm === 'otp'" key="otp">
             <OtpForm
               :email="userEmail"
+              :mode="otpMode"
               :is-resending="isLoading"
               @submit="onOtpSubmit"
               @resend-otp="resendOtp"
+            />
+          </div>
+
+          <div v-else-if="currentForm === 'forgot-password'" key="forgot-password">
+            <ForgotPasswordForm
+              :loading="isLoading"
+              @submit="onForgotPasswordSubmit"
+              @resend-otp="resendOtp"
+              @back-to-login="switchToLogin"
+            />
+          </div>
+
+          <div v-else-if="currentForm === 'reset-password'" key="reset-password">
+            <ResetPasswordForm
+              :loading="isLoading"
+              @submit="onResetPasswordSubmit"
+              @back-to-login="switchToLogin"
             />
           </div>
         </Transition>

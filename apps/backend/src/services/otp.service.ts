@@ -101,9 +101,7 @@ export class OtpService {
     otp: string,
     verificationToken?: string,
   ): Promise<void> {
-    const verifyUrl = verificationToken
-      ? `${FE_URL}/verify-email?token=${verificationToken}`
-      : `${FE_URL}/verify-email?email=${encodeURIComponent(email)}`
+    const verifyUrl = `${FE_URL}/verify-email/${verificationToken}`
 
     const mailData = {
       verifyUrl,
@@ -129,9 +127,7 @@ export class OtpService {
     otp: string,
     verificationToken?: string,
   ): Promise<void> {
-    const resetUrl = verificationToken
-      ? `${FE_URL}/reset-password?token=${verificationToken}`
-      : `${FE_URL}/reset-password?email=${encodeURIComponent(email)}`
+    const resetUrl = `${FE_URL}/reset-password/${verificationToken}`
 
     const mailData = {
       resetUrl,

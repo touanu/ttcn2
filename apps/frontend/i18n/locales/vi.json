@@ -1,6 +1,7 @@
 {
   "ERROR_TITLE": "Lỗi",
   "SUCCESS_TITLE": "Thành công",
+  "GENERIC_ERROR": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
   "INTERNAL_SERVER_ERROR": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
   "ROUTE_NOT_FOUND": "Không tìm thấy đường dẫn.",
   "VALIDATION_FAILED": "Xác thực dữ liệu thất bại.",
@@ -60,7 +61,7 @@
       "DESCRIPTION": "Vui lòng nhập mã xác thực được gửi đến email của bạn.",
       "SENT_TO_EMAIL": "Chúng tôi đã gửi mã 6 chữ số đến {email}",
       "BUTTON_VERIFY": "Xác thực Email",
-      "VERIFICATION_SUCCESS": "Xác thực email thành công!",
+      "VERIFICATION_SUCCESS": "Xác thực email thành công!\nHãy quay lại đăng nhập để tiếp tục.",
       "VERIFICATION_FAILED": "Xác thực OTP thất bại. Vui lòng thử lại.",
       "INVALID_OR_EXPIRED": "Mã OTP không hợp lệ hoặc đã hết hạn.",
       "RESEND_COUNTDOWN": "Gửi lại mã sau {seconds}s",
@@ -69,11 +70,19 @@
       "RESEND_FAILED": "Gửi lại mã OTP thất bại. Vui lòng thử lại.",
       "BACK_TO_REGISTER": "Quay lại đăng ký",
       "EMAIL_VERIFIED": "Xác thực email thành công!",
-      "EMAIL_VERIFICATION_OTP_SENT": "Mã xác thực đã được gửi đến email của bạn."
+      "EMAIL_VERIFICATION_OTP_SENT": "Mã xác thực đã được gửi đến email của bạn.",
+      "BACK_TO_LOGIN": "Quay lại đăng nhập"
     },
     "PASSWORD_RESET": {
-      "OTP_SENT": "Mã đặt lại mật khẩu đã được gửi đến email của bạn.",
-      "SUCCESS": "Đặt lại mật khẩu thành công!"
+      "TITLE": "Đặt lại mật khẩu của bạn",
+      "DESCRIPTION": "Vui lòng nhập mật khẩu mới cho tài khoản của bạn.",
+      "RESET_EMAIL_SENT": "Mã đặt lại mật khẩu đã được gửi đến email của bạn.",
+      "SUCCESS": "Đặt lại mật khẩu thành công!",
+      "FAILED": "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
+      "NEW_PASSWORD_LABEL": "Mật khẩu mới",
+      "NEW_PASSWORD_PLACEHOLDER": "Nhập mật khẩu mới của bạn",
+      "RESET_BUTTON": "Đặt lại mật khẩu",
+      "REMEMBER_PASSWORD": "Đã nhớ mật khẩu rồi?"
     },
     "TERMS_AGREEMENT": "Bằng cách đăng ký, bạn đồng ý với"
   },

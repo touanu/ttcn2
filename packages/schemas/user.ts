@@ -1,23 +1,8 @@
 import { emptyAsNull } from '@shared/utils/validation'
-import { z } from 'zod'
-import { otpVerificationSchema } from './otp'
+import z from 'zod'
+import { emailSchema, passwordSchema, usernameSchema } from './base'
+import { otpSchema } from './otp'
 
-// Schema chung
-export const usernameSchema = z
-  .string('FORMS.USERNAME.REQUIRED')
-  .min(3, 'FORMS.USERNAME.MIN_LENGTH')
-  .max(30, 'VALIDATION_USERNAME_MAX')
-export const passwordSchema = z
-  .string('FORMS.PASSWORD.REQUIRED')
-  .min(8, 'FORMS.PASSWORD.MIN_LENGTH')
-  .max(64, 'VALIDATION_PASSWORD_MAX')
-  .regex(/[A-Z]/, 'FORMS.PASSWORD.UPPERCASE_REQUIRED')
-  .regex(/[a-z]/, 'FORMS.PASSWORD.LOWERCASE_REQUIRED')
-  .regex(/\d/, 'FORMS.PASSWORD.NUMBER_REQUIRED')
-  .regex(/[\W_]/, 'FORMS.PASSWORD.SPECIAL_CHARACTER_REQUIRED')
-export const emailSchema = z.email('FORMS.EMAIL.INVALID')
-
-// DTO đăng ký thành viên (dùng chung cho signup và login)
 export const createUserSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
@@ -37,7 +22,8 @@ export const emailOnlySchema = z.object({
 })
 export type EmailOnlyDto = z.infer<typeof emailOnlySchema>
 
-export const emailVerificationSchema = otpVerificationSchema.safeExtend({
+export const emailVerificationSchema = z.object({
+  otp: otpSchema,
   email: emailSchema,
 })
 export type EmailVerificationDto = z.infer<typeof emailVerificationSchema>
@@ -47,10 +33,15 @@ export const passwordResetSchema = emailVerificationSchema.safeExtend({
 })
 export type PasswordResetDto = z.infer<typeof passwordResetSchema>
 
-export const passwordResetByTokenSchema = z.object({
+export const onlyPasswordResetSchema = z.object({
   newPassword: passwordSchema,
 })
-export type PasswordResetByTokenDto = z.infer<typeof passwordResetByTokenSchema>
+export type PasswordOnlyDto = z.infer<typeof onlyPasswordResetSchema>
+
+export const usernameOnlySchema = z.object({
+  username: usernameSchema,
+})
+export type UsernameOnlyDto = z.infer<typeof usernameOnlySchema>
 
 export const requestVerifyEmailSchema = z.object({
   email: emptyAsNull(emailSchema.nullish()),

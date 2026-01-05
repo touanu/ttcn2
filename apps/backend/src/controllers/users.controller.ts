@@ -92,7 +92,7 @@ export class UsersController {
       throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
 
     const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION', true)
-    this.otpService.sendEmailVerificationMail(email, user.fullName, otp, verificationToken)
+    await this.otpService.sendEmailVerificationMail(email, user.fullName, otp, verificationToken)
 
     const response: RequestVerifyEmailResponse = {
       success: true,
@@ -126,7 +126,7 @@ export class UsersController {
     const user = await this.userService.getUserByEmail(email)
 
     const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'PASSWORD_RESET', true)
-    this.otpService.sendPasswordResetMail(email, user.fullName, otp, verificationToken)
+    await this.otpService.sendPasswordResetMail(email, user.fullName, otp, verificationToken)
 
     const response: SuccessResponseBody<undefined> = {
       success: true,

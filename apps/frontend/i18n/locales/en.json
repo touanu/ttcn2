@@ -1,6 +1,7 @@
 {
   "ERROR_TITLE": "Error",
   "SUCCESS_TITLE": "Success",
+  "GENERIC_ERROR": "An unexpected error occurred. Please try again later.",
   "INTERNAL_SERVER_ERROR": "Internal server error. Please try again later.",
   "ROUTE_NOT_FOUND": "Route not found.",
   "VALIDATION_FAILED": "Validation failed.",
@@ -63,7 +64,7 @@
       "DESCRIPTION": "Please enter the verification code sent to your email.",
       "SENT_TO_EMAIL": "We've sent a 6-digit code to {email}",
       "BUTTON_VERIFY": "Verify Email",
-      "VERIFICATION_SUCCESS": "Email verification successful!",
+      "VERIFICATION_SUCCESS": "Email verification successful!\nPlease go back to login to continue.",
       "VERIFICATION_FAILED": "OTP verification failed. Please try again.",
       "INVALID_OR_EXPIRED": "Invalid or expired OTP code.",
       "RESEND_COUNTDOWN": "Resend code in {seconds}s",
@@ -72,11 +73,16 @@
       "RESEND_FAILED": "Failed to resend OTP code. Please try again.",
       "BACK_TO_REGISTER": "Back to Registration",
       "EMAIL_VERIFIED": "Email verified successfully!",
-      "EMAIL_VERIFICATION_OTP_SENT": "Verification code sent to your email."
+      "EMAIL_VERIFICATION_OTP_SENT": "Verification code sent to your email.",
+      "BACK_TO_LOGIN": "Back to Login"
     },
     "PASSWORD_RESET": {
       "OTP_SENT": "Password reset code sent to your email.",
-      "SUCCESS": "Password reset successfully!"
+      "SUCCESS": "Password reset successfully!",
+      "FAILED": "Password reset failed. Please try again.",
+      "NEW_PASSWORD_LABEL": "New Password",
+      "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
+      "RESET_BUTTON": "Reset Password"
     },
     "TERMS_AGREEMENT": "By registering, you agree to our"
   },

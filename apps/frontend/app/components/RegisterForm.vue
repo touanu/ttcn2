@@ -3,6 +3,10 @@ import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
 import type { CreateUserDto } from '@shared/schemas/user'
 import { createUserSchema } from '@shared/schemas/user'
 
+defineProps<{
+  loading?: boolean
+}>()
+
 const emit = defineEmits<{
   submit: [payload: FormSubmitEvent<CreateUserDto>]
   switchToLogin: []
@@ -54,6 +58,7 @@ function switchToLogin(): void {
     icon="i-lucide-user-plus"
     :fields="registerFields"
     :submit-button="{ label: $t('AUTH.BUTTON.REGISTER') }"
+    :loading="loading"
     @submit="onSubmit"
   >
     <template #description>

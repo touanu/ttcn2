@@ -1,4 +1,4 @@
-import { config } from 'zod/v4/core'
+import { config } from 'zod'
 
 // Tùy chỉnh thông điệp lỗi của Zod
 config({

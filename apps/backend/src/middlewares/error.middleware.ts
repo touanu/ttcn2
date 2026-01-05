@@ -55,15 +55,6 @@ function extractStack(err: unknown): string | undefined {
   return undefined
 }
 
-function formatResponseMessage(message: string): string {
-  // Chỉ giữ phần mã lỗi, bỏ phần mô tả chi tiết
-  // Ví dụ: "INVALID_INPUT: expected string, received undefined, PHONE_NUMBER_INVALID_FORMAT"
-  // thành "INVALID_INPUT,PHONE_NUMBER_INVALID_FORMAT"
-
-  const messageCodeRegex = /[A-Z0-9_]{3,}/g
-  return message.match(messageCodeRegex)?.join(',') || message
-}
-
 export function ErrorMiddleware(error: unknown, req: Request, res: Response, _next: NextFunction) {
   const httpErr = toHttpException(error)
   const status = httpErr.status || 500
@@ -79,7 +70,7 @@ export function ErrorMiddleware(error: unknown, req: Request, res: Response, _ne
     success: false,
     error: {
       code: status,
-      message: formatResponseMessage(message),
+      message,
     },
   }
 

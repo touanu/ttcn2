@@ -3,9 +3,14 @@ import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
 import type { LoginUserDto } from '@shared/schemas/auth'
 import { loginUserSchema } from '@shared/schemas/auth'
 
+defineProps<{
+  loading?: boolean
+}>()
+
 const emit = defineEmits<{
   submit: [payload: FormSubmitEvent<LoginUserDto>]
   switchToRegister: []
+  switchToForgotPassword: []
 }>()
 
 const loginFields: AuthFormField[] = [{
@@ -35,6 +40,10 @@ function onSubmit(payload: FormSubmitEvent<LoginUserDto>): void {
 function switchToRegister(): void {
   emit('switchToRegister')
 }
+
+function switchToForgotPassword(): void {
+  emit('switchToForgotPassword')
+}
 </script>
 
 <template>
@@ -45,6 +54,7 @@ function switchToRegister(): void {
     :description="$t('AUTH.LOGIN.DESCRIPTION')"
     icon="i-lucide-user"
     :fields="loginFields"
+    :loading="loading"
     @submit="onSubmit"
   >
     <template #description>
@@ -58,7 +68,10 @@ function switchToRegister(): void {
     </template>
 
     <template #password-hint>
-      <ULink to="#" class="text-primary font-medium" tabindex="-1">
+      <ULink
+        class="text-primary font-medium cursor-pointer hover:underline"
+        @click.prevent="switchToForgotPassword"
+      >
         {{ $t('AUTH.LOGIN.FORGOT_PASSWORD') }}
       </ULink>
     </template>

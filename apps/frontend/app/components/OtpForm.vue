@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
 import type { OtpOnlyDto } from '@shared/schemas/otp'
+import type { OTPType } from '@shared/types/otp'
 import { hideRealEmailAddress } from '@shared/utils'
 
 const props = defineProps<{
   email: string
   isResending?: boolean
+  mode?: OTPType
 }>()
 const emit = defineEmits<{
   submit: [payload: FormSubmitEvent<OtpOnlyDto>]
   resendOtp: []
-  backToRegister: []
 }>()
 const { public: { otpLength } } = useRuntimeConfig()
 const countdown = ref(60)
@@ -53,6 +54,10 @@ function startCountdown(): void {
 onMounted(() => {
   startCountdown()
 })
+
+onUnmounted(() => {
+  isCountingDown.value = false
+})
 </script>
 
 <template>
@@ -61,8 +66,9 @@ onMounted(() => {
     :description="$t('AUTH.OTP.DESCRIPTION', { email: hideRealEmailAddress(props.email) })"
     icon="i-lucide-mail-check"
     :fields="otpFields"
-    class="items-center"
     :validate-on="[]"
+    :loading="props.isResending"
+    class="items-center"
     @submit="onSubmit"
   >
     <template #description>

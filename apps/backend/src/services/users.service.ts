@@ -1,6 +1,5 @@
 import type { User } from '@shared/interfaces/users.interface'
 import type { UserDB } from '@shared/types'
-import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
 import { hash } from 'bcryptjs'
@@ -51,17 +50,6 @@ export class UsersService {
 
     const { password, ...safeUserData } = created
     return safeUserData as User
-  }
-
-  async updateUserPassword(id: ObjectId, newPassword: string): Promise<void> {
-    const hashedPassword = await hash(newPassword, 10)
-    const updated = await UserModel
-      .findByIdAndUpdate(id, { password: hashedPassword })
-      .lean()
-      .exec()
-
-    if (!updated)
-      throw new HttpException(404, 'USER_NOT_FOUND')
   }
 
   async updateUser(id: string, update: Partial<User>): Promise<UserDB> {
