@@ -14,6 +14,7 @@ import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
 import { ACCESS_TOKEN_SECRET } from '@shared/config'
 import { ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_EXPIRATION_TIME } from '@shared/constants'
+import { getRolePermissions } from '@shared/utils'
 import { logger } from '@utils/logger'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
@@ -36,7 +37,11 @@ export class AuthService {
       throw new HttpException(500, 'CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
     }
 
-    const dataStoredInToken: AccessTokenPayload = { id: payload.id, role: payload.role }
+    const dataStoredInToken: AccessTokenPayload = {
+      id: payload.id,
+      role: payload.role,
+      permissions: payload.permissions,
+    }
     const expiresIn = ACCESS_TOKEN_EXPIRATION_TIME
     const token = sign(dataStoredInToken, ACCESS_TOKEN_SECRET, { expiresIn })
     return { expiresIn, token }
@@ -136,10 +141,12 @@ export class AuthService {
     if (!user.isEmailVerified)
       throw new HttpException(401, 'AUTH.EMAIL_NOT_VERIFIED')
 
+    const userRole = user.role || 'student'
     const userPayload: AccessTokenPayload = {
       id: user._id.toString(),
-      role: user.role,
+      role: userRole,
       name: user.fullName,
+      permissions: getRolePermissions(userRole),
     }
 
     const refreshTokenData = await this.createRefreshTokenData(
@@ -192,10 +199,12 @@ export class AuthService {
       throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
     }
 
+    const userRole = user.role || 'student'
     const userPayload: AccessTokenPayload = {
       id: user._id.toString(),
-      role: user.role,
+      role: userRole,
       name: user.fullName,
+      permissions: getRolePermissions(userRole),
     }
 
     // Tạo access token và refresh token mới

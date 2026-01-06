@@ -8,7 +8,14 @@ import type { H3Event } from 'h3'
  * @returns Chuỗi dịch đã được nối lại, ngăn cách bằng dấu phẩy
  */
 export async function translate(event: H3Event, rawKeys: string, vars: string[] = []): Promise<string> {
+  if (!rawKeys)
+    return ''
+
   const t = await useTranslation(event)
+  if (!rawKeys.includes(',')) {
+    return t(rawKeys, vars)
+  }
+
   const keys = rawKeys.split(',')
   const translations = keys.map(key => t(key, vars))
   return translations.join(',')

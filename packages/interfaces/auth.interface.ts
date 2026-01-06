@@ -1,3 +1,4 @@
+import type { Permission } from '@shared/constants'
 import type { Request } from 'express'
 import type { User } from './users.interface'
 
@@ -5,6 +6,7 @@ export interface AccessTokenPayload extends TokenPayload {
   id: string
   role?: string
   name?: string
+  permissions?: Permission[]
 }
 
 export interface TokenPayload {
@@ -28,6 +30,7 @@ export interface TokenWithOTP extends Token {
 
 export interface RequestWithUser extends Request {
   user: User
+  permissions?: Permission[]
 }
 
 export interface ClientInfo {

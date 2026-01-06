@@ -84,6 +84,9 @@
       "RESET_BUTTON": "Đặt lại mật khẩu",
       "REMEMBER_PASSWORD": "Đã nhớ mật khẩu rồi?"
     },
+    "PERMISSIONS": {
+      "ACCESS_DENIED": "Quyền truy cập quản trị bị từ chối."
+    },
     "TERMS_AGREEMENT": "Bằng cách đăng ký, bạn đồng ý với"
   },
   "USERS": {

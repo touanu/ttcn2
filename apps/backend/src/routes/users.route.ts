@@ -1,7 +1,10 @@
 import type { Routes } from '@interfaces/routes.interface'
 import { UsersController } from '@controllers/users.controller'
+import { AuthMiddleware } from '@middlewares/auth.middleware'
 import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
+import { requirePermission } from '@middlewares/rbac.middleware'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'
+import { PERMISSIONS } from '@shared/constants'
 import {
   createUserSchema,
   emailOnlySchema,
@@ -9,6 +12,7 @@ import {
   onlyPasswordResetSchema,
   passwordResetSchema,
   requestVerifyEmailSchema,
+  updateUserRoleSchema,
   updateUserSchema,
 } from '@shared/schemas'
 import { Router } from 'express'
@@ -78,6 +82,18 @@ export class UsersRoute implements Routes {
       rateLimitMiddleware(10, true),
       ValidationMiddleware(onlyPasswordResetSchema),
       this.userController.verifyPasswordResetToken,
+    )
+    this.router.patch(
+      `${this.path}/:id/role`,
+      AuthMiddleware,
+      requirePermission([PERMISSIONS.USER_MANAGE_ROLES]),
+      ValidationMiddleware(updateUserRoleSchema),
+      this.userController.updateUserRole,
+    )
+    this.router.get(
+      `${this.path}/:id/permissions`,
+      AuthMiddleware,
+      this.userController.getUserPermissions,
     )
   }
 }
