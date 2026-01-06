@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (requiredRole && !hasRole(requiredRole)) {
     return abortNavigation({
       statusCode: 403,
-      message: $t('AUTH.PERMISSIONS.ACCESS_DENIED'),
+      message: 'AUTH.PERMISSIONS.ACCESS_DENIED',
     })
   }
 
@@ -29,7 +29,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (requiredRoles && requiredRoles.length > 0 && !hasAnyRole(...requiredRoles)) {
     return abortNavigation({
       statusCode: 403,
-      message: $t('AUTH.PERMISSIONS.ACCESS_DENIED'),
+      message: 'AUTH.PERMISSIONS.ACCESS_DENIED',
     })
   }
 })

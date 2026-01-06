@@ -17,7 +17,7 @@ export default defineNuxtRouteMiddleware((to: RouteLocationNormalizedGeneric) =>
   if (!isAdmin.value) {
     return abortNavigation({
       statusCode: 403,
-      message: $t('AUTH.PERMISSIONS.ACCESS_DENIED'),
+      message: ('AUTH.PERMISSIONS.ACCESS_DENIED'),
     })
   }
 })

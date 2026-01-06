@@ -84,7 +84,7 @@
       "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
       "RESET_BUTTON": "Reset Password"
     },
-    "PERRMISSIONS": {
+    "PERMISSIONS": {
       "ACCESS_DENIED": "Admin access denied."
     },
     "TERMS_AGREEMENT": "By registering, you agree to our"
