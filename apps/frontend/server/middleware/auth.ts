@@ -44,6 +44,16 @@ export default defineEventHandler(async (event) => {
 
     if (!payload.id)
       throw new Error('AUTH.ACCESS_TOKEN_INVALID')
+
+    // Update user data with role and permissions from JWT
+    if (payload.role || payload.permissions) {
+      session.user = {
+        ...session.user,
+        role: payload.role,
+        permissions: payload.permissions,
+      }
+      await setUserSession(event, session)
+    }
   }
   catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -51,6 +61,17 @@ export default defineEventHandler(async (event) => {
       session.secure.accessToken = tokenData.accessToken.token
       session.secure.refreshToken = tokenData.refreshToken.token
       session.id = tokenData.sessionId
+
+      // Update user data with role and permissions from the new token
+      const newPayload = jwt.decode(tokenData.accessToken.token) as AccessTokenPayload
+      if (newPayload) {
+        session.user = {
+          ...session.user,
+          role: newPayload.role,
+          permissions: newPayload.permissions,
+        }
+      }
+
       await setUserSession(event, session)
     }
     else {

@@ -41,12 +41,13 @@ Chi tiết về kiến trúc hệ thống có thể được tìm thấy trong t
 
 EPFS cung cấp các tính năng chính sau:
 
-- Quản lý người dùng: Đăng ký, đăng nhập, quản lý hồ sơ.
-- Quản lý khóa học: Tạo, chỉnh sửa, xóa khóa học và bài
-- Quản lý bài học: Tải lên video, tài liệu học tập.
-- Bài kiểm tra và đánh giá: Tạo bài kiểm tra, chấm điểm.
-- Theo dõi tiến độ học tập: Hiển thị tiến độ của học viên trong các khóa học.
-- Thông báo: Gửi thông báo về các sự kiện quan trọng.
+- **Quản lý người dùng**: Đăng ký, đăng nhập, quản lý hồ sơ với hệ thống RBAC (Role-Based Access Control)
+- **Quản lý khóa học**: Tạo, chỉnh sửa, xóa khóa học và bài
+- **Quản lý bài học**: Tải lên video, tài liệu học tập
+- **Bài kiểm tra và đánh giá**: Tạo bài kiểm tra, chấm điểm
+- **Theo dõi tiến độ học tập**: Hiển thị tiến độ của học viên trong các khóa học
+- **Thông báo**: Gửi thông báo về các sự kiện quan trọng
+- **Hệ thống phân quyền (RBAC)**: Kiểm soát truy cập dựa trên vai trò và quyền hạn chi tiết
 
 ## 📝 Cài đặt và chạy dự án
 

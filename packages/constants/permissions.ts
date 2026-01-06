@@ -1,0 +1,82 @@
+export const PERMISSIONS = {
+  // Quyền người dùng
+  USER_READ: 'user:read',
+  USER_WRITE: 'user:write',
+  USER_DELETE: 'user:delete',
+  USER_MANAGE_ROLES: 'user:manage-roles',
+
+  // Quyền khóa học
+  COURSE_READ: 'course:read',
+  COURSE_WRITE: 'course:write',
+  COURSE_DELETE: 'course:delete',
+  COURSE_PUBLISH: 'course:publish',
+
+  // Quyền bài học
+  LESSON_READ: 'lesson:read',
+  LESSON_WRITE: 'lesson:write',
+  LESSON_DELETE: 'lesson:delete',
+
+  // Quyền bài kiểm tra
+  QUIZ_READ: 'quiz:read',
+  QUIZ_WRITE: 'quiz:write',
+  QUIZ_DELETE: 'quiz:delete',
+  QUIZ_GRADE: 'quiz:grade',
+
+  // Quyền ghi danh
+  ENROLLMENT_READ: 'enrollment:read',
+  ENROLLMENT_WRITE: 'enrollment:write',
+  ENROLLMENT_DELETE: 'enrollment:delete',
+
+  // Quyền hệ thống
+  SYSTEM_SETTINGS: 'system:settings',
+  SYSTEM_LOGS: 'system:logs',
+} as const
+
+export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS]
+
+export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
+  student: [
+    PERMISSIONS.USER_READ,
+    PERMISSIONS.COURSE_READ,
+    PERMISSIONS.LESSON_READ,
+    PERMISSIONS.QUIZ_READ,
+    PERMISSIONS.ENROLLMENT_READ,
+  ],
+  teacher: [
+    PERMISSIONS.USER_READ,
+    PERMISSIONS.USER_WRITE,
+    PERMISSIONS.COURSE_READ,
+    PERMISSIONS.COURSE_WRITE,
+    PERMISSIONS.LESSON_READ,
+    PERMISSIONS.LESSON_WRITE,
+    PERMISSIONS.LESSON_DELETE,
+    PERMISSIONS.QUIZ_READ,
+    PERMISSIONS.QUIZ_WRITE,
+    PERMISSIONS.QUIZ_DELETE,
+    PERMISSIONS.QUIZ_GRADE,
+    PERMISSIONS.ENROLLMENT_READ,
+    PERMISSIONS.ENROLLMENT_WRITE,
+  ],
+  admin: [
+    PERMISSIONS.USER_READ,
+    PERMISSIONS.USER_WRITE,
+    PERMISSIONS.USER_DELETE,
+    PERMISSIONS.USER_MANAGE_ROLES,
+    PERMISSIONS.COURSE_READ,
+    PERMISSIONS.COURSE_WRITE,
+    PERMISSIONS.COURSE_DELETE,
+    PERMISSIONS.COURSE_PUBLISH,
+    PERMISSIONS.LESSON_READ,
+    PERMISSIONS.LESSON_WRITE,
+    PERMISSIONS.LESSON_DELETE,
+    PERMISSIONS.QUIZ_READ,
+    PERMISSIONS.QUIZ_WRITE,
+    PERMISSIONS.QUIZ_DELETE,
+    PERMISSIONS.QUIZ_GRADE,
+    PERMISSIONS.ENROLLMENT_READ,
+    PERMISSIONS.ENROLLMENT_WRITE,
+    PERMISSIONS.ENROLLMENT_DELETE,
+    PERMISSIONS.SYSTEM_LOGS,
+  ],
+  superadmin: Object.values(PERMISSIONS),
+}

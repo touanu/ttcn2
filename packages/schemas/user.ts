@@ -3,6 +3,10 @@ import z from 'zod'
 import { emailSchema, passwordSchema, usernameSchema } from './base'
 import { otpSchema } from './otp'
 
+// Define user roles enum for validation
+export const userRoleSchema = z.enum(['student', 'teacher', 'admin', 'superadmin'])
+export type UserRoleDto = z.infer<typeof userRoleSchema>
+
 export const createUserSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
@@ -56,3 +60,8 @@ export const requestVerifyEmailSchema = z.object({
   }
 })
 export type RequestVerifyEmailDto = z.infer<typeof requestVerifyEmailSchema>
+
+export const updateUserRoleSchema = z.object({
+  role: userRoleSchema,
+})
+export type UpdateUserRoleDto = z.infer<typeof updateUserRoleSchema>

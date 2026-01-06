@@ -2,6 +2,7 @@ import type { User } from '@shared/interfaces/users.interface'
 import type { UserDB } from '@shared/types'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
+import { getRolePermissions } from '@shared/utils'
 import { hash } from 'bcryptjs'
 import { injectable } from 'tsyringe'
 
@@ -72,5 +73,11 @@ export class UsersService {
     const deleted = await UserModel.findByIdAndDelete(id)
     if (!deleted)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
+  }
+
+  async getUserPermissions(id: string): Promise<string[]> {
+    const user = await this.getUserById(id)
+    const role = user.role || 'student'
+    return getRolePermissions(role)
   }
 }

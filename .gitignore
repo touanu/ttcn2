@@ -150,3 +150,6 @@ bun.lock
 
 # ignore uploads folder
 uploads/
+
+.shared/
+.github/prompts/

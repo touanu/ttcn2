@@ -1,5 +1,5 @@
 import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/interfaces'
-import type { UserDB } from '@shared/types'
+import type { UserDB, UserRole } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { OtpService } from '@services/otp.service'
@@ -175,6 +175,47 @@ export class UsersController {
     const response: SuccessResponseBody<undefined> = {
       success: true,
       message: 'AUTH.PASSWORD_RESET.SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  /**
+   * Cập nhật vai trò người dùng (chỉ admin)
+   */
+  public updateUserRole: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const userId: string = req.params.id
+    const { role }: { role: UserRole } = req.body
+
+    if (!role)
+      throw new HttpException(400, 'USERS.ROLE_REQUIRED')
+
+    const user = await this.userService.updateUser(userId, { role })
+
+    const response: SuccessResponseBody<User> = {
+      success: true,
+      data: user,
+      message: 'USERS.ROLE_UPDATE_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  /**
+   * Lấy danh sách quyền của người dùng dựa trên vai trò
+   */
+  public getUserPermissions: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const userId: string = req.params.id
+    const user = await this.userService.getUserById(userId)
+    const permissions = await this.userService.getUserPermissions(userId)
+
+    const response: SuccessResponseBody<{ role: UserRole, permissions: string[] }> = {
+      success: true,
+      data: {
+        role: user.role || 'student',
+        permissions,
+      },
+      message: 'USERS.PERMISSIONS_RETRIEVED',
     }
 
     res.status(200).json(response)

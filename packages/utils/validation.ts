@@ -1,12 +1,13 @@
-import { z } from 'zod'
+import type { ZodType } from 'zod'
+import { preprocess } from 'zod'
 
 /**
  * Biến đổi các chuỗi rỗng thành null trước khi xác thực
  * @param schema
  * @returns ZodTypeAny
  */
-export function emptyAsNull<T extends z.ZodTypeAny>(schema: T) {
-  return z.preprocess((val) => {
+export function emptyAsNull<T extends ZodType<unknown, unknown>>(schema: T) {
+  return preprocess((val) => {
     if (typeof val === 'string' && val === '') {
       return null
     }

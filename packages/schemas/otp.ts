@@ -1,5 +1,5 @@
 import { OTP_LENGTH } from '@shared/constants'
-import { emptyAsNull } from '@shared/utils'
+import { emptyAsNull } from '@shared/utils/validation'
 import z from 'zod'
 
 // Schema chung
