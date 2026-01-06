@@ -39,7 +39,6 @@ flowchart LR
     ucCreateC([Create / Edit course])
     ucUpload([Upload videos / lessons])
     ucGrade([Grade submissions])
-    ucLive([Host live class])
 
     ucManageUsers([Manage users])
     ucManageCourses([Manage courses])
@@ -67,7 +66,6 @@ flowchart LR
   rT --- ucCreateC
   rT --- ucUpload
   rT --- ucGrade
-  rT --- ucLive
 
   rA --- ucManageUsers
   rA --- ucManageCourses
@@ -239,8 +237,6 @@ erDiagram
     bool isEmailVerified
     string passwordHash
     string fullName
-    string phoneNumber
-    bool isPhoneVerified
     string role
     string profilePicture
     date createdAt
@@ -266,19 +262,19 @@ erDiagram
     string description
     string thumbnail
     string level
-    string[] lessonIds
-    string authorId
+    ObjectId[] lessonIds
+    ObjectId authorId
     date createdAt
     date updatedAt
   }
 
   LESSON {
     ObjectId _id
-    string courseId
+    ObjectId courseId
     string title
     string content
-    string[] mediaIds
-    string quizId
+    ObjectId[] mediaIds
+    ObjectId quizId
     number orderIndex
     date createdAt
     date updatedAt
@@ -286,13 +282,13 @@ erDiagram
 
   QUIZ {
     ObjectId _id
-    string lessonId
-    string[] questionIds
+    ObjectId lessonId
+    ObjectId[] questionIds
   }
 
   QUESTION {
-    string _id
-    string quizId
+    ObjectId _id
+    ObjectId quizId
     string type
     string prompt
     string[] choices
@@ -301,8 +297,8 @@ erDiagram
 
   ATTEMPT {
     ObjectId _id
-    string userId
-    string quizId
+    ObjectId userId
+    ObjectId quizId
     number score
     json answers
     date createdAt
@@ -310,9 +306,9 @@ erDiagram
 
   PROGRESS {
     ObjectId _id
-    string userId
-    string courseId
-    string[] completedLessonIds
+    ObjectId userId
+    ObjectId courseId
+    ObjectId[] completedLessonIds
     number percentage
     date updatedAt
   }
@@ -321,7 +317,17 @@ erDiagram
     ObjectId _id
     string url
     string type
-    string ownerId
+    ObjectId ownerId
+    date createdAt
+  }
+
+  OTP {
+    ObjectId _id
+    ObjectId userId
+    string otpHash
+    string verificationToken
+    enum otpType
+    bool used
     date createdAt
   }
 
@@ -346,15 +352,9 @@ erDiagram
 graph LR
   %% Chưa phải là lược đồ hoàn chỉnh, cần bổ sung thêm khi có yêu cầu cụ thể hơn
     subgraph "Authentication"
-        A[POST /auth/register]
         B[POST /auth/login]
         C[POST /auth/logout]
         D[POST /auth/refresh]
-        E[POST /auth/verify-email-otp]
-        ZAC[POST /auth/verify-email-token]
-        F[POST /auth/forgot-password]
-        G[POST /auth/reset-password]
-        H[GET /users/me]
     end
 
     subgraph "User Management"
@@ -364,6 +364,12 @@ graph LR
         L[PATCH /users/:id]
         M[DELETE /users/:id]
         N[PATCH /users/me/avatar]
+        A[POST /users/register]
+        E[POST /users/verify-email-otp]
+        ZAC[POST /users/verify-email-token]
+        F[POST /users/forgot-password]
+        G[POST /users/reset-password]
+        H[GET /users/me]
     end
 
     subgraph "Course Management"

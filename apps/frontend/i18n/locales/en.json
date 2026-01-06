@@ -33,6 +33,14 @@
     "EMAIL_NOT_VERIFIED": "Email has not been verified yet.",
     "EMAIL_ALREADY_VERIFIED": "Email has already been verified.",
     "ACCESS_TOKEN_REFRESHED": "Access token refreshed successfully.",
+    "ACCESS_TOKEN_SECRET_NOT_FOUND": "Access token secret not found.",
+    "CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID": "Cannot create token for user without ID.",
+    "SESSION_CREATION_FAILED": "Session creation failed.",
+    "INVALID_SESSION_ID": "Invalid session ID.",
+    "INVALID_REFRESH_TOKEN": "Invalid refresh token.",
+    "REVOKED_REFRESH_TOKEN": "Refresh token has been revoked.",
+    "FORBIDDEN_INSUFFICIENT_ROLE": "You do not have sufficient role permissions.",
+    "FORBIDDEN_INSUFFICIENT_PERMISSIONS": "You do not have sufficient permissions.",
     "BUTTON": {
       "LOGIN": "Login",
       "REGISTER": "Register"
@@ -94,7 +102,10 @@
     "GET_ALL_SUCCESS": "Users retrieved successfully.",
     "CREATE_SUCCESS": "User created successfully.",
     "UPDATE_SUCCESS": "User updated successfully.",
-    "DELETE_SUCCESS": "User deleted successfully."
+    "DELETE_SUCCESS": "User deleted successfully.",
+    "ROLE_REQUIRED": "User role is required.",
+    "ROLE_UPDATE_SUCCESS": "User role updated successfully.",
+    "PERMISSIONS_RETRIEVED": "User permissions retrieved successfully."
   },
   "CONFIG": {
     "MAILER_HOST_REQUIRED": "Mailer host is required in production.",
@@ -108,7 +119,8 @@
       "LABEL": "Email Address",
       "PLACEHOLDER": "Enter your email address",
       "REQUIRED": "Email is required.",
-      "INVALID": "Invalid email address."
+      "INVALID": "Invalid email address.",
+      "HINT": "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character."
     },
     "PASSWORD": {
       "LABEL": "Password",
@@ -118,7 +130,9 @@
       "UPPERCASE_REQUIRED": "Password must contain at least one uppercase letter.",
       "LOWERCASE_REQUIRED": "Password must contain at least one lowercase letter.",
       "SPECIAL_CHARACTER_REQUIRED": "Password must contain at least one special character.",
-      "NUMBER_REQUIRED": "Password must contain at least {min} number."
+      "NUMBER_REQUIRED": "Password must contain at least {min} number.",
+      "HINT": "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
+      "MISMATCH": "Passwords do not match."
     },
     "CONFIRM_PASSWORD": {
       "LABEL": "Confirm Password",
@@ -160,10 +174,200 @@
     "EITHER_OTP_OR_HASH_REQUIRED": "Either OTP or hash is required."
   },
 
+  "COMMON": {
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "SAVE_CHANGES": "Save Changes",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "RETRY": "Retry",
+    "LOADING": "Loading...",
+    "UNSAVED_CHANGES": "Unsaved changes",
+    "ERROR": {
+      "UNKNOWN": "An unknown error occurred"
+    }
+  },
+
+  "ROLES": {
+    "STUDENT": "Student",
+    "TEACHER": "Teacher",
+    "ADMIN": "Admin",
+    "SUPERADMIN": "Super Admin"
+  },
+
+  "PROFILE": {
+    "TITLE": "My Profile",
+    "SUBTITLE": "Manage your account settings and preferences",
+    "VERIFIED": "Verified",
+    "NOT_VERIFIED": "Not Verified",
+    "EMAIL_VERIFIED": "Email Verified",
+    "EMAIL_NOT_VERIFIED": "Email not verified",
+    "NAV": {
+      "OVERVIEW": "Overview",
+      "SETTINGS": "Settings",
+      "SECURITY": "Security"
+    },
+    "ACTIONS": {
+      "EDIT_PROFILE": "Edit Profile",
+      "VERIFY_EMAIL": "Verify Now"
+    },
+    "STATS": {
+      "COURSES_ENROLLED": "Courses Enrolled",
+      "LESSONS_COMPLETED": "Lessons Completed",
+      "ACHIEVEMENTS": "Achievements",
+      "DAY_STREAK": "Day Streak"
+    },
+    "ACCOUNT_INFO": {
+      "TITLE": "Account Information",
+      "MEMBER_SINCE": "Member Since",
+      "LAST_UPDATED": "Last Updated",
+      "EMAIL_STATUS": "Email Status"
+    },
+    "SETTINGS": {
+      "TITLE": "Profile Settings",
+      "SUBTITLE": "Update your personal information and preferences",
+      "PROFILE_PICTURE": "Profile Picture",
+      "PROFILE_PICTURE_URL": "Profile picture URL",
+      "PROFILE_PICTURE_HINT": "Enter the URL of your profile picture",
+      "PERSONAL_INFO": "Personal Information",
+      "CONTACT_INFO": "Contact Information"
+    },
+    "SECURITY": {
+      "CHANGE_PASSWORD": "Change Password",
+      "CHANGE_PASSWORD_DESC": "Update your password to keep your account secure",
+      "CURRENT_PASSWORD": "Current Password",
+      "CURRENT_PASSWORD_PLACEHOLDER": "Enter your current password",
+      "CONFIRM_NEW_PASSWORD": "Confirm New Password",
+      "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Confirm your new password",
+      "UPDATE_PASSWORD": "Update Password",
+      "SECURITY_SETTINGS": "Security Settings",
+      "SECURITY_SETTINGS_DESC": "View your account security information",
+      "EMAIL_VERIFICATION": "Email Verification",
+      "EMAIL_VERIFIED": "Your email has been verified",
+      "EMAIL_NOT_VERIFIED": "Your email has not been verified yet",
+      "ACCOUNT_CREATED": "Account Created",
+      "LAST_UPDATED": "Last Updated",
+      "DANGER_ZONE": "Danger Zone",
+      "DANGER_ZONE_DESC": "Irreversible and destructive actions",
+      "DELETE_ACCOUNT": "Delete Account",
+      "DELETE_ACCOUNT_DESC": "Permanently delete your account and all associated data",
+      "DELETE_ACCOUNT_BTN": "Delete Account",
+      "DELETE_CONFIRMATION_TITLE": "Delete Account?",
+      "DELETE_CONFIRMATION_DESC": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
+      "DELETE_WARNING": "This will delete all your courses, progress, and achievements.",
+      "CONFIRM_DELETE": "Yes, Delete My Account"
+    },
+    "SUCCESS": {
+      "UPDATED": "Profile updated successfully!",
+      "PASSWORD_UPDATED": "Password updated successfully!",
+      "ACCOUNT_DELETED": "Account deleted successfully",
+      "VERIFICATION_SENT": "Verification email sent!",
+      "VERIFICATION_SENT_DESC": "Please check your email for the verification link"
+    },
+    "ERROR": {
+      "FETCH_FAILED": "Failed to load profile",
+      "UPDATE_FAILED": "Failed to update profile",
+      "PASSWORD_UPDATE_FAILED": "Failed to update password",
+      "ACCOUNT_DELETE_FAILED": "Failed to delete account",
+      "VERIFICATION_FAILED": "Failed to send verification email",
+      "STATS_FAILED": "Failed to load statistics"
+    }
+  },
+
   "CONTACT": {
     "PHONE_NUMBER": "Phone number",
     "EMAIL": "Email",
-    "ADDRESS": "Address"
+    "ADDRESS": "Address",
+    "SUBTITLE": "Get in touch with us",
+    "SEND_MESSAGE": "Send us a message",
+    "SUBJECT": "Subject",
+    "MESSAGE": "Message",
+    "SEND": "Send Message"
+  },
+  "TEAM": {
+    "SUBTITLE": "Meet our talented team of educators and professionals",
+    "ERROR": {
+      "FETCH_FAILED": "Failed to load team members"
+    }
+  },
+  "COURSES": {
+    "SUBTITLE": "Explore our comprehensive English learning courses",
+    "COURSE_TITLE": "Course Title {number}",
+    "COURSE_DESC": "Course description goes here. Learn English effectively with our structured curriculum.",
+    "LEVEL_BEGINNER": "Beginner",
+    "LEVEL_INTERMEDIATE": "Intermediate",
+    "LEVEL_ADVANCED": "Advanced",
+    "VIEW_COURSE": "View Course",
+    "ERROR": {
+      "FETCH_FAILED": "Failed to load courses"
+    }
+  },
+  "ROADMAP": {
+    "SUBTITLE": "Your personalized path to English mastery",
+    "LEVEL_BEGINNER": "Beginner Level",
+    "LEVEL_INTERMEDIATE": "Intermediate Level",
+    "LEVEL_ADVANCED": "Advanced Level",
+    "LEVEL_EXPERT": "Expert Level",
+    "LEVEL_DESC": "Complete foundational courses and build your English skills step by step."
+  },
+  "BLOG": {
+    "SUBTITLE": "Tips, guides, and insights for English learners",
+    "POST_TITLE": "Blog Post Title {number}",
+    "POST_DESC": "Read about the latest tips and strategies for improving your English skills.",
+    "READ_MORE": "Read More"
+  },
+  "SETTINGS": {
+    "SUBTITLE": "Manage your application preferences and settings",
+    "APPEARANCE": "Appearance",
+    "THEME": "Theme",
+    "THEME_DESC": "Choose your preferred color theme",
+    "NOTIFICATIONS": "Notifications",
+    "EMAIL_NOTIFICATIONS": "Email Notifications",
+    "EMAIL_NOTIFICATIONS_DESC": "Receive email updates about your progress"
+  },
+  "ABOUT": {
+    "SUBTITLE": "Learn more about our mission and vision",
+    "MISSION_TITLE": "Our Mission",
+    "MISSION_DESC": "At Englearn, we're dedicated to making English learning accessible, effective, and enjoyable for everyone. Our platform combines cutting-edge technology with proven teaching methods to help you achieve your language goals.",
+    "STORY_TITLE": "Our Story",
+    "STORY_DESC": "Founded by passionate educators and technologists, Englearn was born from the belief that language learning should be personalized, interactive, and fun. We've helped thousands of students improve their English skills and achieve their dreams.",
+    "VALUES_TITLE": "Our Values",
+    "VALUES": {
+      "EXCELLENCE": "Excellence",
+      "EXCELLENCE_DESC": "We strive for the highest quality in everything we do",
+      "INNOVATION": "Innovation",
+      "INNOVATION_DESC": "We continuously improve and adapt to new technologies",
+      "ACCESSIBILITY": "Accessibility",
+      "ACCESSIBILITY_DESC": "We believe everyone deserves access to quality education",
+      "COMMUNITY": "Community",
+      "COMMUNITY_DESC": "We foster a supportive learning environment"
+    }
+  },
+  "TEAM": {
+    "SUBTITLE": "Meet the people behind Englearn"
+  },
+  "CAREERS": {
+    "SUBTITLE": "Join our team and help shape the future of English learning",
+    "OPEN_POSITIONS": "Open Positions",
+    "WHY_WORK_TITLE": "Why Work With Us?",
+    "WHY_WORK": {
+      "PASSIONATE_TEAM": "Work with a passionate team dedicated to education",
+      "FLEXIBLE": "Flexible working arrangements and remote options",
+      "COMPETITIVE": "Competitive salary and benefits",
+      "LEARNING": "Continuous learning and development opportunities",
+      "IMPACT": "Make a real impact on thousands of students worldwide"
+    },
+    "DEPARTMENT": "Department",
+    "LOCATION": "Location",
+    "APPLY_NOW": "Apply Now"
+  },
+  "HELP": {
+    "SUBTITLE": "Find answers to frequently asked questions",
+    "SEARCH_PLACEHOLDER": "Search for help...",
+    "FAQS": "Frequently Asked Questions",
+    "STILL_NEED_HELP": "Still need help?",
+    "CONTACT_SUPPORT": "Contact our support team and we'll get back to you as soon as possible.",
+    "CONTACT_US": "Contact Us"
   },
   "LEGAL": {
     "TERMS_OF_SERVICE": "Terms of Service",

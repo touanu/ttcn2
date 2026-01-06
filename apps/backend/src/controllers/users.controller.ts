@@ -1,3 +1,4 @@
+import type { Permission } from '@shared/constants'
 import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/interfaces'
 import type { UserDB, UserRole } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
@@ -209,7 +210,7 @@ export class UsersController {
     const user = await this.userService.getUserById(userId)
     const permissions = await this.userService.getUserPermissions(userId)
 
-    const response: SuccessResponseBody<{ role: UserRole, permissions: string[] }> = {
+    const response: SuccessResponseBody<{ role: UserRole, permissions: Permission[] }> = {
       success: true,
       data: {
         role: user.role || 'student',

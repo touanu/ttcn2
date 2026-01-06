@@ -3,7 +3,13 @@
 
 import 'reflect-metadata'
 import process from 'node:process'
+import { AttemptsRoute } from '@routes/attempts.route'
 import { AuthRoute } from '@routes/auth.route'
+import { CoursesRoute } from '@routes/courses.route'
+import { LessonsRoute } from '@routes/lessons.route'
+import { MediaRoute } from '@routes/media.route'
+import { ProgressRoute } from '@routes/progress.route'
+import { QuizzesRoute } from '@routes/quizzes.route'
 import { UsersRoute } from '@routes/users.route'
 import { container } from 'tsyringe'
 import { z } from 'zod'
@@ -11,11 +17,16 @@ import App from '@/app'
 import '@shared/config'
 
 // Định nghĩa các routes
-const routes
-  = [
-    container.resolve(UsersRoute),
-    container.resolve(AuthRoute),
-  ]
+const routes = [
+  container.resolve(UsersRoute),
+  container.resolve(AuthRoute),
+  container.resolve(CoursesRoute),
+  container.resolve(LessonsRoute),
+  container.resolve(QuizzesRoute),
+  container.resolve(AttemptsRoute),
+  container.resolve(ProgressRoute),
+  container.resolve(MediaRoute),
+]
 
 // Tùy chỉnh thông điệp lỗi của Zod
 z.config({

@@ -25,6 +25,8 @@ tags:
     description: Authentication and session management
   - name: users
     description: User account management and operations
+  - name: media
+    description: Media file upload and management
 
 paths:
   # Authentication endpoints
@@ -587,6 +589,317 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  # Media endpoints
+  /media/upload/image:
+    post:
+      tags: [media]
+      summary: Upload Image File
+      description: Upload an image file (jpg, jpeg, png, gif, webp). Maximum size 10MB.
+      operationId: uploadImage
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Image file to upload
+      responses:
+        201:
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        400:
+          description: Invalid file type or size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /media/upload/video:
+    post:
+      tags: [media]
+      summary: Upload Video File
+      description: Upload a video file (mp4, mov, avi, mkv). Maximum size 100MB.
+      operationId: uploadVideo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Video file to upload
+      responses:
+        201:
+          description: Video uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        400:
+          description: Invalid file type or size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /media/upload/audio:
+    post:
+      tags: [media]
+      summary: Upload Audio File
+      description: Upload an audio file (mp3, wav, ogg, m4a). Maximum size 20MB.
+      operationId: uploadAudio
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Audio file to upload
+      responses:
+        201:
+          description: Audio uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        400:
+          description: Invalid file type or size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /media/upload/document:
+    post:
+      tags: [media]
+      summary: Upload Document File
+      description: Upload a document file (pdf, doc, docx, txt). Maximum size 15MB.
+      operationId: uploadDocument
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Document file to upload
+      responses:
+        201:
+          description: Document uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        400:
+          description: Invalid file type or size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /media/{id}:
+    get:
+      tags: [media]
+      summary: Get Media by ID
+      description: Retrieve media metadata by ID
+      operationId: getMediaById
+      parameters:
+        - name: id
+          in: path
+          description: Media ID (MongoDB ObjectId)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-f]{24}$'
+            example: '507f1f77bcf86cd799439011'
+      responses:
+        200:
+          description: Media found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        404:
+          description: Media not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags: [media]
+      summary: Delete Media
+      description: Delete a media file (only owner can delete)
+      operationId: deleteMedia
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Media ID (MongoDB ObjectId)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-f]{24}$'
+            example: '507f1f77bcf86cd799439011'
+      responses:
+        200:
+          description: Media deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - not the owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Media not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /media/user/me:
+    get:
+      tags: [media]
+      summary: Get Current User's Media
+      description: Retrieve all media files uploaded by the authenticated user
+      operationId: getUserMedia
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Media list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+                  message:
+                    type: string
+                    example: MEDIA.FOUND
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1020,3 +1333,44 @@ components:
               type: object
               nullable: true
               description: Additional error details
+
+    # Media schemas
+    Media:
+      type: object
+      properties:
+        _id:
+          type: string
+          pattern: '^[0-9a-f]{24}$'
+          description: Media ID (MongoDB ObjectId)
+          example: '507f1f77bcf86cd799439011'
+        url:
+          type: string
+          description: URL path to access the media file
+          example: '/uploads/images/1704576000000-abc123.jpg'
+        type:
+          type: string
+          enum: [IMAGE, VIDEO, AUDIO, DOCUMENT]
+          description: Media file type
+          example: IMAGE
+        ownerId:
+          type: string
+          pattern: '^[0-9a-f]{24}$'
+          description: User ID of the file owner
+          example: '507f1f77bcf86cd799439011'
+        createdAt:
+          type: string
+          format: date-time
+          description: Upload timestamp
+          example: '2024-01-06T12:00:00.000Z'
+
+    MediaResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Media'
+        message:
+          type: string
+          example: MEDIA.UPLOADED

@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken'
 
 const appliedPaths = [
   '/api/auth/logout',
+  '/api/profile',
+  '/api/profile/stats',
 ]
 
 async function refreshAccessToken(
@@ -25,7 +27,9 @@ async function refreshAccessToken(
 
 export default defineEventHandler(async (event) => {
   const url = getRequestURL(event)
-  if (url.pathname && !appliedPaths.includes(url.pathname)) {
+
+  // Only apply auth middleware to paths in appliedPaths
+  if (!url.pathname || !appliedPaths.includes(url.pathname)) {
     return
   }
 
@@ -60,7 +64,7 @@ export default defineEventHandler(async (event) => {
       const tokenData = await refreshAccessToken(event, session.id, session.secure.refreshToken)
       session.secure.accessToken = tokenData.accessToken.token
       session.secure.refreshToken = tokenData.refreshToken.token
-      session.id = tokenData.sessionId
+      session.secure.sessionId = tokenData.sessionId
 
       // Update user data with role and permissions from the new token
       const newPayload = jwt.decode(tokenData.accessToken.token) as AccessTokenPayload

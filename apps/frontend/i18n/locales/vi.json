@@ -33,6 +33,14 @@
     "EMAIL_NOT_VERIFIED": "Email chưa được xác thực.",
     "EMAIL_ALREADY_VERIFIED": "Email đã được xác thực rồi.",
     "ACCESS_TOKEN_REFRESHED": "Làm mới access token thành công.",
+    "ACCESS_TOKEN_SECRET_NOT_FOUND": "Không tìm thấy access token secret.",
+    "CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID": "Không thể tạo token cho người dùng không có ID.",
+    "SESSION_CREATION_FAILED": "Tạo phiên đăng nhập thất bại.",
+    "INVALID_SESSION_ID": "Session ID không hợp lệ.",
+    "INVALID_REFRESH_TOKEN": "Refresh token không hợp lệ.",
+    "REVOKED_REFRESH_TOKEN": "Refresh token đã bị thu hồi.",
+    "FORBIDDEN_INSUFFICIENT_ROLE": "Bạn không có đủ quyền theo vai trò.",
+    "FORBIDDEN_INSUFFICIENT_PERMISSIONS": "Bạn không có đủ quyền truy cập.",
     "BUTTON": {
       "LOGIN": "Đăng nhập",
       "REGISTER": "Đăng ký"
@@ -94,7 +102,10 @@
     "GET_ALL_SUCCESS": "Lấy danh sách người dùng thành công.",
     "CREATE_SUCCESS": "Tạo người dùng thành công.",
     "UPDATE_SUCCESS": "Cập nhật người dùng thành công.",
-    "DELETE_SUCCESS": "Xóa người dùng thành công."
+    "DELETE_SUCCESS": "Xóa người dùng thành công.",
+    "ROLE_REQUIRED": "Vai trò người dùng là bắt buộc.",
+    "ROLE_UPDATE_SUCCESS": "Cập nhật vai trò người dùng thành công.",
+    "PERMISSIONS_RETRIEVED": "Lấy quyền người dùng thành công."
   },
   "CONFIG": {
     "MAILER_HOST_REQUIRED": "Mailer host là bắt buộc trong môi trường production.",
@@ -108,7 +119,8 @@
       "LABEL": "Địa chỉ email",
       "PLACEHOLDER": "Nhập địa chỉ email của bạn",
       "REQUIRED": "Email là bắt buộc.",
-      "INVALID": "Địa chỉ email không hợp lệ."
+      "INVALID": "Địa chỉ email không hợp lệ.",
+      "HINT": "Mật khẩu phải có ít nhất 8 ký tự với 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt."
     },
     "PASSWORD": {
       "LABEL": "Mật khẩu",
@@ -118,7 +130,9 @@
       "UPPERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa.",
       "LOWERCASE_REQUIRED": "Mật khẩu phải chứa ít nhất một chữ cái viết thường.",
       "SPECIAL_CHARACTER_REQUIRED": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
-      "NUMBER_REQUIRED": "Mật khẩu phải chứa ít nhất {min} chữ số."
+      "NUMBER_REQUIRED": "Mật khẩu phải chứa ít nhất {min} chữ số.",
+      "HINT": "Mật khẩu phải có ít nhất 8 ký tự với 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.",
+      "MISMATCH": "Mật khẩu không khớp."
     },
     "CONFIRM_PASSWORD": {
       "LABEL": "Xác nhận mật khẩu",
@@ -160,10 +174,200 @@
     "EITHER_OTP_OR_HASH_REQUIRED": "Cần cung cấp OTP hoặc hash."
   },
 
+  "COMMON": {
+    "CANCEL": "Hủy",
+    "SAVE": "Lưu",
+    "SAVE_CHANGES": "Lưu thay đổi",
+    "DELETE": "Xóa",
+    "EDIT": "Chỉnh sửa",
+    "RETRY": "Thử lại",
+    "LOADING": "Đang tải...",
+    "UNSAVED_CHANGES": "Thay đổi chưa lưu",
+    "ERROR": {
+      "UNKNOWN": "Đã xảy ra lỗi không xác định"
+    }
+  },
+
+  "ROLES": {
+    "STUDENT": "Học viên",
+    "TEACHER": "Giáo viên",
+    "ADMIN": "Quản trị viên",
+    "SUPERADMIN": "Quản trị viên cấp cao"
+  },
+
+  "PROFILE": {
+    "TITLE": "Hồ sơ của tôi",
+    "SUBTITLE": "Quản lý cài đặt tài khoản và tùy chọn của bạn",
+    "VERIFIED": "Đã xác thực",
+    "NOT_VERIFIED": "Chưa xác thực",
+    "EMAIL_VERIFIED": "Email đã được xác thực",
+    "EMAIL_NOT_VERIFIED": "Email chưa được xác thực",
+    "NAV": {
+      "OVERVIEW": "Tổng quan",
+      "SETTINGS": "Cài đặt",
+      "SECURITY": "Bảo mật"
+    },
+    "ACTIONS": {
+      "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
+      "VERIFY_EMAIL": "Xác thực ngay"
+    },
+    "STATS": {
+      "COURSES_ENROLLED": "Khóa học đã đăng ký",
+      "LESSONS_COMPLETED": "Bài học đã hoàn thành",
+      "ACHIEVEMENTS": "Thành tích",
+      "DAY_STREAK": "Chuỗi ngày học"
+    },
+    "ACCOUNT_INFO": {
+      "TITLE": "Thông tin tài khoản",
+      "MEMBER_SINCE": "Thành viên từ",
+      "LAST_UPDATED": "Cập nhật lần cuối",
+      "EMAIL_STATUS": "Trạng thái email"
+    },
+    "SETTINGS": {
+      "TITLE": "Cài đặt hồ sơ",
+      "SUBTITLE": "Cập nhật thông tin cá nhân và tùy chọn của bạn",
+      "PROFILE_PICTURE": "Ảnh đại diện",
+      "PROFILE_PICTURE_URL": "URL ảnh đại diện",
+      "PROFILE_PICTURE_HINT": "Nhập URL của ảnh đại diện của bạn",
+      "PERSONAL_INFO": "Thông tin cá nhân",
+      "CONTACT_INFO": "Thông tin liên hệ"
+    },
+    "SECURITY": {
+      "CHANGE_PASSWORD": "Đổi mật khẩu",
+      "CHANGE_PASSWORD_DESC": "Cập nhật mật khẩu để bảo mật tài khoản của bạn",
+      "CURRENT_PASSWORD": "Mật khẩu hiện tại",
+      "CURRENT_PASSWORD_PLACEHOLDER": "Nhập mật khẩu hiện tại của bạn",
+      "CONFIRM_NEW_PASSWORD": "Xác nhận mật khẩu mới",
+      "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Xác nhận mật khẩu mới của bạn",
+      "UPDATE_PASSWORD": "Cập nhật mật khẩu",
+      "SECURITY_SETTINGS": "Cài đặt bảo mật",
+      "SECURITY_SETTINGS_DESC": "Xem thông tin bảo mật tài khoản của bạn",
+      "EMAIL_VERIFICATION": "Xác thực email",
+      "EMAIL_VERIFIED": "Email của bạn đã được xác thực",
+      "EMAIL_NOT_VERIFIED": "Email của bạn chưa được xác thực",
+      "ACCOUNT_CREATED": "Tài khoản được tạo",
+      "LAST_UPDATED": "Cập nhật lần cuối",
+      "DANGER_ZONE": "Vùng nguy hiểm",
+      "DANGER_ZONE_DESC": "Các hành động không thể hoàn tác và mang tính phá hủy",
+      "DELETE_ACCOUNT": "Xóa tài khoản",
+      "DELETE_ACCOUNT_DESC": "Xóa vĩnh viễn tài khoản và tất cả dữ liệu liên quan",
+      "DELETE_ACCOUNT_BTN": "Xóa tài khoản",
+      "DELETE_CONFIRMATION_TITLE": "Xóa tài khoản?",
+      "DELETE_CONFIRMATION_DESC": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn tài khoản của bạn và xóa tất cả dữ liệu của bạn khỏi máy chủ của chúng tôi.",
+      "DELETE_WARNING": "Điều này sẽ xóa tất cả các khóa học, tiến trình và thành tích của bạn.",
+      "CONFIRM_DELETE": "Có, xóa tài khoản của tôi"
+    },
+    "SUCCESS": {
+      "UPDATED": "Cập nhật hồ sơ thành công!",
+      "PASSWORD_UPDATED": "Cập nhật mật khẩu thành công!",
+      "ACCOUNT_DELETED": "Xóa tài khoản thành công",
+      "VERIFICATION_SENT": "Đã gửi email xác thực!",
+      "VERIFICATION_SENT_DESC": "Vui lòng kiểm tra email của bạn để xác thực"
+    },
+    "ERROR": {
+      "FETCH_FAILED": "Không thể tải hồ sơ",
+      "UPDATE_FAILED": "Không thể cập nhật hồ sơ",
+      "PASSWORD_UPDATE_FAILED": "Không thể cập nhật mật khẩu",
+      "ACCOUNT_DELETE_FAILED": "Không thể xóa tài khoản",
+      "VERIFICATION_FAILED": "Không thể gửi email xác thực",
+      "STATS_FAILED": "Không thể tải thống kê"
+    }
+  },
+
   "CONTACT": {
     "PHONE_NUMBER": "Số điện thoại",
     "EMAIL": "Email",
-    "ADDRESS": "Địa chỉ"
+    "ADDRESS": "Địa chỉ",
+    "SUBTITLE": "Liên hệ với chúng tôi",
+    "SEND_MESSAGE": "Gửi tin nhắn cho chúng tôi",
+    "SUBJECT": "Chủ đề",
+    "MESSAGE": "Nội dung",
+    "SEND": "Gửi tin nhắn"
+  },
+  "TEAM": {
+    "SUBTITLE": "Gặp gỡ đội ngũ giáo viên và chuyên gia tài năng của chúng tôi",
+    "ERROR": {
+      "FETCH_FAILED": "Không thể tải danh sách thành viên"
+    }
+  },
+  "COURSES": {
+    "SUBTITLE": "Khám phá các khóa học tiếng Anh toàn diện của chúng tôi",
+    "COURSE_TITLE": "Khóa học {number}",
+    "COURSE_DESC": "Học tiếng Anh hiệu quả với chương trình học có cấu trúc của chúng tôi.",
+    "LEVEL_BEGINNER": "Cơ bản",
+    "LEVEL_INTERMEDIATE": "Trung cấp",
+    "LEVEL_ADVANCED": "Nâng cao",
+    "VIEW_COURSE": "Xem khóa học",
+    "ERROR": {
+      "FETCH_FAILED": "Không thể tải khóa học"
+    }
+  },
+  "ROADMAP": {
+    "SUBTITLE": "Lộ trình học tiếng Anh được cá nhân hóa cho bạn",
+    "LEVEL_BEGINNER": "Cấp độ Cơ bản",
+    "LEVEL_INTERMEDIATE": "Cấp độ Trung cấp",
+    "LEVEL_ADVANCED": "Cấp độ Nâng cao",
+    "LEVEL_EXPERT": "Cấp độ Chuyên gia",
+    "LEVEL_DESC": "Hoàn thành các khóa học cơ bản và xây dựng kỹ năng tiếng Anh từng bước."
+  },
+  "BLOG": {
+    "SUBTITLE": "Mẹo, hướng dẫn và thông tin hữu ích cho người học tiếng Anh",
+    "POST_TITLE": "Bài viết {number}",
+    "POST_DESC": "Đọc về các mẹo và chiến lược mới nhất để cải thiện kỹ năng tiếng Anh của bạn.",
+    "READ_MORE": "Đọc thêm"
+  },
+  "SETTINGS": {
+    "SUBTITLE": "Quản lý tùy chọn và cài đặt ứng dụng của bạn",
+    "APPEARANCE": "Giao diện",
+    "THEME": "Chủ đề",
+    "THEME_DESC": "Chọn chủ đề màu sắc bạn thích",
+    "NOTIFICATIONS": "Thông báo",
+    "EMAIL_NOTIFICATIONS": "Thông báo qua Email",
+    "EMAIL_NOTIFICATIONS_DESC": "Nhận cập nhật email về tiến trình học tập của bạn"
+  },
+  "ABOUT": {
+    "SUBTITLE": "Tìm hiểu thêm về sứ mệnh và tầm nhìn của chúng tôi",
+    "MISSION_TITLE": "Sứ mệnh của chúng tôi",
+    "MISSION_DESC": "Tại Englearn, chúng tôi cam kết làm cho việc học tiếng Anh trở nên dễ tiếp cận, hiệu quả và thú vị cho mọi người. Nền tảng của chúng tôi kết hợp công nghệ tiên tiến với các phương pháp giảng dạy đã được chứng minh để giúp bạn đạt được mục tiêu ngôn ngữ của mình.",
+    "STORY_TITLE": "Câu chuyện của chúng tôi",
+    "STORY_DESC": "Được thành lập bởi các nhà giáo dục và chuyên gia công nghệ đầy đam mê, Englearn ra đời từ niềm tin rằng việc học ngôn ngữ nên được cá nhân hóa, tương tác và vui vẻ. Chúng tôi đã giúp hàng nghìn học viên cải thiện kỹ năng tiếng Anh và đạt được ước mơ của họ.",
+    "VALUES_TITLE": "Giá trị của chúng tôi",
+    "VALUES": {
+      "EXCELLENCE": "Xuất sắc",
+      "EXCELLENCE_DESC": "Chúng tôi luôn phấn đấu cho chất lượng cao nhất trong mọi việc chúng tôi làm",
+      "INNOVATION": "Đổi mới",
+      "INNOVATION_DESC": "Chúng tôi liên tục cải tiến và thích ứng với công nghệ mới",
+      "ACCESSIBILITY": "Khả năng tiếp cận",
+      "ACCESSIBILITY_DESC": "Chúng tôi tin rằng mọi người đều xứng đáng được tiếp cận giáo dục chất lượng",
+      "COMMUNITY": "Cộng đồng",
+      "COMMUNITY_DESC": "Chúng tôi xây dựng một môi trường học tập hỗ trợ lẫn nhau"
+    }
+  },
+  "TEAM": {
+    "SUBTITLE": "Gặp gỡ những người đứng sau Englearn"
+  },
+  "CAREERS": {
+    "SUBTITLE": "Tham gia đội ngũ của chúng tôi và giúp định hình tương lai của việc học tiếng Anh",
+    "OPEN_POSITIONS": "Vị trí đang tuyển",
+    "WHY_WORK_TITLE": "Tại sao nên làm việc với chúng tôi?",
+    "WHY_WORK": {
+      "PASSIONATE_TEAM": "Làm việc cùng đội ngũ đam mê giáo dục",
+      "FLEXIBLE": "Chế độ làm việc linh hoạt và tùy chọn làm việc từ xa",
+      "COMPETITIVE": "Mức lương cạnh tranh và phúc lợi hấp dẫn",
+      "LEARNING": "Cơ hội học tập và phát triển liên tục",
+      "IMPACT": "Tạo ra tác động thực sự đến hàng nghìn học viên trên toàn thế giới"
+    },
+    "DEPARTMENT": "Bộ phận",
+    "LOCATION": "Địa điểm",
+    "APPLY_NOW": "Ứng tuyển ngay"
+  },
+  "HELP": {
+    "SUBTITLE": "Tìm câu trả lời cho các câu hỏi thường gặp",
+    "SEARCH_PLACEHOLDER": "Tìm kiếm trợ giúp...",
+    "FAQS": "Câu hỏi thường gặp",
+    "STILL_NEED_HELP": "Vẫn cần trợ giúp?",
+    "CONTACT_SUPPORT": "Liên hệ đội ngũ hỗ trợ và chúng tôi sẽ phản hồi bạn sớm nhất có thể.",
+    "CONTACT_US": "Liên hệ chúng tôi"
   },
   "LEGAL": {
     "TERMS_OF_SERVICE": "Điều khoản dịch vụ",

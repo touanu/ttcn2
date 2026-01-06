@@ -24,8 +24,9 @@ export async function useAPI<T>(
     logger.error(`API ${endpoint}:`, error)
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR'),
-      message: await translate(event, error.data?.error?.message),
+      message: error.data?.error?.message
+        ? await translate(event, error.data.error.message)
+        : (error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR')),
       data: { errorCode: error.data?.error?.message },
     })
   }

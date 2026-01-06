@@ -1,3 +1,4 @@
+import type { Permission } from '@shared/constants'
 import type { User } from '@shared/interfaces/users.interface'
 import type { UserDB } from '@shared/types'
 import { HttpException } from '@exceptions/HttpException'
@@ -64,7 +65,7 @@ export class UsersService {
       .exec()
 
     if (!updated)
-      throw new HttpException(404, 'USER_NOT_FOUND')
+      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
 
     return updated
   }
@@ -75,7 +76,7 @@ export class UsersService {
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
   }
 
-  async getUserPermissions(id: string): Promise<string[]> {
+  async getUserPermissions(id: string): Promise<Permission[]> {
     const user = await this.getUserById(id)
     const role = user.role || 'student'
     return getRolePermissions(role)

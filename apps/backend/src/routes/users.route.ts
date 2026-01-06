@@ -41,7 +41,7 @@ export class UsersRoute implements Routes {
       ValidationMiddleware(createUserSchema),
       this.userController.createUser,
     )
-    this.router.put(
+    this.router.patch(
       `${this.path}/:id`,
       ValidationMiddleware(updateUserSchema),
       this.userController.updateUser,

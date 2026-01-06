@@ -31,10 +31,10 @@ export class AuthService {
    */
   private createAccessToken(payload: AccessTokenPayload): Token {
     if (!ACCESS_TOKEN_SECRET)
-      throw new HttpException(500, 'ACCESS_TOKEN_SECRET_NOT_FOUND')
+      throw new HttpException(500, 'AUTH.ACCESS_TOKEN_SECRET_NOT_FOUND')
 
     if (payload.id === undefined) {
-      throw new HttpException(500, 'CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
+      throw new HttpException(500, 'AUTH.CANNOT_CREATE_TOKEN_FOR_USER_WITHOUT_ID')
     }
 
     const dataStoredInToken: AccessTokenPayload = {
@@ -76,7 +76,7 @@ export class AuthService {
 
     await session.save().catch((error) => {
       logger.error(`Lỗi khi lưu phiên đăng nhập: ${error.message}`)
-      throw new HttpException(500, 'SESSION_CREATION_FAILED')
+      throw new HttpException(500, 'AUTH.SESSION_CREATION_FAILED')
     })
 
     return session._id.toString()
@@ -119,7 +119,7 @@ export class AuthService {
   public async getSessionById(sessionId: string): Promise<Session> {
     const session = await SessionModel.findById(sessionId).lean().exec()
     if (!session)
-      throw new HttpException(401, 'INVALID_SESSION_ID')
+      throw new HttpException(401, 'AUTH.INVALID_SESSION_ID')
     return session
   }
 
@@ -196,7 +196,7 @@ export class AuthService {
     const isRefreshTokenMatching = await compare(refreshToken, session.refreshTokenHash)
     if (!isRefreshTokenMatching || session.revoked) {
       logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}`)
-      throw new HttpException(401, 'INVALID_REFRESH_TOKEN')
+      throw new HttpException(401, 'AUTH.INVALID_REFRESH_TOKEN')
     }
 
     const userRole = user.role || 'student'
@@ -227,7 +227,7 @@ export class AuthService {
 
     if (!revokeResult) {
       logger.warn(`Phiên đăng nhập đã thu hồi sẵn rồi!\nSessionID: ${session._id.toString()}`)
-      throw new HttpException(401, 'REVOKED_REFRESH_TOKEN')
+      throw new HttpException(401, 'AUTH.REVOKED_REFRESH_TOKEN')
     }
 
     logger.info(`Đã thu hồi phiên đăng nhập cũ\nOld SessionID: ${session._id.toString()}\nNew SessionID: ${refreshTokenData.sessionId}`)

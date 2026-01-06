@@ -103,6 +103,9 @@ class App {
     this.app.use(express.json({ limit: '10mb' }))
     this.app.use(express.urlencoded({ extended: true, limit: '10mb' }))
     this.app.use(cookieParser())
+
+    // Serve static files from uploads directory
+    this.app.use('/uploads', express.static('uploads'))
   }
 
   private initializeRoutes(routes: Routes[], apiPrefix: string) {

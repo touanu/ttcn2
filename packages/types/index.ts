@@ -1,2 +1,7 @@
+export * from './course'
+export * from './lesson'
+export * from './media'
 export * from './otp'
+export * from './progress'
+export * from './quiz'
 export * from './user'

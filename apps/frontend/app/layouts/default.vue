@@ -38,7 +38,7 @@ onMounted(() => {
   })
 })
 
-const navigationItems: NavigationMenuItem[] = [
+const navigationItems = ref<NavigationMenuItem[]>([
   {
     label: $t('NAVIGATION.MENU_TITLE'),
     type: 'label',
@@ -61,13 +61,13 @@ const navigationItems: NavigationMenuItem[] = [
     icon: 'i-ph-map-trifold',
     active: route.path.startsWith('/roadmap'),
   },
-  {
-    label: $t('NAVIGATION.BLOG'),
-    to: '/blog',
-    icon: 'i-ph-newspaper',
-    active: route.path.startsWith('/blog'),
-  },
-]
+  // {
+  //   label: $t('NAVIGATION.BLOG'),
+  //   to: '/blog',
+  //   icon: 'i-ph-newspaper',
+  //   active: route.path.startsWith('/blog'),
+  // },
+])
 
 const loginItem: NavigationMenuItem = {
   label: $t('AUTH.BUTTON.LOGIN'),
@@ -76,7 +76,7 @@ const loginItem: NavigationMenuItem = {
   active: route.path.startsWith('/login'),
 }
 
-const userActionItems: DropdownMenuItem[] = [
+const userActionItems = ref<DropdownMenuItem[]>([
   {
     label: $t('NAVIGATION.USER.DROPDOWN.PROFILE'),
     to: '/profile',
@@ -100,7 +100,7 @@ const userActionItems: DropdownMenuItem[] = [
     icon: 'i-ph-sign-out',
     class: 'cursor-pointer',
   },
-]
+])
 
 const navigationUserActionMenuItems = computed(() => {
   const items: NavigationMenuItem[] = [
@@ -111,7 +111,7 @@ const navigationUserActionMenuItems = computed(() => {
   ]
 
   if (loggedIn.value)
-    items.push(...toNavigationMenuItem(userActionItems))
+    items.push(...toNavigationMenuItem(userActionItems.value))
   else
     items.push(loginItem)
   return items

@@ -1,33 +1,61 @@
 export const PERMISSIONS = {
-  // Quyền người dùng
+  USERS: {
+    VIEW: 'user:read',
+    CREATE: 'user:write',
+    UPDATE: 'user:write',
+    DELETE: 'user:delete',
+    MANAGE_ROLES: 'user:manage-roles',
+  },
+  COURSES: {
+    VIEW: 'course:read',
+    CREATE: 'course:write',
+    UPDATE: 'course:write',
+    DELETE: 'course:delete',
+    PUBLISH: 'course:publish',
+  },
+  LESSONS: {
+    VIEW: 'lesson:read',
+    CREATE: 'lesson:write',
+    UPDATE: 'lesson:write',
+    DELETE: 'lesson:delete',
+  },
+  QUIZZES: {
+    VIEW: 'quiz:read',
+    CREATE: 'quiz:write',
+    UPDATE: 'quiz:write',
+    DELETE: 'quiz:delete',
+    GRADE: 'quiz:grade',
+  },
+  ENROLLMENTS: {
+    VIEW: 'enrollment:read',
+    CREATE: 'enrollment:write',
+    UPDATE: 'enrollment:write',
+    DELETE: 'enrollment:delete',
+  },
+  SYSTEM: {
+    SETTINGS: 'system:settings',
+    LOGS: 'system:logs',
+  },
+
+  // Legacy flat structure for backward compatibility
   USER_READ: 'user:read',
   USER_WRITE: 'user:write',
   USER_DELETE: 'user:delete',
   USER_MANAGE_ROLES: 'user:manage-roles',
-
-  // Quyền khóa học
   COURSE_READ: 'course:read',
   COURSE_WRITE: 'course:write',
   COURSE_DELETE: 'course:delete',
   COURSE_PUBLISH: 'course:publish',
-
-  // Quyền bài học
   LESSON_READ: 'lesson:read',
   LESSON_WRITE: 'lesson:write',
   LESSON_DELETE: 'lesson:delete',
-
-  // Quyền bài kiểm tra
   QUIZ_READ: 'quiz:read',
   QUIZ_WRITE: 'quiz:write',
   QUIZ_DELETE: 'quiz:delete',
   QUIZ_GRADE: 'quiz:grade',
-
-  // Quyền ghi danh
   ENROLLMENT_READ: 'enrollment:read',
   ENROLLMENT_WRITE: 'enrollment:write',
   ENROLLMENT_DELETE: 'enrollment:delete',
-
-  // Quyền hệ thống
   SYSTEM_SETTINGS: 'system:settings',
   SYSTEM_LOGS: 'system:logs',
 } as const
