@@ -20,7 +20,7 @@ router.get('/admin/dashboard', AuthMiddleware, requireRole('admin', 'superadmin'
 import { PERMISSIONS } from '@shared/constants';
 import { requirePermission } from '@middlewares/rbac.middleware';
 
-router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSE_WRITE]), controller.updateCourse);
+router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSES.UPDATE]), controller.updateCourse);
 ```
 
 ### 3. Yêu Cầu Nhiều Quyền (TẤT CẢ)
@@ -29,7 +29,7 @@ router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSE
 router.post(
   '/courses/:id/publish',
   AuthMiddleware,
-  requireAllPermissions(PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH),
+  requireAllPermissions(PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH),
   controller.publishCourse,
 );
 ```
@@ -37,7 +37,7 @@ router.post(
 ### 4. Yêu Cầu Bất Kỳ Quyền Nào
 
 ```typescript
-router.get('/content/:id', AuthMiddleware, requireAnyPermission(PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ), controller.getContent);
+router.get('/content/:id', AuthMiddleware, requireAnyPermission(PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW), controller.getContent);
 ```
 
 ### 5. Kiểm Tra Quyền Trong Controller
@@ -53,7 +53,7 @@ export class CourseController {
     const permissions = getRolePermissions(userRole);
 
     // Kiểm tra xem user có thể publish không
-    const canPublish = permissions.includes(PERMISSIONS.COURSE_PUBLISH);
+    const canPublish = permissions.includes(PERMISSIONS.COURSES.PUBLISH);
 
     // Logic của bạn ở đây...
   });
@@ -150,7 +150,7 @@ import { PERMISSIONS } from '@shared/constants';
 
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permission: PERMISSIONS.COURSE_WRITE,
+  permission: PERMISSIONS.COURSES.UPDATE,
 });
 </script>
 
@@ -170,7 +170,7 @@ import { PERMISSIONS } from '@shared/constants';
 
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permissions: [PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH],
+  permissions: [PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH],
   requireAll: true,
 });
 </script>
@@ -191,7 +191,7 @@ import { PERMISSIONS } from '@shared/constants';
 
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permissions: [PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ],
+  permissions: [PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW],
   requireAll: false, // Chỉ cần một trong hai quyền
 });
 </script>
@@ -215,12 +215,12 @@ import { PERMISSIONS } from '@shared/constants';
     <h2>{{ course.title }}</h2>
 
     <!-- Nút chỉ hiển thị nếu user có quyền -->
-    <Can :permission="PERMISSIONS.COURSE_WRITE">
+    <Can :permission="PERMISSIONS.COURSES.UPDATE">
       <button @click="editCourse">Chỉnh sửa</button>
     </Can>
 
     <!-- Hiển thị nội dung khác nếu không có quyền -->
-    <Can :permission="PERMISSIONS.COURSE_WRITE">
+    <Can :permission="PERMISSIONS.COURSES.UPDATE">
       <template #default>
         <button @click="editCourse">Chỉnh sửa</button>
       </template>
@@ -289,13 +289,13 @@ import { PERMISSIONS } from '@shared/constants';
 const { hasPermission, hasAnyPermission, hasAllPermissions, hasRole, isAdmin, isTeacher } = usePermissions();
 
 // Kiểm tra một quyền
-const canEdit = hasPermission(PERMISSIONS.COURSE_WRITE);
+const canEdit = hasPermission(PERMISSIONS.COURSES.UPDATE);
 
 // Kiểm tra bất kỳ quyền nào
-const canViewContent = hasAnyPermission([PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ]);
+const canViewContent = hasAnyPermission([PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW]);
 
 // Kiểm tra tất cả quyền
-const canPublish = hasAllPermissions([PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH]);
+const canPublish = hasAllPermissions([PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH]);
 
 // Kiểm tra vai trò
 const isAdminUser = isAdmin.value;
@@ -345,7 +345,7 @@ const canManageCourse = computed(() => {
 
   // Giáo viên cần cả quyền đọc và ghi
   if (hasRole('teacher')) {
-    return hasPermission(PERMISSIONS.COURSE_READ) && hasPermission(PERMISSIONS.COURSE_WRITE);
+    return hasPermission(PERMISSIONS.COURSES.VIEW) && hasPermission(PERMISSIONS.COURSES.UPDATE);
   }
 
   return false;
@@ -353,22 +353,22 @@ const canManageCourse = computed(() => {
 
 // Kiểm tra quyền cao cấp
 const hasAdvancedAccess = computed(() => {
-  return hasAllPermissions([PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH, PERMISSIONS.COURSE_DELETE]).value;
+  return hasAllPermissions([PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH, PERMISSIONS.COURSES.DELETE]).value;
 });
 
 // Tính năng dựa trên vai trò
 const availableFeatures = computed(() => {
   const features = [];
 
-  if (hasPermission(PERMISSIONS.COURSE_READ)) {
+  if (hasPermission(PERMISSIONS.COURSES.VIEW)) {
     features.push('view-courses');
   }
 
-  if (hasPermission(PERMISSIONS.COURSE_WRITE)) {
+  if (hasPermission(PERMISSIONS.COURSES.UPDATE)) {
     features.push('edit-courses', 'create-courses');
   }
 
-  if (hasPermission(PERMISSIONS.USER_WRITE)) {
+  if (hasPermission(PERMISSIONS.USERS.CREATE)) {
     features.push('manage-students');
   }
 
@@ -405,7 +405,7 @@ const toast = useToast();
 
 async function deleteCourse(courseId: string) {
   // Kiểm tra quyền trước khi gọi API
-  if (!hasPermission(PERMISSIONS.COURSE_DELETE)) {
+  if (!hasPermission(PERMISSIONS.COURSES.DELETE)) {
     toast.add({
       title: 'Lỗi',
       description: 'Bạn không có quyền xóa khóa học',
@@ -453,7 +453,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const { hasPermission } = usePermissions();
 
   // Kiểm tra quyền cơ bản
-  if (!hasPermission(PERMISSIONS.COURSE_WRITE)) {
+  if (!hasPermission(PERMISSIONS.COURSES.UPDATE)) {
     return navigateTo('/courses');
   }
 
@@ -499,7 +499,7 @@ const navigationItems = computed(() => {
   }
 
   // Giáo viên
-  if (hasPermission(PERMISSIONS.COURSE_WRITE)) {
+  if (hasPermission(PERMISSIONS.COURSES.UPDATE)) {
     items.push({
       label: 'Giảng dạy',
       to: '/teaching',
@@ -549,7 +549,7 @@ const availableActions = computed(() => {
     action: () => viewCourse(props.courseId),
   });
 
-  if (hasPermission(PERMISSIONS.COURSE_WRITE)) {
+  if (hasPermission(PERMISSIONS.COURSES.UPDATE)) {
     actions.push({
       label: 'Chỉnh sửa',
       icon: 'i-heroicons-pencil',
@@ -557,7 +557,7 @@ const availableActions = computed(() => {
     });
   }
 
-  if (hasPermission(PERMISSIONS.COURSE_PUBLISH)) {
+  if (hasPermission(PERMISSIONS.COURSES.PUBLISH)) {
     actions.push({
       label: 'Xuất bản',
       icon: 'i-heroicons-arrow-up-tray',
@@ -565,7 +565,7 @@ const availableActions = computed(() => {
     });
   }
 
-  if (hasPermission(PERMISSIONS.COURSE_DELETE)) {
+  if (hasPermission(PERMISSIONS.COURSES.DELETE)) {
     actions.push({
       label: 'Xóa',
       icon: 'i-heroicons-trash',
@@ -600,11 +600,11 @@ const formFields = computed(() => {
     { name: 'description', label: 'Mô tả', required: true },
   ];
 
-  if (hasPermission(PERMISSIONS.COURSE_WRITE)) {
+  if (hasPermission(PERMISSIONS.COURSES.UPDATE)) {
     fields.push({ name: 'content', label: 'Nội dung', required: true }, { name: 'duration', label: 'Thời lượng', required: false });
   }
 
-  if (hasPermission(PERMISSIONS.COURSE_PUBLISH)) {
+  if (hasPermission(PERMISSIONS.COURSES.PUBLISH)) {
     fields.push({ name: 'publishDate', label: 'Ngày xuất bản', required: false }, { name: 'featured', label: 'Nổi bật', type: 'checkbox' });
   }
 
@@ -615,8 +615,8 @@ const formFields = computed(() => {
   return fields;
 });
 
-const canSaveAsDraft = hasPermission(PERMISSIONS.COURSE_WRITE);
-const canPublish = hasPermission(PERMISSIONS.COURSE_PUBLISH);
+const canSaveAsDraft = hasPermission(PERMISSIONS.COURSES.UPDATE);
+const canPublish = hasPermission(PERMISSIONS.COURSES.PUBLISH);
 </script>
 
 <template>

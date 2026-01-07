@@ -42,6 +42,12 @@ export const onlyPasswordResetSchema = z.object({
 })
 export type PasswordOnlyDto = z.infer<typeof onlyPasswordResetSchema>
 
+export const changePasswordSchema = z.object({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+})
+export type ChangePasswordDto = z.infer<typeof changePasswordSchema>
+
 export const usernameOnlySchema = z.object({
   username: usernameSchema,
 })

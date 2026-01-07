@@ -35,7 +35,7 @@ Cho mỗi route được bảo vệ:
   router.get('/admin/dashboard', AuthMiddleware, requireRole('admin', 'superadmin'), handler);
 
   // Theo quyền
-  router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSE_WRITE]), handler);
+  router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSES.UPDATE]), handler);
   ```
 
 ### Bước 3: Cập Nhật Controllers (nếu cần)
@@ -78,7 +78,7 @@ Cho mỗi trang được bảo vệ:
   // Theo quyền
   definePageMeta({
     middleware: ['auth', 'permission'],
-    permission: PERMISSIONS.COURSE_WRITE,
+    permission: PERMISSIONS.COURSES.UPDATE,
   });
   </script>
   ```
@@ -98,7 +98,7 @@ Cho mỗi trang được bảo vệ:
   ```vue
   <template>
     <!-- Theo quyền -->
-    <Can :permission="PERMISSIONS.COURSE_WRITE">
+    <Can :permission="PERMISSIONS.COURSES.UPDATE">
       <button>Chỉnh sửa</button>
     </Can>
 
@@ -123,7 +123,7 @@ Cho mỗi trang được bảo vệ:
   const { hasPermission, isAdmin } = usePermissions();
 
   function doAction() {
-    if (!hasPermission(PERMISSIONS.COURSE_WRITE)) {
+    if (!hasPermission(PERMISSIONS.COURSES.UPDATE)) {
       showError('Không có quyền');
       return;
     }
@@ -237,13 +237,13 @@ requireRole('admin');
 requireRole('admin', 'teacher');
 
 // Quyền đơn
-requirePermission([PERMISSIONS.COURSE_WRITE]);
+requirePermission([PERMISSIONS.COURSES.UPDATE]);
 
 // Nhiều quyền - TẤT CẢ yêu cầu
-requireAllPermissions(PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH);
+requireAllPermissions(PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH);
 
 // Nhiều quyền - BẤT KỲ yêu cầu
-requireAnyPermission(PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ);
+requireAnyPermission(PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW);
 ```
 
 ### Các Tùy Chọn Frontend Page Meta
@@ -264,13 +264,13 @@ definePageMeta({
 // Quyền đơn
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permission: PERMISSIONS.COURSE_WRITE,
+  permission: PERMISSIONS.COURSES.UPDATE,
 });
 
 // Nhiều quyền
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permissions: [PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH],
+  permissions: [PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH],
   requireAll: true, // hoặc false cho BẤT KỲ
 });
 

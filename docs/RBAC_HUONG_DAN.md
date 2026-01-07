@@ -50,41 +50,51 @@ Quản trị viên hệ thống với quyền truy cập đầy đủ:
 
 ## Quyền
 
-Các quyền được tổ chức theo tài nguyên và hành động:
+Các quyền được tổ chức theo cấu trúc nested dựa trên tài nguyên:
 
 ```typescript
-// Quyền người dùng
-USER_READ: 'user:read';
-USER_WRITE: 'user:write';
-USER_DELETE: 'user:delete';
-USER_MANAGE_ROLES: 'user:manage-roles';
-
-// Quyền khóa học
-COURSE_READ: 'course:read';
-COURSE_WRITE: 'course:write';
-COURSE_DELETE: 'course:delete';
-COURSE_PUBLISH: 'course:publish';
-
-// Quyền bài học
-LESSON_READ: 'lesson:read';
-LESSON_WRITE: 'lesson:write';
-LESSON_DELETE: 'lesson:delete';
-
-// Quyền bài kiểm tra
-QUIZ_READ: 'quiz:read';
-QUIZ_WRITE: 'quiz:write';
-QUIZ_DELETE: 'quiz:delete';
-QUIZ_GRADE: 'quiz:grade';
-
-// Quyền đăng ký
-ENROLLMENT_READ: 'enrollment:read';
-ENROLLMENT_WRITE: 'enrollment:write';
-ENROLLMENT_DELETE: 'enrollment:delete';
-
-// Quyền hệ thống
-SYSTEM_SETTINGS: 'system:settings';
-SYSTEM_LOGS: 'system:logs';
+PERMISSIONS = {
+  USERS: {
+    VIEW: 'user:read',
+    CREATE: 'user:write',
+    UPDATE: 'user:write',
+    DELETE: 'user:delete',
+    MANAGE_ROLES: 'user:manage-roles',
+  },
+  COURSES: {
+    VIEW: 'course:read',
+    CREATE: 'course:write',
+    UPDATE: 'course:write',
+    DELETE: 'course:delete',
+    PUBLISH: 'course:publish',
+  },
+  LESSONS: {
+    VIEW: 'lesson:read',
+    CREATE: 'lesson:write',
+    UPDATE: 'lesson:write',
+    DELETE: 'lesson:delete',
+  },
+  QUIZZES: {
+    VIEW: 'quiz:read',
+    CREATE: 'quiz:write',
+    UPDATE: 'quiz:write',
+    DELETE: 'quiz:delete',
+    GRADE: 'quiz:grade',
+  },
+  ENROLLMENTS: {
+    VIEW: 'enrollment:read',
+    CREATE: 'enrollment:write',
+    UPDATE: 'enrollment:write',
+    DELETE: 'enrollment:delete',
+  },
+  SYSTEM: {
+    SETTINGS: 'system:settings',
+    LOGS: 'system:logs',
+  },
+};
 ```
+
+Sử dụng: `PERMISSIONS.COURSES.UPDATE`, `PERMISSIONS.USERS.VIEW`, v.v.
 
 ## Triển Khai Backend
 
@@ -109,10 +119,10 @@ import { requirePermission, requireAnyPermission, requireAllPermissions } from '
 import { PERMISSIONS } from '@shared/constants';
 
 // Người dùng phải có TẤT CẢ các quyền được chỉ định
-router.put('/courses/:id', AuthMiddleware, requireAllPermissions(PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH), controller.updateCourse);
+router.put('/courses/:id', AuthMiddleware, requireAllPermissions(PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH), controller.updateCourse);
 
 // Người dùng phải có BẤT KỲ quyền nào trong số các quyền được chỉ định
-router.get('/content/:id', AuthMiddleware, requireAnyPermission(PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ), controller.getContent);
+router.get('/content/:id', AuthMiddleware, requireAnyPermission(PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW), controller.getContent);
 ```
 
 ### Truy Cập Quyền Người Dùng trong Controllers
@@ -196,13 +206,13 @@ const {
 } = usePermissions();
 
 // Kiểm tra quyền cụ thể
-const canEditCourse = hasPermission(PERMISSIONS.COURSE_WRITE);
+const canEditCourse = hasPermission(PERMISSIONS.COURSES.UPDATE);
 
 // Kiểm tra nếu người dùng có bất kỳ quyền nào
-const canAccessContent = hasAnyPermission(PERMISSIONS.COURSE_READ, PERMISSIONS.LESSON_READ);
+const canAccessContent = hasAnyPermission(PERMISSIONS.COURSES.VIEW, PERMISSIONS.LESSONS.VIEW);
 
 // Kiểm tra nếu người dùng có tất cả quyền
-const canPublishCourse = hasAllPermissions(PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH);
+const canPublishCourse = hasAllPermissions(PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH);
 
 // Kiểm tra vai trò cụ thể
 const isInstructor = hasRole('teacher');
@@ -239,9 +249,9 @@ import { PERMISSIONS } from '@shared/constants';
 
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permission: PERMISSIONS.COURSE_WRITE, // Quyền đơn
+  permission: PERMISSIONS.COURSES.UPDATE, // Quyền đơn
   // HOẶC
-  permissions: [PERMISSIONS.COURSE_WRITE, PERMISSIONS.LESSON_WRITE], // Nhiều quyền
+  permissions: [PERMISSIONS.COURSES.UPDATE, PERMISSIONS.LESSONS.UPDATE], // Nhiều quyền
   requireAll: true, // Người dùng phải có TẤT CẢ (mặc định: false = BẤT KỲ)
 });
 </script>
@@ -274,22 +284,22 @@ Hiển thị nội dung chỉ khi người dùng có quyền cụ thể:
 ```vue
 <template>
   <!-- Hiển thị nếu người dùng có quyền -->
-  <Can :permission="PERMISSIONS.COURSE_WRITE">
+  <Can :permission="PERMISSIONS.COURSES.UPDATE">
     <button @click="editCourse">Chỉnh sửa khóa học</button>
   </Can>
 
   <!-- Hiển thị nếu người dùng có BẤT KỲ quyền nào -->
-  <Can :permissions="[PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_DELETE]">
+  <Can :permissions="[PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.DELETE]">
     <button @click="manageCourse">Quản lý khóa học</button>
   </Can>
 
   <!-- Hiển thị nếu người dùng có TẤT CẢ quyền -->
-  <Can :permissions="[PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH]" :require-all="true">
+  <Can :permissions="[PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH]" :require-all="true">
     <button @click="publishCourse">Xuất bản khóa học</button>
   </Can>
 
   <!-- Hiển thị nếu người dùng KHÔNG có quyền (fallback) -->
-  <Can :permission="PERMISSIONS.COURSE_WRITE" :fallback="true">
+  <Can :permission="PERMISSIONS.COURSES.UPDATE" :fallback="true">
     <p>Bạn không có quyền chỉnh sửa khóa học</p>
   </Can>
 </template>

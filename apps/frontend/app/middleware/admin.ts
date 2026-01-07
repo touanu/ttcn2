@@ -1,23 +1,12 @@
-import type { RouteLocationNormalizedGeneric } from 'vue-router'
+export default defineNuxtRouteMiddleware(async () => {
+  const { loggedIn, user } = useUserSession()
 
-/**
- * Middleware route để kiểm tra người dùng có phải admin
- * Sử dụng trong trang: definePageMeta({ middleware: ['auth', 'admin'] })
- */
-export default defineNuxtRouteMiddleware((to: RouteLocationNormalizedGeneric) => {
-  const { isAdmin, isAuthenticated } = usePermissions()
-
-  if (!isAuthenticated.value) {
-    return navigateTo({
-      path: '/login',
-      query: { redirect: to.fullPath },
-    })
+  if (!loggedIn.value) {
+    return navigateTo('/login')
   }
 
-  if (!isAdmin.value) {
-    return abortNavigation({
-      statusCode: 403,
-      message: ('AUTH.PERMISSIONS.ACCESS_DENIED'),
-    })
+  // Check if user has admin or superadmin role
+  if (user.value?.role !== 'admin' && user.value?.role !== 'superadmin') {
+    return navigateTo('/')
   }
 })

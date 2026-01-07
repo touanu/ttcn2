@@ -239,13 +239,13 @@ docs/
 router.get('/admin/dashboard', AuthMiddleware, requireRole('admin', 'superadmin'), controller.getDashboard);
 
 // Bảo vệ theo quyền
-router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSE_WRITE]), controller.updateCourse);
+router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSES.UPDATE]), controller.updateCourse);
 
 // Yêu cầu nhiều quyền
 router.post(
   '/courses/:id/publish',
   AuthMiddleware,
-  requireAllPermissions(PERMISSIONS.COURSE_WRITE, PERMISSIONS.COURSE_PUBLISH),
+  requireAllPermissions(PERMISSIONS.COURSES.UPDATE, PERMISSIONS.COURSES.PUBLISH),
   controller.publishCourse,
 );
 ```
@@ -257,13 +257,13 @@ router.post(
 <script setup lang="ts">
 definePageMeta({
   middleware: ['auth', 'permission'],
-  permission: PERMISSIONS.COURSE_WRITE,
+  permission: PERMISSIONS.COURSES.UPDATE,
 });
 </script>
 
 <!-- Hiển thị có điều kiện -->
 <template>
-  <Can :permission="PERMISSIONS.COURSE_WRITE">
+  <Can :permission="PERMISSIONS.COURSES.UPDATE">
     <button @click="edit">Chỉnh sửa</button>
   </Can>
 
@@ -276,7 +276,7 @@ definePageMeta({
 <script setup lang="ts">
 const { hasPermission, isAdmin } = usePermissions();
 
-if (hasPermission(PERMISSIONS.COURSE_DELETE)) {
+if (hasPermission(PERMISSIONS.COURSES.DELETE)) {
   // Cho phép xóa
 }
 </script>
@@ -343,8 +343,8 @@ describe('usePermissions', () => {
   it('should return correct permissions for teacher', () => {
     const { hasPermission } = usePermissions();
 
-    expect(hasPermission(PERMISSIONS.COURSE_WRITE)).toBe(true);
-    expect(hasPermission(PERMISSIONS.SYSTEM_WRITE)).toBe(false);
+    expect(hasPermission(PERMISSIONS.COURSES.UPDATE)).toBe(true);
+    expect(hasPermission(PERMISSIONS.SYSTEM.SETTINGS)).toBe(false);
   });
 });
 
