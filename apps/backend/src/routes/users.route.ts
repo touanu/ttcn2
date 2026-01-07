@@ -6,6 +6,7 @@ import { requirePermission } from '@middlewares/rbac.middleware'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'
 import { PERMISSIONS } from '@shared/constants'
 import {
+  changePasswordSchema,
   createUserSchema,
   emailOnlySchema,
   emailVerificationSchema,
@@ -45,6 +46,11 @@ export class UsersRoute implements Routes {
       `${this.path}/:id`,
       ValidationMiddleware(updateUserSchema),
       this.userController.updateUser,
+    )
+    this.router.patch(
+      `${this.path}/:id/password`,
+      ValidationMiddleware(changePasswordSchema),
+      this.userController.updateUserPassword,
     )
     this.router.delete(
       `${this.path}/:id`,
@@ -86,7 +92,7 @@ export class UsersRoute implements Routes {
     this.router.patch(
       `${this.path}/:id/role`,
       AuthMiddleware,
-      requirePermission([PERMISSIONS.USER_MANAGE_ROLES]),
+      requirePermission([PERMISSIONS.USERS.MANAGE_ROLES]),
       ValidationMiddleware(updateUserRoleSchema),
       this.userController.updateUserRole,
     )

@@ -66,6 +66,25 @@ export class UsersController {
     res.status(200).json(response)
   })
 
+  updateUserPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const userId: string = req.params.id
+    const { currentPassword, newPassword }: { currentPassword: string, newPassword: string } = req.body
+
+    const user = await this.userService.getUserById(userId)
+    const isMatch = await this.userService.comparePassword(currentPassword, user.password)
+    if (!isMatch) {
+      throw new HttpException(400, 'USERS.CURRENT_PASSWORD_INCORRECT')
+    }
+    await this.userService.updateUser(userId, { password: newPassword })
+
+    const response: SuccessResponseBody<undefined> = {
+      success: true,
+      message: 'USERS.PASSWORD_UPDATE_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
   deleteUser: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
     await this.userService.deleteUser(userId)
