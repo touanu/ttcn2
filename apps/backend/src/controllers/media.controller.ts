@@ -19,39 +19,8 @@ export class MediaController {
     if (!userId)
       throw new HttpException(401, 'AUTH.UNAUTHORIZED')
 
-    if (!req.file)
-      throw new HttpException(400, 'MEDIA.NO_FILE_UPLOADED')
-
-    // Extract media type from the path
-    const pathParts = req.file.path.split('/')
-    const mediaFolder = pathParts[pathParts.length - 2] // images, videos, audio, documents
-
-    let type: 'IMAGE' | 'VIDEO' | 'AUDIO' | 'DOCUMENT'
-    switch (mediaFolder) {
-      case 'images':
-        type = 'IMAGE'
-        break
-      case 'videos':
-        type = 'VIDEO'
-        break
-      case 'audio':
-        type = 'AUDIO'
-        break
-      case 'documents':
-        type = 'DOCUMENT'
-        break
-      default:
-        type = 'IMAGE'
-    }
-
-    // Generate URL for the uploaded file
-    const url = `/uploads/${mediaFolder}/${req.file.filename}`
-
-    const media = await this.mediaService.createMedia({
-      url,
-      type,
-      ownerId: userId,
-    })
+    const { url, type } = req.body
+    const media = await this.mediaService.createMedia({ url, type, ownerId: userId })
 
     const response: SuccessResponseBody<MediaDB> = {
       success: true,

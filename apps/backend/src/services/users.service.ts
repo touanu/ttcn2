@@ -4,15 +4,11 @@ import type { UserDB } from '@shared/types'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
 import { getRolePermissions } from '@shared/utils'
-import { compare, hash } from 'bcryptjs'
+import { hash } from 'bcryptjs'
 import { injectable } from 'tsyringe'
 
 @injectable()
 export class UsersService {
-  async comparePassword(currentPassword: string, password: string) {
-    return await compare(currentPassword, password)
-  }
-
   async getUserById(id: string): Promise<UserDB> {
     const user = await UserModel.findById(id).lean<UserDB>().exec()
     if (!user)
