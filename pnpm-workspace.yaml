@@ -16,10 +16,10 @@ packages:
 overrides:
   '@shared/config': workspace:*
   '@shared/constants': workspace:*
-  '@shared/interfaces': workspace:*
   '@shared/schemas': workspace:*
   '@shared/types': workspace:*
   '@shared/utils': workspace:*
+  '@vueuse/core>@types/web-bluetooth': '-'
   vite: npm:rolldown-vite@7.1.14
 
 onlyBuiltDependencies:
