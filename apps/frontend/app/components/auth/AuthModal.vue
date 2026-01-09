@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { ResponseBody, SuccessResponseBody } from '@shared/interfaces'
 import type { CreateUserDto, LoginUserDto, OtpOnlyDto } from '@shared/schemas'
 import type { EmailOnlyDto, PasswordOnlyDto } from '@shared/schemas/user'
+import type { ResponseBody, SuccessResponseBody } from '@shared/types'
 import type { OTPType } from '@shared/types/otp'
 
 const open = ref<boolean>(false)
@@ -333,7 +333,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
           appear
         >
           <div v-if="currentForm === 'login'" key="login">
-            <LoginForm
+            <AuthLoginForm
               :loading="isLoading"
               @submit="onLoginSubmit"
               @switch-to-register="switchToRegister"
@@ -342,7 +342,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
           </div>
 
           <div v-else-if="currentForm === 'register'" key="register">
-            <RegisterForm
+            <AuthRegisterForm
               :loading="isLoading"
               @submit="onRegisterSubmit"
               @switch-to-login="switchToLogin"
@@ -350,7 +350,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
           </div>
 
           <div v-else-if="currentForm === 'otp'" key="otp">
-            <OtpForm
+            <AuthOtpForm
               :email="userEmail"
               :mode="otpMode"
               :is-resending="isLoading"
@@ -360,7 +360,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
           </div>
 
           <div v-else-if="currentForm === 'forgot-password'" key="forgot-password">
-            <ForgotPasswordForm
+            <AuthForgotPasswordForm
               :loading="isLoading"
               @submit="onForgotPasswordSubmit"
               @resend-otp="resendOtp"
@@ -369,7 +369,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
           </div>
 
           <div v-else-if="currentForm === 'reset-password'" key="reset-password">
-            <ResetPasswordForm
+            <AuthResetPasswordForm
               :loading="isLoading"
               @submit="onResetPasswordSubmit"
               @back-to-login="switchToLogin"
