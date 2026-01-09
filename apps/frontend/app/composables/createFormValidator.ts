@@ -22,7 +22,7 @@ export default function createFormValidator<T>(schema: z.ZodType<T>) {
 
         errors.push({
           name: err.path.join('.'),
-          message: nuxtApp.$i18n.t(err.message, { min, max }),
+          message: nuxtApp.$i18n.te(err.message) ? nuxtApp.$i18n.t(err.message, { min, max }) : err.message,
         })
       })
     }

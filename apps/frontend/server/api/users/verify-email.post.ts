@@ -1,4 +1,4 @@
-import type { SuccessResponseBody } from '@shared/interfaces'
+import type { SuccessResponseBody } from '@shared/types'
 import { emailVerificationSchema } from '@shared/schemas/user'
 
 export default defineEventHandler(async (event) => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { SuccessResponseBody } from '@shared/interfaces'
 import type { PasswordOnlyDto } from '@shared/schemas/user'
+import type { SuccessResponseBody } from '@shared/types'
 
 definePageMeta({
   seo: false,
@@ -53,7 +53,7 @@ async function onSubmit(payload: FormSubmitEvent<PasswordOnlyDto>): Promise<void
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-    <ResetPasswordForm
+    <AuthResetPasswordForm
       class="max-w-md w-full flex items-center flex-col bg-white p-8 rounded-lg shadow"
       :loading="isLoading"
       @submit="onSubmit"

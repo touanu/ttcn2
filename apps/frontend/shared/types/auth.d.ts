@@ -1,4 +1,4 @@
-import type { AccessTokenPayload } from '@shared/interfaces'
+import type { AccessTokenPayload } from '@shared/types'
 
 declare module '#auth-utils' {
   interface User extends AccessTokenPayload {}

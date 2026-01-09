@@ -160,9 +160,9 @@ const { data: positions, pending, error } = await useFetch<Position[]>('/api/car
     </UCard>
   </div>
 
-  <AppLoading v-if="pending" />
-  <AppError v-else-if="error" :message="error.message" />
-  <AppEmpty
+  <CommonLoading v-if="pending" />
+  <CommonError v-else-if="error" :message="error.message" />
+  <CommonEmpty
     v-else-if="!positions || positions.length === 0"
     title="No open positions"
     description="Check back later for new opportunities"

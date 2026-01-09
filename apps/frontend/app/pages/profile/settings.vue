@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type { User } from '@shared/interfaces'
+import type { User } from '@shared/types'
 import { updateUserSchema } from '@shared/schemas/user'
 
 definePageMeta({
-  title: 'Profile Settings',
 })
 
 const toast = useToast()
-const { t } = useI18n()
+const { setLocale, locale } = useI18n()
 
 // Fetch current user data
 const { data: user, pending, error } = await useFetch<User>('/api/profile')
@@ -68,15 +67,15 @@ async function onSubmit() {
     user.value = updatedUser
 
     toast.add({
-      title: t('PROFILE.SUCCESS.UPDATED'),
+      title: $t('PROFILE.SUCCESS.UPDATED'),
       color: 'success',
       icon: 'i-heroicons-check-circle',
     })
   }
   catch (err: any) {
     toast.add({
-      title: t('PROFILE.ERROR.UPDATE_FAILED'),
-      description: err.message || t('COMMON.ERROR.UNKNOWN'),
+      title: $t('PROFILE.ERROR.UPDATE_FAILED'),
+      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
       color: 'error',
       icon: 'i-heroicons-x-circle',
     })
@@ -95,16 +94,16 @@ async function requestVerifyEmail() {
     })
 
     toast.add({
-      title: t('PROFILE.SUCCESS.VERIFICATION_SENT'),
-      description: t('PROFILE.SUCCESS.VERIFICATION_SENT_DESC'),
+      title: $t('PROFILE.SUCCESS.VERIFICATION_SENT'),
+      description: $t('PROFILE.SUCCESS.VERIFICATION_SENT_DESC'),
       color: 'success',
       icon: 'i-heroicons-envelope',
     })
   }
   catch (err: any) {
     toast.add({
-      title: t('PROFILE.ERROR.VERIFICATION_FAILED'),
-      description: err.message || t('COMMON.ERROR.UNKNOWN'),
+      title: $t('PROFILE.ERROR.VERIFICATION_FAILED'),
+      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
       color: 'error',
       icon: 'i-heroicons-x-circle',
     })
@@ -116,7 +115,7 @@ async function requestVerifyEmail() {
   <NuxtLayout name="profile">
     <!-- Loading State -->
     <UCard v-if="pending">
-      <AppLoading size="lg" :message="$t('COMMON.LOADING')" />
+      <CommonLoading size="lg" :message="$t('COMMON.LOADING')" />
     </UCard>
 
     <!-- Error State -->
@@ -171,8 +170,9 @@ async function requestVerifyEmail() {
             </h4>
           </div>
 
-          <UFormGroup
+          <UFormField
             name="profilePictureUrl"
+            :hint="$t('PROFILE.SETTINGS.PROFILE_PICTURE_HINT')"
             class="pl-7"
           >
             <div class="flex items-start gap-6">
@@ -192,12 +192,9 @@ async function requestVerifyEmail() {
                     <UIcon name="i-heroicons-link" class="h-5 w-5" />
                   </template>
                 </UInput>
-                <p class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ $t('PROFILE.SETTINGS.PROFILE_PICTURE_HINT') }}
-                </p>
               </div>
             </div>
-          </UFormGroup>
+          </UFormField>
         </div>
 
         <USeparator />
@@ -213,7 +210,7 @@ async function requestVerifyEmail() {
 
           <div class="grid gap-6 pl-7 sm:grid-cols-2">
             <!-- Full Name -->
-            <UFormGroup
+            <UFormField
               :label="$t('FORMS.FULLNAME.LABEL')"
               name="fullName"
               required
@@ -228,10 +225,10 @@ async function requestVerifyEmail() {
                   <UIcon name="i-heroicons-user-circle" class="h-5 w-5" />
                 </template>
               </UInput>
-            </UFormGroup>
+            </UFormField>
 
             <!-- Username -->
-            <UFormGroup
+            <UFormField
               :label="$t('FORMS.USERNAME.LABEL')"
               name="username"
               required
@@ -246,7 +243,46 @@ async function requestVerifyEmail() {
                   <UIcon name="i-heroicons-at-symbol" class="h-5 w-5" />
                 </template>
               </UInput>
-            </UFormGroup>
+            </UFormField>
+          </div>
+        </div>
+
+        <USeparator />
+
+        <!-- Localization Section -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <UIcon name="i-heroicons-language" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+            <h4 class="text-base font-medium text-gray-900 dark:text-white">
+              {{ $t('SETTINGS.LOCALIZATION') }}
+            </h4>
+          </div>
+
+          <div class="pl-7">
+            <UFormField
+              :label="$t('SETTINGS.LANGUAGE')"
+              :description="$t('SETTINGS.LANGUAGE_DESC')"
+            >
+              <USelectMenu
+                :model-value="{ value: locale, label: locale === 'vi' ? 'Tiếng Việt' : 'English', icon: locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us' }"
+                :items="[{
+                  value: 'vi',
+                  label: 'Tiếng Việt',
+                  icon: 'i-circle-flags-vn',
+                }, {
+                  value: 'en',
+                  label: 'English',
+                  icon: 'i-circle-flags-us',
+                }]"
+                value-attribute="value"
+                size="lg"
+                @update:model-value="(item) => setLocale(item.value as 'vi' | 'en')"
+              >
+                <template #leading>
+                  <UIcon :name="locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us'" class="h-5 w-5" />
+                </template>
+              </USelectMenu>
+            </UFormField>
           </div>
         </div>
 
@@ -263,7 +299,7 @@ async function requestVerifyEmail() {
 
           <div class="pl-7">
             <!-- Email -->
-            <UFormGroup
+            <UFormField
               :label="$t('FORMS.EMAIL.LABEL')"
               name="email"
               required
@@ -284,23 +320,21 @@ async function requestVerifyEmail() {
                 </template>
               </UInput>
 
-              <template v-if="user && !user.isEmailVerified" #hint>
-                <div class="mt-2 flex items-center gap-2 rounded-lg bg-warning-50 p-3 dark:bg-warning-950/30">
-                  <UIcon name="i-heroicons-exclamation-triangle" class="h-4 w-4 text-warning-600 dark:text-warning-400" />
-                  <span class="flex-1 text-xs text-warning-700 dark:text-warning-300">
-                    {{ $t('PROFILE.EMAIL_NOT_VERIFIED') }}
-                  </span>
-                  <UButton
-                    size="xs"
-                    color="warning"
-                    variant="soft"
-                    @click="requestVerifyEmail"
-                  >
-                    {{ $t('PROFILE.ACTIONS.VERIFY_EMAIL') }}
-                  </UButton>
-                </div>
-              </template>
-            </UFormGroup>
+              <div v-if="user && !user.isEmailVerified" class="mt-2 flex items-center gap-2 rounded-lg bg-warning-50 p-3 dark:bg-warning-950/30">
+                <UIcon name="i-heroicons-exclamation-triangle" class="h-4 w-4 text-warning-600 dark:text-warning-400" />
+                <span class="flex-1 text-xs text-warning-700 dark:text-warning-300">
+                  {{ $t('PROFILE.EMAIL_NOT_VERIFIED') }}
+                </span>
+                <UButton
+                  size="xs"
+                  color="warning"
+                  variant="soft"
+                  @click="requestVerifyEmail"
+                >
+                  {{ $t('PROFILE.ACTIONS.VERIFY_EMAIL') }}
+                </UButton>
+              </div>
+            </UFormField>
           </div>
         </div>
 

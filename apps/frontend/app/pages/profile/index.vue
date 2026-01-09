@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from '@shared/interfaces'
+import type { User } from '@shared/types'
 import { formatDate, getRoleColor } from '~/utils/profile'
 
 definePageMeta({
@@ -90,28 +90,28 @@ const formattedUpdatedAt = computed(() => formatDate(user.value?.updatedAt, loca
 
       <!-- Statistics -->
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
+        <CommonStatCard
           icon="i-heroicons-book-open"
           :label="$t('PROFILE.STATS.COURSES_ENROLLED')"
           :value="statsPending ? '...' : (stats?.coursesEnrolled || 0)"
           color="blue"
         />
 
-        <StatCard
+        <CommonStatCard
           icon="i-heroicons-academic-cap"
           :label="$t('PROFILE.STATS.LESSONS_COMPLETED')"
           :value="statsPending ? '...' : (stats?.lessonsCompleted || 0)"
           color="green"
         />
 
-        <StatCard
+        <CommonStatCard
           icon="i-heroicons-trophy"
           :label="$t('PROFILE.STATS.ACHIEVEMENTS')"
           :value="statsPending ? '...' : (stats?.achievements || 0)"
           color="purple"
         />
 
-        <StatCard
+        <CommonStatCard
           icon="i-heroicons-fire"
           :label="$t('PROFILE.STATS.DAY_STREAK')"
           :value="statsPending ? '...' : (stats?.dayStreak || 0)"

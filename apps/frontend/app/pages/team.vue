@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from '@shared/interfaces'
+import type { User } from '@shared/types'
 
 definePageMeta({
   title: 'Our Team',
@@ -29,7 +29,7 @@ const teamMembers = computed(() => response.value?.data || [])
     />
 
     <div v-else class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      <UCard v-for="member in teamMembers" :key="member._id?.toString()" class="group hover:shadow-xl transition-all duration-300">
+      <UCard v-for="member in teamMembers" :key="member._id" class="group hover:shadow-xl transition-all duration-300">
         <div class="text-center">
           <div class="relative mx-auto mb-4 inline-block">
             <UAvatar :src="member.profilePictureUrl" :alt="member.fullName" size="3xl" class="ring-4 ring-primary-100 dark:ring-primary-900" />

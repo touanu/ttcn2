@@ -1,4 +1,4 @@
-import type { User } from '@shared/interfaces'
+import type { User } from '@shared/types'
 
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event)

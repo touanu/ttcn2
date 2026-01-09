@@ -32,9 +32,7 @@ definePageMeta({
                 {{ $t('SETTINGS.THEME_DESC') }}
               </p>
             </div>
-            <UButton color="neutral" variant="soft">
-              Auto
-            </UButton>
+            <UColorModeSelect />
           </div>
         </div>
       </UCard>
@@ -55,7 +53,6 @@ definePageMeta({
                 {{ $t('SETTINGS.EMAIL_NOTIFICATIONS_DESC') }}
               </p>
             </div>
-            <UToggle />
           </div>
         </div>
       </UCard>

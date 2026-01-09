@@ -183,16 +183,197 @@
     "RETRY": "Thử lại",
     "LOADING": "Đang tải...",
     "UNSAVED_CHANGES": "Thay đổi chưa lưu",
+    "CREATE": "Tạo mới",
+    "SEARCH": "Tìm kiếm",
+    "FILTER": "Lọc",
+    "ACTIONS": "Hành động",
+    "EMAIL": "Email",
+    "NAME": "Tên",
+    "FULL_NAME": "Họ và tên",
+    "USERNAME": "Tên đăng nhập",
+    "PASSWORD": "Mật khẩu",
+    "ROLE": "Vai trò",
+    "STATUS": "Trạng thái",
+    "JOINED": "Tham gia",
+    "CREATED": "Tạo lúc",
+    "ALL": "Tất cả",
+    "OF": "của",
+    "VERIFIED": "Đã xác thực",
+    "UNVERIFIED": "Chưa xác thực",
+    "SHOWING": "Hiển thị",
+    "MANAGE": "Quản lý",
+    "SUCCESS": "Thành công",
     "ERROR": {
       "UNKNOWN": "Đã xảy ra lỗi không xác định"
     }
   },
 
+  "ADMIN": {
+    "TITLE": "Quản Trị",
+    "DASHBOARD": "Tổng Quan",
+    "BACK_TO_SITE": "Về Trang Chủ",
+    "WELCOME": "Chào mừng trở lại",
+    "WELCOME_SUBTITLE": "Đây là tổng quan về nền tảng của bạn",
+    "NAV": {
+      "DASHBOARD": "Tổng Quan",
+      "USERS": "Người Dùng",
+      "COURSES": "Khóa Học",
+      "CONTENT": "Nội Dung",
+      "SETTINGS": "Cài Đặt"
+    },
+    "STATS": {
+      "TOTAL_USERS": "Tổng Người Dùng",
+      "TOTAL_COURSES": "Tổng Khóa Học",
+      "ACTIVE_COURSES": "Khóa Học Hoạt Động",
+      "TOTAL_LESSONS": "Tổng Bài Giảng",
+      "LOADING": "Đang tải thống kê..."
+    },
+    "RECENT_USERS": "Người Dùng Mới",
+    "VIEW_ALL": "Xem Tất Cả",
+    "ADD_USER": "Thêm Người Dùng",
+    "ADD_COURSE": "Thêm Khóa Học",
+    "ADD_CONTENT": "Thêm Nội Dung",
+    "USERS": {
+      "SUBTITLE": "Quản lý người dùng, vai trò và quyền hạn",
+      "ALL_USERS": "Tất Cả Người Dùng",
+      "TOTAL": "người dùng",
+      "FILTER_EMAILS": "Lọc email...",
+      "FILTER_STATUS": "Lọc trạng thái",
+      "DISPLAY": "Hiển thị",
+      "ROWS_SELECTED": "hàng được chọn.",
+      "COPY_USER_ID": "Sao chép ID người dùng",
+      "COPIED_TO_CLIPBOARD": "Đã sao chép",
+      "USER_ID_COPIED": "ID người dùng đã được sao chép",
+      "USER_ID_NOT_FOUND": "Không tìm thấy ID người dùng",
+      "CANNOT_DELETE_ADMIN": "Không thể xóa tài khoản quản trị",
+      "CANNOT_DELETE_SUPERADMIN": "Không thể xóa tài khoản superadmin",
+      "CANNOT_DELETE_OTHER_SUPERADMIN": "Superadmin không thể xóa superadmin khác",
+      "ADMIN_PROTECTED": "Tài khoản admin và superadmin được bảo vệ và không thể xóa",
+      "VIEW_DETAILS": "Xem chi tiết",
+      "VIEW_PAYMENTS": "Xem thanh toán",
+      "DELETE_USER": "Xóa người dùng",
+      "USER_DELETED": "Đã xóa người dùng",
+      "USER_DELETED_DESC": "Người dùng đã được xóa.",
+      "VIEW_PROFILE": "Xem hồ sơ",
+      "EDIT_USER": "Chỉnh sửa người dùng",
+      "ADD_USER_DESC": "Thêm người dùng mới vào hệ thống",
+      "USER_CREATED": "Đã tạo người dùng '{name}' thành công",
+      "CREATE_ERROR": "Không thể tạo người dùng",
+      "DELETE_MODAL_TITLE": "Xóa người dùng",
+      "DELETE_CONFIRMATION": "Bạn có chắc chắn muốn xóa {count} người dùng? Hành động này không thể hoàn tác.",
+      "DELETE_WARNING": "⚠️ Điều này sẽ xóa vĩnh viễn người dùng đã chọn và tất cả dữ liệu của họ.",
+      "USERS_DELETED_SUCCESS": "Đã xóa {count} người dùng thành công",
+      "DELETE_ERROR": "Không thể xóa người dùng",
+      "NO_USERS_SELECTED": "Chưa chọn người dùng để xóa",
+      "USER_ID_REQUIRED": "Yêu cầu ID người dùng",
+      "AND_MORE": "và {count} nữa...",
+      "STATUS": {
+        "ALL": "Tất cả",
+        "SUBSCRIBED": "Đã đăng ký",
+        "UNSUBSCRIBED": "Hủy đăng ký",
+        "BOUNCED": "Bị trả về"
+      }
+    },
+    "COURSES": {
+      "SUBTITLE": "Quản lý khóa học và bài giảng",
+      "ALL_COURSES": "Tất Cả Khóa Học",
+      "TOTAL": "khóa học",
+      "COPY_COURSE_ID": "Sao chép ID khóa học",
+      "COURSE_ID_COPIED": "ID khóa học đã được sao chép",
+      "EDIT_COURSE": "Chỉnh sửa khóa học",
+      "EDIT_COMING_SOON": "Chức năng chỉnh sửa sắp ra mắt",
+      "VIEW_LESSONS": "Xem bài giảng",
+      "DELETE_COURSE": "Xóa khóa học",
+      "COURSE_DELETED": "Đã xóa khóa học",
+      "COURSE_DELETED_DESC": "Khóa học đã được xóa.",
+      "COLUMN_TITLE": "Tiêu đề",
+      "COLUMN_LEVEL": "Cấp độ",
+      "COLUMN_STATUS": "Trạng thái",
+      "COLUMN_LESSONS": "Bài giảng",
+      "COLUMN_ACTIONS": "Hành động",
+      "SELECT_ALL": "Chọn tất cả",
+      "SELECT_ROW": "Chọn hàng"
+    },
+    "CONTENT": {
+      "SUBTITLE": "Quản lý nội dung và tài liệu học tập",
+      "LESSONS": "Bài Giảng",
+      "LESSONS_DESC": "Quản lý bài giảng và tài liệu học tập",
+      "QUIZZES": "Bài Kiểm Tra",
+      "QUIZZES_DESC": "Tạo và quản lý bài kiểm tra",
+      "VIDEOS": "Video",
+      "VIDEOS_DESC": "Tải lên và quản lý video học tập",
+      "MATERIALS": "Tài Liệu",
+      "MATERIALS_DESC": "Quản lý tài liệu khóa học",
+      "RECENT_ACTIVITY": "Hoạt Động Gần Đây",
+      "ACTIVITY_CREATED": "Nội dung mới được tạo",
+      "ACTIVITY_TIME": "{time}",
+      "LESSON": "Bài giảng"
+    },
+    "SETTINGS": {
+      "SUBTITLE": "Cấu hình hệ thống và tùy chỉnh",
+      "GENERAL": "Cài Đặt Chung",
+      "GENERAL_DESC": "Cấu hình cơ bản của trang web",
+      "AUTHENTICATION": "Xác Thực",
+      "AUTH_DESC": "Cài đặt bảo mật và xác thực",
+      "EMAIL": "Cấu Hình Email",
+      "EMAIL_DESC": "Cài đặt SMTP và gửi email",
+      "STORAGE": "Lưu Trữ & Tệp",
+      "STORAGE_DESC": "Cài đặt tải lên và lưu trữ tệp",
+      "SITE_NAME": "Tên Trang Web",
+      "SITE_URL": "URL Trang Web",
+      "ADMIN_EMAIL": "Email Quản Trị",
+      "JWT_EXPIRY": "Thời Gian Hết Hạn JWT",
+      "REFRESH_TOKEN": "Thời Gian Hết Hạn Refresh Token",
+      "OTP_EXPIRY": "Thời Gian Hết Hạn OTP",
+      "SMTP_HOST": "SMTP Host",
+      "SMTP_PORT": "SMTP Port",
+      "FROM_NAME": "Tên Người Gửi",
+      "STORAGE_TYPE": "Loại Lưu Trữ",
+      "MAX_UPLOAD": "Kích Thước Tối Đa",
+      "ALLOWED_TYPES": "Loại Tệp Cho Phép",
+      "DANGER_ZONE": "Vùng Nguy Hiểm",
+      "DANGER_DESC": "Các hành động không thể hoàn tác - hãy thận trọng",
+      "CLEAR_CACHE": "Xóa Bộ Nhớ Đệm",
+      "CLEAR_CACHE_DESC": "Xóa toàn bộ bộ nhớ đệm ứng dụng",
+      "CLEAR": "Xóa",
+      "RESET_DATABASE": "Đặt Lại Cơ Sở Dữ Liệu",
+      "RESET_DATABASE_DESC": "Đặt lại cơ sở dữ liệu về trạng thái ban đầu (CẢNH BÁO: Không thể hoàn tác)",
+      "RESET": "Đặt lại"
+    }
+  },
+
   "ROLES": {
+    "ALL": "Tất Cả Vai Trò",
     "STUDENT": "Học viên",
     "TEACHER": "Giáo viên",
     "ADMIN": "Quản trị viên",
     "SUPERADMIN": "Quản trị viên cấp cao"
+  },
+
+  "COURSE": {
+    "TITLE": "Tiêu đề",
+    "LEVEL": "Cấp độ",
+    "LESSONS": "Bài giảng",
+    "STATUS": {
+      "DRAFT": "Bản nháp",
+      "PUBLISHED": "Đã xuất bản",
+      "ARCHIVED": "Đã lưu trữ"
+    },
+    "LEVELS": {
+      "BEGINNER": "Cơ bản",
+      "INTERMEDIATE": "Trung cấp",
+      "ADVANCED": "Nâng cao"
+    },
+    "SUBTITLE": "Khám phá các khóa học tiếng Anh toàn diện của chúng tôi",
+    "COURSE_TITLE": "Khóa học {number}",
+    "COURSE_DESC": "Học tiếng Anh hiệu quả với chương trình học có cấu trúc của chúng tôi.",
+    "LEVEL_BEGINNER": "Cơ bản",
+    "LEVEL_INTERMEDIATE": "Trung cấp",
+    "LEVEL_ADVANCED": "Nâng cao",
+    "VIEW_COURSE": "Xem khóa học",
+    "ERROR": {
+      "FETCH_FAILED": "Không thể tải khóa học"
+    }
   },
 
   "PROFILE": {
@@ -290,18 +471,6 @@
       "FETCH_FAILED": "Không thể tải danh sách thành viên"
     }
   },
-  "COURSES": {
-    "SUBTITLE": "Khám phá các khóa học tiếng Anh toàn diện của chúng tôi",
-    "COURSE_TITLE": "Khóa học {number}",
-    "COURSE_DESC": "Học tiếng Anh hiệu quả với chương trình học có cấu trúc của chúng tôi.",
-    "LEVEL_BEGINNER": "Cơ bản",
-    "LEVEL_INTERMEDIATE": "Trung cấp",
-    "LEVEL_ADVANCED": "Nâng cao",
-    "VIEW_COURSE": "Xem khóa học",
-    "ERROR": {
-      "FETCH_FAILED": "Không thể tải khóa học"
-    }
-  },
   "ROADMAP": {
     "SUBTITLE": "Lộ trình học tiếng Anh được cá nhân hóa cho bạn",
     "LEVEL_BEGINNER": "Cấp độ Cơ bản",
@@ -321,6 +490,10 @@
     "APPEARANCE": "Giao diện",
     "THEME": "Chủ đề",
     "THEME_DESC": "Chọn chủ đề màu sắc bạn thích",
+    "LANGUAGE": "Ngôn ngữ",
+    "LANGUAGE_DESC": "Chọn ngôn ngữ bạn muốn sử dụng",
+    "LOCALIZATION": "Địa phương hóa",
+    "SELECT_LANGUAGE": "Chọn ngôn ngữ",
     "NOTIFICATIONS": "Thông báo",
     "EMAIL_NOTIFICATIONS": "Thông báo qua Email",
     "EMAIL_NOTIFICATIONS_DESC": "Nhận cập nhật email về tiến trình học tập của bạn"
@@ -342,9 +515,6 @@
       "COMMUNITY": "Cộng đồng",
       "COMMUNITY_DESC": "Chúng tôi xây dựng một môi trường học tập hỗ trợ lẫn nhau"
     }
-  },
-  "TEAM": {
-    "SUBTITLE": "Gặp gỡ những người đứng sau Englearn"
   },
   "CAREERS": {
     "SUBTITLE": "Tham gia đội ngũ của chúng tôi và giúp định hình tương lai của việc học tiếng Anh",

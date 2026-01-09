@@ -183,16 +183,189 @@
     "RETRY": "Retry",
     "LOADING": "Loading...",
     "UNSAVED_CHANGES": "Unsaved changes",
+    "CREATE": "Create",
+    "SEARCH": "Search",
+    "FILTER": "Filter",
+    "ACTIONS": "Actions",
+    "EMAIL": "Email",
+    "NAME": "Name",
+    "FULL_NAME": "Full Name",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "ROLE": "Role",
+    "STATUS": "Status",
+    "JOINED": "Joined",
+    "CREATED": "Created",
+    "ALL": "All",
+    "OF": "of",
+    "VERIFIED": "Verified",
+    "UNVERIFIED": "Unverified",
+    "SHOWING": "Showing",
+    "MANAGE": "Manage",
+    "SUCCESS": "Success",
     "ERROR": {
       "UNKNOWN": "An unknown error occurred"
     }
   },
 
+  "ADMIN": {
+    "TITLE": "Admin Panel",
+    "DASHBOARD": "Dashboard",
+    "BACK_TO_SITE": "Back to Site",
+    "WELCOME": "Welcome back",
+    "WELCOME_SUBTITLE": "Here's an overview of your platform",
+    "NAV": {
+      "DASHBOARD": "Dashboard",
+      "USERS": "Users",
+      "COURSES": "Courses",
+      "CONTENT": "Content",
+      "SETTINGS": "Settings"
+    },
+    "STATS": {
+      "TOTAL_USERS": "Total Users",
+      "TOTAL_COURSES": "Total Courses",
+      "ACTIVE_COURSES": "Active Courses",
+      "TOTAL_LESSONS": "Total Lessons",
+      "LOADING": "Loading statistics..."
+    },
+    "RECENT_USERS": "Recent Users",
+    "VIEW_ALL": "View All",
+    "ADD_USER": "Add User",
+    "ADD_COURSE": "Add Course",
+    "ADD_CONTENT": "Add Content",
+    "USERS": {
+      "SUBTITLE": "Manage users, roles, and permissions",
+      "ALL_USERS": "All Users",
+      "TOTAL": "users",
+      "FILTER_EMAILS": "Filter emails...",
+      "FILTER_STATUS": "Filter status",
+      "DISPLAY": "Display",
+      "ROWS_SELECTED": "row(s) selected.",
+      "COPY_USER_ID": "Copy user ID",
+      "COPIED_TO_CLIPBOARD": "Copied to clipboard",
+      "USER_ID_COPIED": "User ID copied to clipboard",
+      "USER_ID_NOT_FOUND": "User ID not found",
+      "CANNOT_DELETE_ADMIN": "Cannot delete admin accounts",
+      "CANNOT_DELETE_SUPERADMIN": "Cannot delete superadmin accounts",
+      "CANNOT_DELETE_OTHER_SUPERADMIN": "Superadmin cannot delete other superadmins",
+      "ADMIN_PROTECTED": "Admin and superadmin accounts are protected and cannot be deleted",
+      "VIEW_DETAILS": "View customer details",
+      "VIEW_PAYMENTS": "View customer payments",
+      "DELETE_USER": "Delete customer",
+      "USER_DELETED": "Customer deleted",
+      "USER_DELETED_DESC": "The customer has been deleted.",
+      "VIEW_PROFILE": "View profile",
+      "EDIT_USER": "Edit user",
+      "ADD_USER_DESC": "Add a new user to the system",
+      "USER_CREATED": "User '{name}' created successfully",
+      "CREATE_ERROR": "Failed to create user",
+      "DELETE_MODAL_TITLE": "Delete Users",
+      "DELETE_CONFIRMATION": "Are you sure you want to delete {count} user(s)? This action cannot be undone.",
+      "DELETE_WARNING": "⚠️ This will permanently delete the selected users and all their data.",
+      "USERS_DELETED_SUCCESS": "{count} user(s) deleted successfully",
+      "DELETE_ERROR": "Failed to delete user(s)",
+      "NO_USERS_SELECTED": "No users selected for deletion",
+      "USER_ID_REQUIRED": "User ID is required",
+      "AND_MORE": "and {count} more...",
+      "CANNOT_DELETE_SUPERADMIN": "Cannot delete superadmin",
+      "SUPERADMIN_PROTECTED": "Superadmin accounts are protected and cannot be deleted",
+      "STATUS": {
+        "ALL": "All",
+        "SUBSCRIBED": "Subscribed",
+        "UNSUBSCRIBED": "Unsubscribed",
+        "BOUNCED": "Bounced"
+      }
+    },
+    "COURSES": {
+      "SUBTITLE": "Manage courses and lessons",
+      "ALL_COURSES": "All Courses",
+      "TOTAL": "courses",
+      "COPY_COURSE_ID": "Copy course ID",
+      "COURSE_ID_COPIED": "Course ID copied to clipboard",
+      "EDIT_COURSE": "Edit course",
+      "EDIT_COMING_SOON": "Edit functionality coming soon",
+      "VIEW_LESSONS": "View lessons",
+      "DELETE_COURSE": "Delete course",
+      "COURSE_DELETED": "Course deleted",
+      "COURSE_DELETED_DESC": "The course has been deleted.",
+      "COLUMN_TITLE": "Title",
+      "COLUMN_LEVEL": "Level",
+      "COLUMN_STATUS": "Status",
+      "COLUMN_LESSONS": "Lessons",
+      "COLUMN_ACTIONS": "Actions",
+      "SELECT_ALL": "Select all",
+      "SELECT_ROW": "Select row"
+    },
+    "CONTENT": {
+      "SUBTITLE": "Manage educational content and materials",
+      "LESSONS": "Lessons",
+      "LESSONS_DESC": "Manage course lessons and learning materials",
+      "QUIZZES": "Quizzes",
+      "QUIZZES_DESC": "Create and manage quizzes and assessments",
+      "VIDEOS": "Videos",
+      "VIDEOS_DESC": "Upload and manage video content",
+      "MATERIALS": "Materials",
+      "MATERIALS_DESC": "Manage downloadable course materials",
+      "RECENT_ACTIVITY": "Recent Activity",
+      "ACTIVITY_CREATED": "New content created",
+      "ACTIVITY_TIME": "{time}",
+      "LESSON": "Lesson"
+    },
+    "SETTINGS": {
+      "SUBTITLE": "Configure system settings and preferences",
+      "GENERAL": "General Settings",
+      "GENERAL_DESC": "Basic site configuration",
+      "AUTHENTICATION": "Authentication",
+      "AUTH_DESC": "Security and authentication settings",
+      "EMAIL": "Email Configuration",
+      "EMAIL_DESC": "SMTP and email delivery settings",
+      "STORAGE": "Storage & Media",
+      "STORAGE_DESC": "File upload and storage settings",
+      "SITE_NAME": "Site Name",
+      "SITE_URL": "Site URL",
+      "ADMIN_EMAIL": "Admin Email",
+      "JWT_EXPIRY": "JWT Token Expiry",
+      "REFRESH_TOKEN": "Refresh Token Expiry",
+      "OTP_EXPIRY": "OTP Expiry",
+      "SMTP_HOST": "SMTP Host",
+      "SMTP_PORT": "SMTP Port",
+      "FROM_NAME": "From Name",
+      "STORAGE_TYPE": "Storage Type",
+      "MAX_UPLOAD": "Max Upload Size",
+      "ALLOWED_TYPES": "Allowed File Types",
+      "DANGER_ZONE": "Danger Zone",
+      "DANGER_DESC": "Irreversible actions - proceed with caution",
+      "CLEAR_CACHE": "Clear Cache",
+      "CLEAR_CACHE_DESC": "Clear all application caches",
+      "CLEAR": "Clear",
+      "RESET_DATABASE": "Reset Database",
+      "RESET_DATABASE_DESC": "Reset database to initial state (WARNING: This cannot be undone)",
+      "RESET": "Reset"
+    }
+  },
+
   "ROLES": {
+    "ALL": "All Roles",
     "STUDENT": "Student",
     "TEACHER": "Teacher",
     "ADMIN": "Admin",
     "SUPERADMIN": "Super Admin"
+  },
+
+  "COURSES": {
+    "TITLE": "Title",
+    "LEVEL": "Level",
+    "LESSONS": "Lessons",
+    "STATUS": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "ARCHIVED": "Archived"
+    },
+    "LEVELS": {
+      "BEGINNER": "Beginner",
+      "INTERMEDIATE": "Intermediate",
+      "ADVANCED": "Advanced"
+    }
   },
 
   "PROFILE": {
@@ -290,18 +463,6 @@
       "FETCH_FAILED": "Failed to load team members"
     }
   },
-  "COURSES": {
-    "SUBTITLE": "Explore our comprehensive English learning courses",
-    "COURSE_TITLE": "Course Title {number}",
-    "COURSE_DESC": "Course description goes here. Learn English effectively with our structured curriculum.",
-    "LEVEL_BEGINNER": "Beginner",
-    "LEVEL_INTERMEDIATE": "Intermediate",
-    "LEVEL_ADVANCED": "Advanced",
-    "VIEW_COURSE": "View Course",
-    "ERROR": {
-      "FETCH_FAILED": "Failed to load courses"
-    }
-  },
   "ROADMAP": {
     "SUBTITLE": "Your personalized path to English mastery",
     "LEVEL_BEGINNER": "Beginner Level",
@@ -321,6 +482,10 @@
     "APPEARANCE": "Appearance",
     "THEME": "Theme",
     "THEME_DESC": "Choose your preferred color theme",
+    "LANGUAGE": "Language",
+    "LANGUAGE_DESC": "Choose your preferred language",
+    "LOCALIZATION": "Localization",
+    "SELECT_LANGUAGE": "Select Language",
     "NOTIFICATIONS": "Notifications",
     "EMAIL_NOTIFICATIONS": "Email Notifications",
     "EMAIL_NOTIFICATIONS_DESC": "Receive email updates about your progress"
@@ -342,9 +507,6 @@
       "COMMUNITY": "Community",
       "COMMUNITY_DESC": "We foster a supportive learning environment"
     }
-  },
-  "TEAM": {
-    "SUBTITLE": "Meet the people behind Englearn"
   },
   "CAREERS": {
     "SUBTITLE": "Join our team and help shape the future of English learning",

@@ -1,4 +1,4 @@
-import type { AccessTokenPayload, RefreshTokenData, ResponseBody } from '@shared/interfaces'
+import type { AccessTokenPayload, RefreshTokenData, ResponseBody } from '@shared/types'
 import type { H3Event } from 'h3'
 import jwt from 'jsonwebtoken'
 
@@ -6,6 +6,10 @@ const appliedPaths = [
   '/api/auth/logout',
   '/api/profile',
   '/api/profile/stats',
+  '/api/admin/stats',
+  '/api/admin/users/recent',
+  '/api/admin/users',
+  '/api/admin/courses',
 ]
 
 async function refreshAccessToken(
@@ -21,6 +25,10 @@ async function refreshAccessToken(
       refreshToken,
     },
   })
+
+  if (res.message === 'AUTH.INVALID_REFRESH_TOKEN') {
+    await clearUserSession(event)
+  }
 
   return res.data as RefreshTokenData
 }
@@ -61,7 +69,7 @@ export default defineEventHandler(async (event) => {
   }
   catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      const tokenData = await refreshAccessToken(event, session.id, session.secure.refreshToken)
+      const tokenData = await refreshAccessToken(event, session.secure.sessionId, session.secure.refreshToken)
       session.secure.accessToken = tokenData.accessToken.token
       session.secure.refreshToken = tokenData.refreshToken.token
       session.secure.sessionId = tokenData.sessionId

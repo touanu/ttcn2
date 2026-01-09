@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
-import type { ResponseBody } from '@shared/interfaces'
+import type { ResponseBody } from '@shared/types'
 
 const { setLocale, getLocaleCookie } = useI18n()
 const route = useRoute()
@@ -122,7 +122,7 @@ const navigationUserActionMenuItems = computed(() => {
   <UHeader>
     <template #title>
       <div class="flex items-center gap-2 font-semibold text-lg">
-        <AppLogo class="w-auto h-8 shrink-0" />
+        <LayoutLogo class="w-auto h-8 shrink-0" />
         <span class="">Englearn</span>
       </div>
     </template>
@@ -166,8 +166,7 @@ const navigationUserActionMenuItems = computed(() => {
 
           class="capitalize"
         />
-        <UDropdownMenu
-          :items="userActionItems"
+        <UsersDropdown
           :content="{
             align: 'end',
             side: 'bottom',
@@ -180,7 +179,7 @@ const navigationUserActionMenuItems = computed(() => {
             class="hover:bg-elevated cursor-pointer"
             icon="i-ph-dots-three-vertical"
           />
-        </UDropdownMenu>
+        </UsersDropdown>
       </div>
       <div v-else class="hidden sm:block">
         <AuthModal />
@@ -188,7 +187,7 @@ const navigationUserActionMenuItems = computed(() => {
     </template>
 
     <template #body>
-      <SearchBox
+      <LayoutSearchBox
         :placeholder="$t('FORMS.SEARCH_PLACEHOLDER')"
         class="mb-4"
       />
@@ -215,7 +214,7 @@ const navigationUserActionMenuItems = computed(() => {
     <div class="columns-1 grid md:grid-cols-4 md:columns-4 gap-6 md:gap-8 lg:gap-12">
       <div>
         <div class="flex items-center gap-2 font-semibold text-lg">
-          <AppLogo class="w-auto h-6 shrink-0" />
+          <LayoutLogo class="w-auto h-6 shrink-0" />
           <span class="">Englearn</span>
         </div>
 
@@ -301,7 +300,7 @@ const navigationUserActionMenuItems = computed(() => {
           {{ $t('FOOTER.NEWSLETTER.DESCRIPTION') }}
         </p>
 
-        <InputWithButton
+        <LayoutInputWithButton
           :placeholder="$t('FOOTER.NEWSLETTER.PLACEHOLDER')"
           :button-text="$t('FOOTER.NEWSLETTER.BUTTON')"
         />

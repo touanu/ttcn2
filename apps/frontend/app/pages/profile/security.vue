@@ -1,27 +1,24 @@
 <script setup lang="ts">
-import type { User } from '@shared/interfaces'
+import type { User } from '@shared/types'
 import { passwordSchema as basePasswordSchema } from '@shared/schemas/base'
 import { z } from 'zod'
 import { formatDate } from '~/utils/profile'
 
 definePageMeta({
-  title: 'Security Settings',
 })
 
 const toast = useToast()
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 const router = useRouter()
 
-// Fetch current user data
 const { data: user } = await useFetch<User>('/api/profile')
 
-// Password change form
 const passwordSchema = z.object({
   currentPassword: basePasswordSchema,
   newPassword: basePasswordSchema,
   confirmPassword: basePasswordSchema,
 }).refine(data => data.newPassword === data.confirmPassword, {
-  message: t('FORMS.PASSWORD.MISMATCH'),
+  message: $t('FORMS.PASSWORD.MISMATCH'),
   path: ['confirmPassword'],
 })
 
@@ -35,33 +32,32 @@ const isChangingPassword = ref(false)
 const showDeleteConfirmation = ref(false)
 const isDeletingAccount = ref(false)
 
-// Change password handler
 async function onChangePassword() {
   isChangingPassword.value = true
 
   try {
-    await $fetch('/api/users/reset-password', {
+    await $fetch('/api/users/change-password', {
       method: 'POST',
       body: {
+        currentPassword: passwordForm.currentPassword,
         newPassword: passwordForm.newPassword,
       },
     })
 
     toast.add({
-      title: t('PROFILE.SUCCESS.PASSWORD_UPDATED'),
+      title: $t('PROFILE.SUCCESS.PASSWORD_UPDATED'),
       color: 'success',
       icon: 'i-heroicons-check-circle',
     })
 
-    // Reset form
     passwordForm.currentPassword = ''
     passwordForm.newPassword = ''
     passwordForm.confirmPassword = ''
   }
   catch (err: any) {
     toast.add({
-      title: t('PROFILE.ERROR.PASSWORD_UPDATE_FAILED'),
-      description: err.message || t('COMMON.ERROR.UNKNOWN'),
+      title: $t('PROFILE.ERROR.PASSWORD_UPDATE_FAILED'),
+      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
       color: 'error',
       icon: 'i-heroicons-x-circle',
     })
@@ -71,27 +67,24 @@ async function onChangePassword() {
   }
 }
 
-// Delete account handler
 async function onDeleteAccount() {
   isDeletingAccount.value = true
 
   try {
-    // TODO: Implement account deletion API
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     toast.add({
-      title: t('PROFILE.SUCCESS.ACCOUNT_DELETED'),
+      title: $t('PROFILE.SUCCESS.ACCOUNT_DELETED'),
       color: 'success',
       icon: 'i-heroicons-check-circle',
     })
 
-    // Redirect to home after deletion
     router.push('/')
   }
   catch (err: any) {
     toast.add({
-      title: t('PROFILE.ERROR.ACCOUNT_DELETE_FAILED'),
-      description: err.message || t('COMMON.ERROR.UNKNOWN'),
+      title: $t('PROFILE.ERROR.ACCOUNT_DELETE_FAILED'),
+      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
       color: 'error',
       icon: 'i-heroicons-x-circle',
     })
@@ -126,7 +119,7 @@ async function onDeleteAccount() {
           @submit="onChangePassword"
         >
           <!-- Current Password -->
-          <UFormGroup
+          <UFormField
             :label="$t('PROFILE.SECURITY.CURRENT_PASSWORD')"
             name="currentPassword"
             required
@@ -137,12 +130,13 @@ async function onDeleteAccount() {
               :placeholder="$t('PROFILE.SECURITY.CURRENT_PASSWORD_PLACEHOLDER')"
               icon="i-heroicons-lock-closed"
             />
-          </UFormGroup>
+          </UFormField>
 
           <!-- New Password -->
-          <UFormGroup
+          <UFormField
             :label="$t('FORMS.PASSWORD.LABEL')"
             name="newPassword"
+            :hint="$t('FORMS.PASSWORD.HINT')"
             required
           >
             <UInput
@@ -151,15 +145,10 @@ async function onDeleteAccount() {
               :placeholder="$t('FORMS.PASSWORD.PLACEHOLDER')"
               icon="i-heroicons-key"
             />
-            <template #hint>
-              <span class="text-xs text-gray-500 dark:text-gray-400">
-                {{ $t('FORMS.PASSWORD.HINT') }}
-              </span>
-            </template>
-          </UFormGroup>
+          </UFormField>
 
           <!-- Confirm New Password -->
-          <UFormGroup
+          <UFormField
             :label="$t('PROFILE.SECURITY.CONFIRM_NEW_PASSWORD')"
             name="confirmPassword"
             required
@@ -170,7 +159,7 @@ async function onDeleteAccount() {
               :placeholder="$t('PROFILE.SECURITY.CONFIRM_NEW_PASSWORD_PLACEHOLDER')"
               icon="i-heroicons-key"
             />
-          </UFormGroup>
+          </UFormField>
 
           <!-- Submit Button -->
           <div class="flex justify-end pt-2">

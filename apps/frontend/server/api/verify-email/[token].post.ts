@@ -1,4 +1,4 @@
-import type { SuccessResponseBody } from '@shared/interfaces'
+import type { SuccessResponseBody } from '@shared/types'
 
 export default defineEventHandler(async (event) => {
   const { token } = event.context.params as { token: string }

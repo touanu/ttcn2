@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SuccessResponseBody } from '@shared/interfaces'
+import type { SuccessResponseBody } from '@shared/types'
 
 definePageMeta({
   seo: false,

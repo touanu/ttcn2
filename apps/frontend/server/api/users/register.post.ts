@@ -1,4 +1,4 @@
-import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/interfaces'
+import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/types'
 import { createUserSchema } from '@shared/schemas/user'
 
 export default defineEventHandler(async (event) => {

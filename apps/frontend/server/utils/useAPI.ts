@@ -1,4 +1,4 @@
-import type { SuccessResponseBody } from '@shared/interfaces'
+import type { SuccessResponseBody } from '@shared/types'
 import type { H3Event } from 'h3'
 import type { AvailableRouterMethod, NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 

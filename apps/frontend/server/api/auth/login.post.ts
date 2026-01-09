@@ -1,4 +1,4 @@
-import type { LoginCredential, LoginData, SuccessResponseBody } from '@shared/interfaces'
+import type { LoginCredential, LoginData, SuccessResponseBody } from '@shared/types'
 import { loginUserSchema } from '@shared/schemas/auth'
 import { UAParser } from 'ua-parser-js'
 

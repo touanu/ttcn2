@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
   <div class="container mx-auto max-w-5xl px-4 py-16">
-    <PageHeader
+    <LayoutPageHeader
       :title="$t('FOOTER.ABOUT.LINK')"
       :subtitle="$t('ABOUT.SUBTITLE')"
       icon="i-heroicons-heart"

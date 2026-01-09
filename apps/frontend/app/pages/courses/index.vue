@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Course } from '@shared/interfaces'
+import type { Course } from '@shared/types'
 
 definePageMeta({
   title: 'Courses',
@@ -19,9 +19,9 @@ const { data: courses, pending, error } = await useFetch<Course[]>('/api/courses
       </p>
     </div>
 
-    <AppLoading v-if="pending" />
-    <AppError v-else-if="error" :message="error.message" />
-    <AppEmpty
+    <CommonLoading v-if="pending" />
+    <CommonError v-else-if="error" :message="error.message" />
+    <CommonEmpty
       v-else-if="!courses || courses.length === 0"
       title="No courses available"
       description="Check back later for new courses"
@@ -29,7 +29,7 @@ const { data: courses, pending, error } = await useFetch<Course[]>('/api/courses
     />
 
     <div v-else class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <UCard v-for="course in courses" :key="course._id?.toString()" class="group hover:shadow-xl transition-all duration-300">
+      <UCard v-for="course in courses" :key="course._id" class="group hover:shadow-xl transition-all duration-300">
         <div class="space-y-4">
           <div class="relative overflow-hidden rounded-lg">
             <div class="aspect-video bg-linear-to-br from-primary-100 via-primary-200 to-primary-300 dark:from-primary-900 dark:via-primary-800 dark:to-primary-700 transition-transform duration-300 group-hover:scale-105" />
@@ -58,7 +58,7 @@ const { data: courses, pending, error } = await useFetch<Course[]>('/api/courses
             <UBadge color="primary" variant="subtle" size="md">
               {{ course.level }}
             </UBadge>
-            <UButton color="primary" size="sm" trailing-icon="i-heroicons-arrow-right" :to="`/courses/${course._id?.toString()}`">
+            <UButton color="primary" size="sm" trailing-icon="i-heroicons-arrow-right" :to="`/courses/${course._id}`">
               {{ $t('COURSES.VIEW_COURSE') }}
             </UButton>
           </div>

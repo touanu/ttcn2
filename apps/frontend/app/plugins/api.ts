@@ -1,4 +1,4 @@
-import type { ResponseBody } from '@shared/interfaces'
+import type { ResponseBody } from '@shared/types'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const api = $fetch.create({
