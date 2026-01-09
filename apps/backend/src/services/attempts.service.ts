@@ -1,4 +1,4 @@
-import type { AttemptDB } from '@shared/types'
+import type { AttemptDB } from '@/interfaces'
 import { HttpException } from '@exceptions/HttpException'
 import { AttemptModel } from '@models/attempt.model'
 import { QuestionModel, QuizModel } from '@models/quiz.model'

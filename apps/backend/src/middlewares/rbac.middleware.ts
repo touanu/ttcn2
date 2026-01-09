@@ -1,7 +1,7 @@
 import type { Permission } from '@shared/constants'
-import type { RequestWithUser } from '@shared/interfaces'
 import type { UserRole } from '@shared/types'
 import type { NextFunction, Request, Response } from 'express'
+import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import {
   getRolePermissions,
@@ -95,6 +95,26 @@ export function attachPermissions(req: Request, res: Response, next: NextFunctio
     const userRole = userReq.user.role || 'student'
     userReq.permissions = getRolePermissions(userRole)
 
+    next()
+  }
+  catch {
+    next(new HttpException(500, 'INTERNAL_SERVER_ERROR'))
+  }
+}
+
+/**
+ * Middleware kiểm tra ability xóa người dùng dựa trên target user ID
+ * Phải được sử dụng sau AuthMiddleware và trên route có param :id
+ */
+export function canDeleteUserMiddleware(req: Request, res: Response, next: NextFunction) {
+  const userReq = req as RequestWithUser
+  try {
+    if (!userReq.user) {
+      return next(new HttpException(401, 'AUTH.UNAUTHORIZED'))
+    }
+
+    // Lưu trữ ability check để controller sử dụng
+    // Controller sẽ cần lấy target user và validate
     next()
   }
   catch {

@@ -25,6 +25,8 @@ tags:
     description: Authentication and session management
   - name: users
     description: User account management and operations
+  - name: courses
+    description: Course management and operations
   - name: media
     description: Media file upload and management
 
@@ -157,17 +159,47 @@ paths:
     get:
       tags: [users]
       summary: Get All Users
-      description: Retrieve a list of all registered users in the system.
+      description: |
+        Retrieve a list of all registered users in the system.
+        Supports sorting and limiting results.
       operationId: getUsers
+      parameters:
+        - name: sort
+          in: query
+          description: |
+            Sort field and order.
+            Format: 'field:order' or '-field' for descending.
+            Examples: 'createdAt:desc', '-createdAt', 'username:asc', 'email'
+          required: false
+          schema:
+            type: string
+            example: 'createdAt:desc'
+        - name: limit
+          in: query
+          description: Maximum number of users to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
       responses:
         200:
           description: Successfully retrieved user list
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  message:
+                    type: string
+                    example: USERS.GET_ALL_SUCCESS
         500:
           description: Server Error
           content:
@@ -226,7 +258,7 @@ paths:
           schema:
             type: string
             pattern: '^[0-9a-f]{24}$'
-            example: '507f1f77bcf86cd799439011'
+            example: 507f1f77bcf86cd799439011
       responses:
         200:
           description: User found
@@ -260,7 +292,7 @@ paths:
           schema:
             type: string
             pattern: '^[0-9a-f]{24}$'
-            example: '507f1f77bcf86cd799439011'
+            example: 507f1f77bcf86cd799439011
       requestBody:
         required: true
         content:
@@ -312,7 +344,7 @@ paths:
           schema:
             type: string
             pattern: '^[0-9a-f]{24}$'
-            example: '507f1f77bcf86cd799439011'
+            example: 507f1f77bcf86cd799439011
       responses:
         204:
           description: User deleted successfully
@@ -792,7 +824,7 @@ paths:
           schema:
             type: string
             pattern: '^[0-9a-f]{24}$'
-            example: '507f1f77bcf86cd799439011'
+            example: 507f1f77bcf86cd799439011
       responses:
         200:
           description: Media found
@@ -828,7 +860,7 @@ paths:
           schema:
             type: string
             pattern: '^[0-9a-f]{24}$'
-            example: '507f1f77bcf86cd799439011'
+            example: 507f1f77bcf86cd799439011
       responses:
         200:
           description: Media deleted successfully
@@ -900,6 +932,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  # Course endpoints
+  /courses:
+    get:
+      tags: [courses]
+      summary: Get All Courses
+      description: |
+        Retrieve a list of all courses in the system.
+        Supports search, pagination, and sorting.
+      operationId: getCourses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          description: Search courses by title or description (case-insensitive)
+          required: false
+          schema:
+            type: string
+            example: beginner
+        - name: status
+          in: query
+          description: Filter courses by status
+          required: false
+          schema:
+            type: string
+            enum: [DRAFT, PUBLISHED, ARCHIVED]
+            example: PUBLISHED
+        - name: page
+          in: query
+          description: Page number for pagination (must be used with limit)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - name: limit
+          in: query
+          description: Number of courses per page (maximum 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 10
+        - name: sort
+          in: query
+          description: |
+            Sort field and order. Prefix with '-' for descending order.
+            Supported fields: createdAt, updatedAt, title, level
+            Examples: '-createdAt', 'title', 'level'
+          required: false
+          schema:
+            type: string
+            example: -createdAt
+      responses:
+        200:
+          description: Successfully retrieved courses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+                  message:
+                    type: string
+                    example: COURSES.GET_ALL_SUCCESS
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -953,7 +1070,7 @@ components:
               properties:
                 id:
                   type: string
-                  example: '507f1f77bcf86cd799439011'
+                  example: 507f1f77bcf86cd799439011
                 role:
                   type: string
                   example: student
@@ -985,7 +1102,7 @@ components:
             sessionId:
               type: string
               description: Session identifier
-              example: '507f1f77bcf86cd799439012'
+              example: 507f1f77bcf86cd799439012
 
     LogoutRequest:
       type: object
@@ -996,7 +1113,7 @@ components:
           type: string
           pattern: '^[0-9a-f]{24}$'
           description: Session ID to invalidate
-          example: '507f1f77bcf86cd799439012'
+          example: 507f1f77bcf86cd799439012
 
     RefreshTokenRequest:
       type: object
@@ -1008,7 +1125,7 @@ components:
           type: string
           pattern: '^[0-9a-f]{24}$'
           description: Current session ID
-          example: '507f1f77bcf86cd799439012'
+          example: 507f1f77bcf86cd799439012
         refreshToken:
           type: string
           description: Valid refresh token
@@ -1049,7 +1166,7 @@ components:
                   example: 604800
             sessionId:
               type: string
-              example: '507f1f77bcf86cd799439012'
+              example: 507f1f77bcf86cd799439012
 
     # User schemas
     User:
@@ -1058,7 +1175,7 @@ components:
         _id:
           type: string
           description: User's unique identifier
-          example: '507f1f77bcf86cd799439011'
+          example: 507f1f77bcf86cd799439011
         username:
           type: string
           minLength: 3
@@ -1342,11 +1459,11 @@ components:
           type: string
           pattern: '^[0-9a-f]{24}$'
           description: Media ID (MongoDB ObjectId)
-          example: '507f1f77bcf86cd799439011'
+          example: 507f1f77bcf86cd799439011
         url:
           type: string
           description: URL path to access the media file
-          example: '/uploads/images/1704576000000-abc123.jpg'
+          example: /uploads/images/1704576000000-abc123.jpg
         type:
           type: string
           enum: [IMAGE, VIDEO, AUDIO, DOCUMENT]
@@ -1356,7 +1473,7 @@ components:
           type: string
           pattern: '^[0-9a-f]{24}$'
           description: User ID of the file owner
-          example: '507f1f77bcf86cd799439011'
+          example: 507f1f77bcf86cd799439011
         createdAt:
           type: string
           format: date-time
@@ -1374,3 +1491,57 @@ components:
         message:
           type: string
           example: MEDIA.UPLOADED
+
+    # Course schemas
+    Course:
+      type: object
+      properties:
+        _id:
+          type: string
+          pattern: '^[0-9a-f]{24}$'
+          description: Course ID (MongoDB ObjectId)
+          example: 507f1f77bcf86cd799439011
+        title:
+          type: string
+          description: Course title
+          example: English for Beginners
+        description:
+          type: string
+          description: Detailed course description
+          example: A comprehensive course for English language beginners
+        thumbnail:
+          type: string
+          description: Course thumbnail image URL
+          example: /uploads/images/course-thumbnail.jpg
+        authorId:
+          type: string
+          pattern: '^[0-9a-f]{24}$'
+          description: User ID of the course author
+          example: 507f1f77bcf86cd799439012
+        level:
+          type: string
+          enum: [BEGINNER, INTERMEDIATE, ADVANCED]
+          description: Course difficulty level
+          example: BEGINNER
+        status:
+          type: string
+          enum: [DRAFT, PUBLISHED, ARCHIVED]
+          description: Course publication status
+          example: PUBLISHED
+        lessonIds:
+          type: array
+          items:
+            type: string
+            pattern: '^[0-9a-f]{24}$'
+          description: Array of lesson IDs in this course
+          example: [507f1f77bcf86cd799439013, 507f1f77bcf86cd799439014]
+        createdAt:
+          type: string
+          format: date-time
+          description: Course creation timestamp
+          example: '2024-01-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2024-01-06T12:00:00.000Z'

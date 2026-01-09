@@ -1,0 +1,6 @@
+export * from './courses.interface'
+export * from './lessons.interface'
+export * from './media.interface'
+export * from './progress.interface'
+export * from './quizzes.interface'
+export * from './users.interface'

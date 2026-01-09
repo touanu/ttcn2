@@ -1,7 +1,7 @@
-import type { Attempt } from '@shared/interfaces'
+import type { AttemptDB } from '@/interfaces'
 import { model, Schema } from 'mongoose'
 
-const AttemptSchema = new Schema<Attempt>({
+const AttemptSchema = new Schema<AttemptDB>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   quizId: { type: Schema.Types.ObjectId, ref: 'Quiz', required: true },
   score: { type: Number, required: true },
@@ -12,4 +12,4 @@ const AttemptSchema = new Schema<Attempt>({
 AttemptSchema.index({ userId: 1, quizId: 1 })
 AttemptSchema.index({ createdAt: -1 })
 
-export const AttemptModel = model<Attempt>('Attempt', AttemptSchema)
+export const AttemptModel = model<AttemptDB>('Attempt', AttemptSchema)

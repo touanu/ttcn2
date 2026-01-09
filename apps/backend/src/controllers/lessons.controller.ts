@@ -1,8 +1,8 @@
-import type { SuccessResponseBody } from '@shared/interfaces'
-import type { LessonDB } from '@shared/types'
+import type { Lesson, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { LessonsService } from '@services/lessons.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertLessonToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -16,9 +16,9 @@ export class LessonsController {
     const lessonData = req.body
     const lesson = await this.lessonsService.createLesson(courseId, lessonData)
 
-    const response: SuccessResponseBody<LessonDB> = {
+    const response: SuccessResponseBody<Lesson> = {
       success: true,
-      data: lesson,
+      data: convertLessonToResponse(lesson),
       message: 'LESSON.CREATED',
     }
 
@@ -29,9 +29,9 @@ export class LessonsController {
     const { id } = req.params
     const lesson = await this.lessonsService.getLessonById(id)
 
-    const response: SuccessResponseBody<LessonDB> = {
+    const response: SuccessResponseBody<Lesson> = {
       success: true,
-      data: lesson,
+      data: convertLessonToResponse(lesson),
       message: 'LESSON.FOUND',
     }
 
@@ -42,9 +42,9 @@ export class LessonsController {
     const { courseId } = req.params
     const lessons = await this.lessonsService.getLessonsByCourseId(courseId)
 
-    const response: SuccessResponseBody<LessonDB[]> = {
+    const response: SuccessResponseBody<Lesson[]> = {
       success: true,
-      data: lessons,
+      data: lessons.map(convertLessonToResponse),
       message: 'LESSONS.FOUND',
     }
 
@@ -56,9 +56,9 @@ export class LessonsController {
     const updateData = req.body
     const lesson = await this.lessonsService.updateLesson(id, updateData)
 
-    const response: SuccessResponseBody<LessonDB> = {
+    const response: SuccessResponseBody<Lesson> = {
       success: true,
-      data: lesson,
+      data: convertLessonToResponse(lesson),
       message: 'LESSON.UPDATED',
     }
 

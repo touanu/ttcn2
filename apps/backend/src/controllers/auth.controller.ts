@@ -1,4 +1,4 @@
-import type { LoginCredential, LoginData, RefreshTokenData, SuccessResponseBody, User } from '@shared/interfaces'
+import type { LoginCredential, LoginData, RefreshTokenData, SuccessResponseBody, User } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { AuthService } from '@services/auth.service'
@@ -28,7 +28,7 @@ export class AuthController {
 
   public logIn: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const loginData: LoginCredential = req.body
-    const findUser = await this.userService.findUserByUsername(loginData.username)
+    const findUser = await this.userService.findUserByUsernameInternal(loginData.username)
 
     if (!findUser)
       throw new HttpException(401, 'AUTH.LOGIN.WRONG_CREDENTIALS')
@@ -60,7 +60,7 @@ export class AuthController {
   public refreshSession: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { sessionId, refreshToken } = req.body
     const session = await this.authService.getSessionById(sessionId)
-    const user = await this.userService.getUserById(session.userId.toString())
+    const user = await this.userService.getUserByIdInternal(session.userId.toString())
     const data: RefreshTokenData = await this.authService.refreshSession(user, session, refreshToken)
 
     const response: SuccessResponseBody<RefreshTokenData> = {

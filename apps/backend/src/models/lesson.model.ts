@@ -1,7 +1,7 @@
-import type { Lesson } from '@shared/interfaces'
+import type { LessonDB } from '@/interfaces/lessons.interface'
 import { model, Schema } from 'mongoose'
 
-const LessonSchema = new Schema<Lesson>({
+const LessonSchema = new Schema<LessonDB>({
   courseId: { type: Schema.Types.ObjectId, ref: 'Course', required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
@@ -14,4 +14,4 @@ const LessonSchema = new Schema<Lesson>({
 
 LessonSchema.index({ courseId: 1, orderIndex: 1 })
 
-export const LessonModel = model<Lesson>('Lesson', LessonSchema)
+export const LessonModel = model<LessonDB>('Lesson', LessonSchema)

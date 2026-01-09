@@ -1,8 +1,8 @@
-import type { Question, Quiz } from '@shared/interfaces'
+import type { QuestionDB, QuizDB } from '@/interfaces'
 import { QUESTION_TYPES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 
-const QuizSchema = new Schema<Quiz>({
+const QuizSchema = new Schema<QuizDB>({
   lessonId: { type: Schema.Types.ObjectId, ref: 'Lesson', required: true },
   questionIds: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
   createdAt: { type: Date, default: Date.now },
@@ -11,7 +11,7 @@ const QuizSchema = new Schema<Quiz>({
 
 QuizSchema.index({ lessonId: 1 })
 
-const QuestionSchema = new Schema<Question>({
+const QuestionSchema = new Schema<QuestionDB>({
   quizId: { type: Schema.Types.ObjectId, ref: 'Quiz', required: true },
   type: { type: String, enum: QUESTION_TYPES, required: true },
   prompt: { type: String, required: true },
@@ -23,5 +23,5 @@ const QuestionSchema = new Schema<Question>({
 
 QuestionSchema.index({ quizId: 1 })
 
-export const QuizModel = model<Quiz>('Quiz', QuizSchema)
-export const QuestionModel = model<Question>('Question', QuestionSchema)
+export const QuizModel = model<QuizDB>('Quiz', QuizSchema)
+export const QuestionModel = model<QuestionDB>('Question', QuestionSchema)

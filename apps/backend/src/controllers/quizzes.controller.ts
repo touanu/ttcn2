@@ -1,8 +1,8 @@
-import type { SuccessResponseBody } from '@shared/interfaces'
-import type { QuestionDB, QuizDB } from '@shared/types'
+import type { Question, Quiz, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { QuizzesService } from '@services/quizzes.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertQuestionToResponse, convertQuizToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -16,9 +16,9 @@ export class QuizzesController {
     const quizData = req.body
     const quiz = await this.quizzesService.createQuiz(lessonId, quizData)
 
-    const response: SuccessResponseBody<QuizDB> = {
+    const response: SuccessResponseBody<Quiz> = {
       success: true,
-      data: quiz,
+      data: convertQuizToResponse(quiz),
       message: 'QUIZ.CREATED',
     }
 
@@ -29,9 +29,9 @@ export class QuizzesController {
     const { id } = req.params
     const quiz = await this.quizzesService.getQuizById(id)
 
-    const response: SuccessResponseBody<QuizDB> = {
+    const response: SuccessResponseBody<Quiz> = {
       success: true,
-      data: quiz,
+      data: convertQuizToResponse(quiz),
       message: 'QUIZ.FOUND',
     }
 
@@ -42,9 +42,9 @@ export class QuizzesController {
     const { lessonId } = req.params
     const quiz = await this.quizzesService.getQuizByLessonId(lessonId)
 
-    const response: SuccessResponseBody<QuizDB | null> = {
+    const response: SuccessResponseBody<Quiz | null> = {
       success: true,
-      data: quiz,
+      data: quiz ? convertQuizToResponse(quiz) : null,
       message: quiz ? 'QUIZ.FOUND' : 'QUIZ.NOT_FOUND',
     }
 
@@ -56,9 +56,9 @@ export class QuizzesController {
     const updateData = req.body
     const quiz = await this.quizzesService.updateQuiz(id, updateData)
 
-    const response: SuccessResponseBody<QuizDB> = {
+    const response: SuccessResponseBody<Quiz> = {
       success: true,
-      data: quiz,
+      data: convertQuizToResponse(quiz),
       message: 'QUIZ.UPDATED',
     }
 
@@ -83,9 +83,9 @@ export class QuizzesController {
     const questionData = req.body
     const question = await this.quizzesService.createQuestion(quizId, questionData)
 
-    const response: SuccessResponseBody<QuestionDB> = {
+    const response: SuccessResponseBody<Question> = {
       success: true,
-      data: question,
+      data: convertQuestionToResponse(question),
       message: 'QUESTION.CREATED',
     }
 
@@ -96,9 +96,9 @@ export class QuizzesController {
     const { id } = req.params
     const question = await this.quizzesService.getQuestionById(id)
 
-    const response: SuccessResponseBody<QuestionDB> = {
+    const response: SuccessResponseBody<Question> = {
       success: true,
-      data: question,
+      data: convertQuestionToResponse(question),
       message: 'QUESTION.FOUND',
     }
 
@@ -110,9 +110,9 @@ export class QuizzesController {
     const updateData = req.body
     const question = await this.quizzesService.updateQuestion(id, updateData)
 
-    const response: SuccessResponseBody<QuestionDB> = {
+    const response: SuccessResponseBody<Question> = {
       success: true,
-      data: question,
+      data: convertQuestionToResponse(question),
       message: 'QUESTION.UPDATED',
     }
 

@@ -1,5 +1,4 @@
-import type { Lesson } from '@shared/interfaces'
-import type { LessonDB } from '@shared/types'
+import type { LessonDB } from '@/interfaces/lessons.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { LessonModel } from '@models/lesson.model'
 import { logger } from '@utils/logger'
@@ -7,7 +6,7 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export class LessonsService {
-  public async createLesson(courseId: string, lessonData: Partial<Lesson>): Promise<LessonDB> {
+  public async createLesson(courseId: string, lessonData: Partial<LessonDB>): Promise<LessonDB> {
     const lesson = new LessonModel({
       ...lessonData,
       courseId,
@@ -46,7 +45,7 @@ export class LessonsService {
     return lessons
   }
 
-  public async updateLesson(lessonId: string, updateData: Partial<Lesson>): Promise<LessonDB> {
+  public async updateLesson(lessonId: string, updateData: Partial<LessonDB>): Promise<LessonDB> {
     const lesson = await LessonModel.findByIdAndUpdate(
       lessonId,
       { ...updateData, updatedAt: new Date() },

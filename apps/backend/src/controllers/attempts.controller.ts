@@ -1,9 +1,10 @@
-import type { RequestWithUser, SuccessResponseBody } from '@shared/interfaces'
-import type { AttemptDB } from '@shared/types'
+import type { Attempt, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
+import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { AttemptsService } from '@services/attempts.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertAttemptToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -23,9 +24,9 @@ export class AttemptsController {
 
     const attempt = await this.attemptsService.submitQuizAttempt(userId, quizId, answers)
 
-    const response: SuccessResponseBody<AttemptDB> = {
+    const response: SuccessResponseBody<Attempt> = {
       success: true,
-      data: attempt,
+      data: convertAttemptToResponse(attempt),
       message: 'ATTEMPT.SUBMITTED',
     }
 
@@ -36,9 +37,9 @@ export class AttemptsController {
     const { id } = req.params
     const attempt = await this.attemptsService.getAttemptById(id)
 
-    const response: SuccessResponseBody<AttemptDB> = {
+    const response: SuccessResponseBody<Attempt> = {
       success: true,
-      data: attempt,
+      data: convertAttemptToResponse(attempt),
       message: 'ATTEMPT.FOUND',
     }
 
@@ -55,9 +56,9 @@ export class AttemptsController {
     const { quizId } = req.query
     const attempts = await this.attemptsService.getUserAttempts(userId, quizId as string | undefined)
 
-    const response: SuccessResponseBody<AttemptDB[]> = {
+    const response: SuccessResponseBody<Attempt[]> = {
       success: true,
-      data: attempts,
+      data: attempts.map(convertAttemptToResponse),
       message: 'ATTEMPTS.FOUND',
     }
 
@@ -68,9 +69,9 @@ export class AttemptsController {
     const { quizId } = req.params
     const attempts = await this.attemptsService.getQuizAttempts(quizId)
 
-    const response: SuccessResponseBody<AttemptDB[]> = {
+    const response: SuccessResponseBody<Attempt[]> = {
       success: true,
-      data: attempts,
+      data: attempts.map(convertAttemptToResponse),
       message: 'ATTEMPTS.FOUND',
     }
 

@@ -1,7 +1,7 @@
 import type { Permission } from '@shared/constants'
-import type { RequestVerifyEmailResponse, SuccessResponseBody, User } from '@shared/interfaces'
-import type { UserDB, UserRole } from '@shared/types'
+import type { RequestVerifyEmailResponse, SuccessResponseBody, User, UserRole } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
+import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { OtpService } from '@services/otp.service'
 import { UsersService } from '@services/users.service'
@@ -16,11 +16,37 @@ export class UsersController {
   ) {}
 
   getUsers: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const users = await this.userService.getAllUsers()
+    const { sort, limit } = req.query
+
+    const options: { sort?: string, limit?: number } = {}
+
+    if (sort && typeof sort === 'string') {
+      options.sort = sort
+    }
+
+    if (limit) {
+      const parsedLimit = Number.parseInt(limit as string, 10)
+      if (!Number.isNaN(parsedLimit) && parsedLimit > 0) {
+        options.limit = parsedLimit
+      }
+    }
+
+    const users = await this.userService.getAllUsers(options)
     const response: SuccessResponseBody<User[]> = {
       success: true,
       data: users,
       message: 'USERS.GET_ALL_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  getUsersCount: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const total = await this.userService.getUsersCount()
+    const response: SuccessResponseBody<{ total: number }> = {
+      success: true,
+      data: { total },
+      message: 'USERS.COUNT_SUCCESS',
     }
 
     res.status(200).json(response)
@@ -87,19 +113,57 @@ export class UsersController {
 
   deleteUser: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
+
+    const userReq = req as RequestWithUser
+    if (!userReq.user || !userReq.user._id) {
+      throw new HttpException(401, 'AUTH.UNAUTHORIZED')
+    }
+
+    // Lấy thông tin người dùng cần xóa
+    const targetUser = await this.userService.getUserByIdInternal(userId)
+    const actorRole: UserRole = userReq.user.role ?? 'student'
+    const targetRole: UserRole = targetUser.role ?? 'student'
+
+    // Check if deleting self
+    const isSelf = userReq.user._id.toString() === targetUser._id?.toString()
+
+    // Apply role-based deletion rules
+    // Rule 1: Admin cannot delete other admins or any superadmin (but can self-delete)
+    if (actorRole === 'admin') {
+      if (targetRole === 'admin' && !isSelf) {
+        throw new HttpException(403, 'USERS.CANNOT_DELETE_ADMIN')
+      }
+      if (targetRole === 'superadmin') {
+        throw new HttpException(403, 'USERS.CANNOT_DELETE_SUPERADMIN')
+      }
+    }
+
+    // Rule 2: Superadmin can delete admins and can self-delete
+    // For safety, block superadmin deleting other superadmins (can be relaxed if needed)
+    if (actorRole === 'superadmin' && targetRole === 'superadmin' && !isSelf) {
+      throw new HttpException(403, 'USERS.CANNOT_DELETE_OTHER_SUPERADMIN')
+    }
+
+    // Rule 3: Regular users (student, teacher) can only delete themselves
+    if (actorRole !== 'admin' && actorRole !== 'superadmin') {
+      if (!isSelf) {
+        throw new HttpException(403, 'AUTH.FORBIDDEN')
+      }
+    }
+
     await this.userService.deleteUser(userId)
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
       message: 'USERS.DELETE_SUCCESS',
     }
-    res.status(204).json(response)
+    res.status(200).json(response)
   })
 
   public requestEmailVerification: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     let { email, username } = req.body
 
-    let user: UserDB
+    let user: User
     if (username) {
       user = await this.userService.findUserByUsername(username)
       email = user.email
@@ -110,6 +174,9 @@ export class UsersController {
 
     if (user.isEmailVerified)
       throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
+
+    if (!user._id)
+      throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
 
     const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'EMAIL_VERIFICATION', true)
     await this.otpService.sendEmailVerificationMail(email, user.fullName, otp, verificationToken)
@@ -130,8 +197,11 @@ export class UsersController {
     if (user.isEmailVerified)
       throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
 
+    if (!user._id)
+      throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
+
     await this.otpService.verifyOTP(user._id, 'EMAIL_VERIFICATION', otp)
-    await this.userService.updateUser(user._id.toString(), { isEmailVerified: true })
+    await this.userService.updateUser(user._id, { isEmailVerified: true })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
@@ -144,6 +214,9 @@ export class UsersController {
   public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body
     const user = await this.userService.getUserByEmail(email)
+
+    if (!user._id)
+      throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
 
     const { otp, verificationToken } = await this.otpService.requestOTP(user._id, 'PASSWORD_RESET', true)
     await this.otpService.sendPasswordResetMail(email, user.fullName, otp, verificationToken)
@@ -160,8 +233,11 @@ export class UsersController {
     const { email, otp, newPassword } = req.body
     const user = await this.userService.getUserByEmail(email)
 
+    if (!user._id)
+      throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
+
     await this.otpService.verifyOTP(user._id, 'PASSWORD_RESET', otp)
-    await this.userService.updateUser(user._id.toString(), { password: newPassword })
+    await this.userService.updateUser(user._id, { password: newPassword })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,

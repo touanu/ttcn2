@@ -1,4 +1,4 @@
-import type { ProgressDB } from '@shared/types'
+import type { ProgressDB } from '@/interfaces/progress.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { LessonModel } from '@models/lesson.model'
 import { ProgressModel } from '@models/progress.model'

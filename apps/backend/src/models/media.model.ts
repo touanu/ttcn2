@@ -1,8 +1,8 @@
-import type { Media } from '@shared/interfaces'
+import type { MediaDB } from '@/interfaces/media.interface'
 import { MEDIA_TYPES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 
-const MediaSchema = new Schema<Media>({
+const MediaSchema = new Schema<MediaDB>({
   url: { type: String, required: true },
   type: { type: String, enum: MEDIA_TYPES, required: true },
   ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -11,4 +11,4 @@ const MediaSchema = new Schema<Media>({
 
 MediaSchema.index({ ownerId: 1 })
 
-export const MediaModel = model<Media>('Media', MediaSchema)
+export const MediaModel = model<MediaDB>('Media', MediaSchema)

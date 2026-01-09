@@ -1,9 +1,10 @@
-import type { RequestWithUser, SuccessResponseBody } from '@shared/interfaces'
-import type { ProgressDB } from '@shared/types'
+import type { Progress, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
+import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { ProgressService } from '@services/progress.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertProgressToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -22,9 +23,9 @@ export class ProgressController {
     const { courseId } = req.query
     const progress = await this.progressService.getUserProgress(userId, courseId as string | undefined)
 
-    const response: SuccessResponseBody<ProgressDB[]> = {
+    const response: SuccessResponseBody<Progress[]> = {
       success: true,
-      data: progress,
+      data: progress.map(convertProgressToResponse),
       message: 'PROGRESS.FOUND',
     }
 
@@ -41,9 +42,9 @@ export class ProgressController {
 
     const progress = await this.progressService.getCourseProgress(userId, courseId)
 
-    const response: SuccessResponseBody<ProgressDB> = {
+    const response: SuccessResponseBody<Progress> = {
       success: true,
-      data: progress,
+      data: convertProgressToResponse(progress),
       message: 'PROGRESS.FOUND',
     }
 
@@ -60,9 +61,9 @@ export class ProgressController {
 
     const progress = await this.progressService.markLessonComplete(userId, lessonId)
 
-    const response: SuccessResponseBody<ProgressDB> = {
+    const response: SuccessResponseBody<Progress> = {
       success: true,
-      data: progress,
+      data: convertProgressToResponse(progress),
       message: 'LESSON.COMPLETED',
     }
 

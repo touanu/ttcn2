@@ -1,5 +1,4 @@
-import type { Media } from '@shared/interfaces'
-import type { MediaDB } from '@shared/types'
+import type { MediaDB } from '@/interfaces/media.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaModel } from '@models/media.model'
 import { logger } from '@utils/logger'
@@ -7,7 +6,7 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export class MediaService {
-  public async createMedia(mediaData: Partial<Media>): Promise<MediaDB> {
+  public async createMedia(mediaData: Partial<MediaDB>): Promise<MediaDB> {
     const media = new MediaModel({
       ...mediaData,
       createdAt: new Date(),
@@ -22,12 +21,12 @@ export class MediaService {
   }
 
   public async getMediaById(mediaId: string): Promise<MediaDB> {
-    const media = await MediaModel.findById(mediaId)
+    const media = await MediaModel.findById(mediaId).lean<MediaDB>().exec()
 
     if (!media)
       throw new HttpException(404, 'MEDIA.NOT_FOUND')
 
-    return media.toObject() as MediaDB
+    return media
   }
 
   public async getMediaByOwner(ownerId: string): Promise<MediaDB[]> {

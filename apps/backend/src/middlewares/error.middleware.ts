@@ -1,4 +1,4 @@
-import type { ErrorResponseBody } from '@shared/interfaces/error.interface'
+import type { ErrorResponseBody } from '@shared/types'
 import type { NextFunction, Request, Response } from 'express'
 import type { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import { HttpException } from '@exceptions/HttpException'

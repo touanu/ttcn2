@@ -1,5 +1,4 @@
-import type { Question, Quiz } from '@shared/interfaces'
-import type { QuestionDB, QuizDB } from '@shared/types'
+import type { QuestionDB, QuizDB } from '@/interfaces/quizzes.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { QuestionModel, QuizModel } from '@models/quiz.model'
 import { logger } from '@utils/logger'
@@ -7,7 +6,7 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export class QuizzesService {
-  public async createQuiz(lessonId: string, quizData: Partial<Quiz>): Promise<QuizDB> {
+  public async createQuiz(lessonId: string, quizData: Partial<QuizDB>): Promise<QuizDB> {
     const quiz = new QuizModel({
       ...quizData,
       lessonId,
@@ -44,7 +43,7 @@ export class QuizzesService {
     return quiz
   }
 
-  public async updateQuiz(quizId: string, updateData: Partial<Quiz>): Promise<QuizDB> {
+  public async updateQuiz(quizId: string, updateData: Partial<QuizDB>): Promise<QuizDB> {
     const quiz = await QuizModel.findByIdAndUpdate(
       quizId,
       { ...updateData, updatedAt: new Date() },
@@ -66,7 +65,7 @@ export class QuizzesService {
       throw new HttpException(404, 'QUIZZES.NOT_FOUND')
   }
 
-  public async createQuestion(quizId: string, questionData: Partial<Question>): Promise<QuestionDB> {
+  public async createQuestion(quizId: string, questionData: Partial<QuestionDB>): Promise<QuestionDB> {
     const question = new QuestionModel({
       ...questionData,
       quizId,
@@ -96,7 +95,7 @@ export class QuizzesService {
     return question.toObject() as QuestionDB
   }
 
-  public async updateQuestion(questionId: string, updateData: Partial<Question>): Promise<QuestionDB> {
+  public async updateQuestion(questionId: string, updateData: Partial<QuestionDB>): Promise<QuestionDB> {
     const question = await QuestionModel.findByIdAndUpdate(
       questionId,
       { ...updateData, updatedAt: new Date() },

@@ -34,27 +34,13 @@ export class UsersRoute implements Routes {
       this.userController.getUsers,
     )
     this.router.get(
-      `${this.path}/:id`,
-      this.userController.getUserById,
+      `${this.path}/count`,
+      this.userController.getUsersCount,
     )
     this.router.post(
       this.path,
       ValidationMiddleware(createUserSchema),
       this.userController.createUser,
-    )
-    this.router.patch(
-      `${this.path}/:id`,
-      ValidationMiddleware(updateUserSchema),
-      this.userController.updateUser,
-    )
-    this.router.patch(
-      `${this.path}/:id/password`,
-      ValidationMiddleware(changePasswordSchema),
-      this.userController.updateUserPassword,
-    )
-    this.router.delete(
-      `${this.path}/:id`,
-      this.userController.deleteUser,
     )
     this.router.post(
       `${this.path}/request-verify-email`,
@@ -89,6 +75,13 @@ export class UsersRoute implements Routes {
       ValidationMiddleware(onlyPasswordResetSchema),
       this.userController.verifyPasswordResetToken,
     )
+
+    // Parameterized routes (:id) must come AFTER all specific routes
+    this.router.get(
+      `${this.path}/:id/permissions`,
+      AuthMiddleware,
+      this.userController.getUserPermissions,
+    )
     this.router.patch(
       `${this.path}/:id/role`,
       AuthMiddleware,
@@ -96,10 +89,25 @@ export class UsersRoute implements Routes {
       ValidationMiddleware(updateUserRoleSchema),
       this.userController.updateUserRole,
     )
+    this.router.patch(
+      `${this.path}/:id/password`,
+      ValidationMiddleware(changePasswordSchema),
+      this.userController.updateUserPassword,
+    )
     this.router.get(
-      `${this.path}/:id/permissions`,
+      `${this.path}/:id`,
+      this.userController.getUserById,
+    )
+    this.router.patch(
+      `${this.path}/:id`,
+      ValidationMiddleware(updateUserSchema),
+      this.userController.updateUser,
+    )
+    this.router.delete(
+      `${this.path}/:id`,
       AuthMiddleware,
-      this.userController.getUserPermissions,
+      requirePermission([PERMISSIONS.USERS.DELETE]),
+      this.userController.deleteUser,
     )
   }
 }

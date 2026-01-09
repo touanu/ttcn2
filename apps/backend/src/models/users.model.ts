@@ -1,8 +1,8 @@
-import type { User } from '@shared/interfaces'
+import type { UserDB } from '@/interfaces'
 import { USER_ROLES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 
-const UserSchema: Schema = new Schema<User>({
+const UserSchema: Schema = new Schema<UserDB>({
   username: {
     type: String,
     required: true,
@@ -46,4 +46,4 @@ const UserSchema: Schema = new Schema<User>({
   },
 })
 
-export const UserModel = model<User>('User', UserSchema)
+export const UserModel = model<UserDB>('User', UserSchema)

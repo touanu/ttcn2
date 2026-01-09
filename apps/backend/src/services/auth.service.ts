@@ -6,9 +6,9 @@ import type {
   LoginData,
   RefreshTokenData,
   Token,
-} from '@shared/interfaces'
-import type { UserDB } from '@shared/types'
+} from '@shared/types'
 import type { ObjectId } from 'mongoose'
+import type { UserDB } from '@/interfaces/users.interface'
 import { randomBytes } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
@@ -140,6 +140,10 @@ export class AuthService {
 
     if (!user.isEmailVerified)
       throw new HttpException(401, 'AUTH.EMAIL_NOT_VERIFIED')
+    if (!user._id)
+      throw new HttpException(500, 'AUTH.USER_ID_NOT_FOUND')
+    if (!user._id)
+      throw new HttpException(500, 'AUTH.USER_ID_NOT_FOUND')
 
     const userRole = user.role || 'student'
     const userPayload: AccessTokenPayload = {
@@ -198,6 +202,9 @@ export class AuthService {
       logger.warn(`Phát hiện sử dụng refresh token không hợp lệ\nSessionID: ${session._id.toString()}`)
       throw new HttpException(401, 'AUTH.INVALID_REFRESH_TOKEN')
     }
+
+    if (!user._id)
+      throw new HttpException(500, 'AUTH.USER_ID_NOT_FOUND')
 
     const userRole = user.role || 'student'
     const userPayload: AccessTokenPayload = {
