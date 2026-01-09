@@ -117,9 +117,9 @@ docs/                # Documentation files
 **Shared Packages:**
 
 - `@shared/config` → `packages/config`
-- `@shared/interfaces` → `packages/interfaces`
-- `@shared/schemas` → `packages/schemas`
 - `@shared/types` → `packages/types`
+- `@shared/schemas` → `packages/schemas`
+- `@shared/constants` → `packages/constants`
 - `@shared/utils` → `packages/utils`
 
 ### Database & Models
