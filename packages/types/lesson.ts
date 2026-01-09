@@ -1,3 +1,11 @@
-import type { Lesson } from '@shared/interfaces/lessons.interface'
-
-export type LessonDB = Lesson & Required<Pick<Lesson, '_id'>>
+export interface Lesson {
+  _id?: string
+  courseId: string
+  title: string
+  content: string
+  mediaIds: string[]
+  quizId?: string
+  orderIndex: number
+  createdAt: Date
+  updatedAt: Date
+}

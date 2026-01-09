@@ -4,7 +4,10 @@ import { emailSchema, passwordSchema, usernameSchema } from './base'
 import { otpSchema } from './otp'
 
 // Define user roles enum for validation
-export const userRoleSchema = z.enum(['student', 'teacher', 'admin', 'superadmin'])
+export const userRoleSchema = z.enum(
+  ['student', 'teacher', 'admin', 'superadmin'],
+  'FORMS.INVALID_USER_ROLE',
+)
 export type UserRoleDto = z.infer<typeof userRoleSchema>
 
 export const createUserSchema = z.object({
@@ -16,6 +19,11 @@ export const createUserSchema = z.object({
     .max(100, 'FORMS.FULLNAME.MAX_LENGTH'),
 })
 export type CreateUserDto = z.infer<typeof createUserSchema>
+
+export const createUserWithRoleSchema = createUserSchema.extend({
+  role: userRoleSchema,
+})
+export type CreateUserWithRoleDto = z.infer<typeof createUserWithRoleSchema>
 
 // DTO chỉnh sửa (không bắt buộc tất cả trường)
 export const updateUserSchema = createUserSchema.partial()

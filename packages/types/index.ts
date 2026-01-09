@@ -1,4 +1,6 @@
+export * from './auth'
 export * from './course'
+export * from './error'
 export * from './lesson'
 export * from './media'
 export * from './otp'

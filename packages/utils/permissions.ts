@@ -31,3 +31,25 @@ export function roleHasAllPermissions(role: string, permissions: Permission[]): 
   const rolePermissions = getRolePermissions(role)
   return permissions.every(permission => rolePermissions.includes(permission))
 }
+
+/**
+ * Kiểm tra ability: Người dùng có thể xóa người dùng khác không
+ * @param currentUserRole Vai trò của người dùng hiện tại
+ * @param targetUserRole Vai trò của người dùng cần xóa
+ * @returns true nếu có quyền xóa
+ */
+export function canDeleteUser(currentUserRole: string, targetUserRole: string): boolean {
+  // Superadmin có thể xóa bất kỳ ai (kể cả admin và superadmin khác)
+  if (currentUserRole === 'superadmin') {
+    return roleHasPermission(currentUserRole, 'user:delete')
+  }
+
+  // Admin có thể xóa student và teacher, nhưng không thể xóa admin hoặc superadmin
+  if (currentUserRole === 'admin') {
+    const canDeleteNormal = roleHasPermission(currentUserRole, 'user:delete')
+    const isProtectedRole = targetUserRole === 'admin' || targetUserRole === 'superadmin'
+    return canDeleteNormal && !isProtectedRole
+  }
+
+  return false
+}

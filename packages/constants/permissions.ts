@@ -4,6 +4,7 @@ export const PERMISSIONS = {
     CREATE: 'user:write',
     UPDATE: 'user:write',
     DELETE: 'user:delete',
+    DELETE_ADMIN: 'user:delete-admin',
     MANAGE_ROLES: 'user:manage-roles',
   },
   COURSES: {

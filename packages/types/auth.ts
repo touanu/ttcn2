@@ -1,10 +1,9 @@
 import type { Permission } from '@shared/constants'
-import type { Request } from 'express'
-import type { User } from './users.interface'
+import type { UserRole } from './user'
 
-export interface AccessTokenPayload extends TokenPayload {
+export interface AccessTokenPayload {
   id: string
-  role?: string
+  role: UserRole
   name?: string
   permissions?: Permission[]
 }
@@ -28,11 +27,6 @@ export interface TokenWithOTP extends Token {
   otp: string
 }
 
-export interface RequestWithUser extends Request {
-  user: User
-  permissions?: Permission[]
-}
-
 export interface ClientInfo {
   ipAddress?: string
   userAgent?: string
@@ -54,4 +48,20 @@ export interface RefreshTokenData {
 
 export interface LoginData extends RefreshTokenData {
   user: AccessTokenPayload
+}
+
+export interface RegisterData {
+  username: string
+  email: string
+  password: string
+  fullName: string
+}
+
+export interface RefreshTokenPayload {
+  userId: string
+}
+
+export interface ChangePasswordData {
+  oldPassword: string
+  newPassword: string
 }

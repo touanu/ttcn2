@@ -1,3 +1,8 @@
-import type { Progress } from '@shared/interfaces/progress.interface'
-
-export type ProgressDB = Progress & Required<Pick<Progress, '_id'>>
+export interface Progress {
+  _id?: string
+  userId: string
+  courseId: string
+  completedLessonIds: string[]
+  percentage: number
+  updatedAt: Date
+}
