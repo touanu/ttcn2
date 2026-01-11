@@ -1,8 +1,8 @@
 /* eslint-disable perfectionist/sort-imports */
 /* eslint-disable no-console */
-
 import 'reflect-metadata'
 import process from 'node:process'
+import { container } from 'tsyringe'
 import { AttemptsRoute } from '@routes/attempts.route'
 import { AuthRoute } from '@routes/auth.route'
 import { CoursesRoute } from '@routes/courses.route'
@@ -11,7 +11,7 @@ import { MediaRoute } from '@routes/media.route'
 import { ProgressRoute } from '@routes/progress.route'
 import { QuizzesRoute } from '@routes/quizzes.route'
 import { UsersRoute } from '@routes/users.route'
-import { container } from 'tsyringe'
+import { PaymentRoute } from '@routes/payment.route'
 import { z } from 'zod'
 import App from '@/app'
 import '@shared/config'
@@ -26,8 +26,8 @@ const routes = [
   container.resolve(AttemptsRoute),
   container.resolve(ProgressRoute),
   container.resolve(MediaRoute),
+  container.resolve(PaymentRoute),
 ]
-
 // Tùy chỉnh thông điệp lỗi của Zod
 z.config({
   customError: (issue) => {
