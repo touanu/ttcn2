@@ -1,11 +1,53 @@
 {
-  "ERROR_TITLE": "Lỗi",
+  "MESSAGES": {
+    "CREATED": "{resource} đã được tạo thành công",
+    "UPDATED": "{resource} đã được cập nhật thành công",
+    "DELETED": "{resource} đã được xóa thành công",
+    "FOUND": "Lấy thông tin {resource} thành công",
+    "NOT_FOUND": "Không tìm thấy {resource}",
+    "INVALID_ID": "ID {resource} không hợp lệ",
+    "ALREADY_EXISTS": "{resource} đã tồn tại"
+  },
+  "ERRORS": {
+    "TITLE": "Lỗi",
+    "GENERIC": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+    "INTERNAL_SERVER": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
+    "ROUTE_NOT_FOUND": "Không tìm thấy đường dẫn.",
+    "VALIDATION_FAILED": "Xác thực dữ liệu thất bại.",
+    "RATE_LIMIT": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+    "INVALID_TYPE": "Loại không hợp lệ",
+    "UNKNOWN": "Đã xảy ra lỗi không xác định",
+    "FETCH_FAILED": "Không thể tải {resource}",
+    "CREATE_FAILED": "Không thể tạo {resource}",
+    "UPDATE_FAILED": "Không thể cập nhật {resource}",
+    "DELETE_FAILED": "Không thể xóa {resource}"
+  },
   "SUCCESS_TITLE": "Thành công",
-  "GENERIC_ERROR": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
-  "INTERNAL_SERVER_ERROR": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
-  "ROUTE_NOT_FOUND": "Không tìm thấy đường dẫn.",
-  "VALIDATION_FAILED": "Xác thực dữ liệu thất bại.",
-  "RATE_LIMIT_REACHED": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+  "STATUS": {
+    "COURSE": {
+      "PUBLISHED": "Đã xuất bản",
+      "DRAFT": "Bản nháp",
+      "ARCHIVED": "Đã lưu trữ"
+    },
+    "CLASS": {
+      "ACTIVE": "Đang hoạt động",
+      "PENDING": "Đang chờ",
+      "COMPLETED": "Đã hoàn thành",
+      "CANCELLED": "Đã hủy"
+    },
+    "USER": {
+      "ALL": "Tất cả",
+      "SUBSCRIBED": "Đã đăng ký",
+      "UNSUBSCRIBED": "Đã hủy đăng ký",
+      "BOUNCED": "Bị trả về"
+    }
+  },
+  "LEVELS": {
+    "BEGINNER": "Cơ bản",
+    "INTERMEDIATE": "Trung cấp",
+    "ADVANCED": "Nâng cao",
+    "EXPERT": "Chuyên gia"
+  },
   "NAVIGATION": {
     "MENU_TITLE": "Điều Hướng",
     "HOME": "Trang chủ",
@@ -23,6 +65,7 @@
   },
   "AUTH": {
     "UNAUTHORIZED": "Bạn không có quyền truy cập tài nguyên này.",
+    "LOGIN_REQUIRED": "Yêu cầu Đăng nhập",
     "USER_NOT_FOUND": "Không tìm thấy người dùng.",
     "AUTHENTICATION_FAILED": "Xác thực thất bại.",
     "ACCESS_TOKEN_NOT_FOUND": "Không tìm thấy access token.",
@@ -169,6 +212,18 @@
       "REQUIRED": "Hash là bắt buộc.",
       "CANNOT_BE_EMPTY": "Hash không được để trống."
     },
+    "COURSE": {
+      "TITLE_REQUIRED": "Tiêu đề khóa học là bắt buộc",
+      "TITLE_MAX_LENGTH": "Tiêu đề khóa học không được vượt quá {max} ký tự",
+      "DESCRIPTION_REQUIRED": "Mô tả khóa học là bắt buộc",
+      "CATEGORY_REQUIRED": "Danh mục khóa học là bắt buộc",
+      "INVALID_THUMBNAIL_URL": "URL hình thu nhỏ không hợp lệ"
+    },
+    "CATEGORY": {
+      "NAME_REQUIRED": "Tên danh mục là bắt buộc",
+      "NAME_MAX_LENGTH": "Tên danh mục không được vượt quá {max} ký tự",
+      "DESCRIPTION_REQUIRED": "Mô tả danh mục là bắt buộc"
+    },
     "REMEMBER_ME": "Ghi nhớ đăng nhập?",
     "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Cần cung cấp email hoặc tên người dùng.",
     "EITHER_OTP_OR_HASH_REQUIRED": "Cần cung cấp OTP hoặc hash."
@@ -176,6 +231,7 @@
 
   "COMMON": {
     "CANCEL": "Hủy",
+    "CLOSE": "Đóng",
     "SAVE": "Lưu",
     "SAVE_CHANGES": "Lưu thay đổi",
     "DELETE": "Xóa",
@@ -187,6 +243,7 @@
     "SEARCH": "Tìm kiếm",
     "FILTER": "Lọc",
     "ACTIONS": "Hành động",
+    "ADD": "Thêm",
     "EMAIL": "Email",
     "NAME": "Tên",
     "FULL_NAME": "Họ và tên",
@@ -198,11 +255,31 @@
     "CREATED": "Tạo lúc",
     "ALL": "Tất cả",
     "OF": "của",
+    "YES": "Có",
+    "NO": "Không",
     "VERIFIED": "Đã xác thực",
     "UNVERIFIED": "Chưa xác thực",
     "SHOWING": "Hiển thị",
     "MANAGE": "Quản lý",
     "SUCCESS": "Thành công",
+    "USER_ID": "ID người dùng",
+    "NOT_AVAILABLE": "Không có",
+    "CREATED_AT": "Ngày tạo",
+    "UPDATED_AT": "Ngày cập nhật",
+    "EMAIL_VERIFIED": "Email đã xác thực",
+    "START": "Bắt đầu",
+    "REVIEW": "Ôn tập",
+    "COMING_SOON": "Sắp ra mắt",
+    "BACK": "Quay lại",
+    "DAYS": {
+      "MONDAY": "Thứ Hai",
+      "TUESDAY": "Thứ Ba",
+      "WEDNESDAY": "Thứ Tư",
+      "THURSDAY": "Thứ Năm",
+      "FRIDAY": "Thứ Sáu",
+      "SATURDAY": "Thứ Bảy",
+      "SUNDAY": "Chủ Nhật"
+    },
     "ERROR": {
       "UNKNOWN": "Đã xảy ra lỗi không xác định"
     }
@@ -214,10 +291,14 @@
     "BACK_TO_SITE": "Về Trang Chủ",
     "WELCOME": "Chào mừng trở lại",
     "WELCOME_SUBTITLE": "Đây là tổng quan về nền tảng của bạn",
+    "ADD_CATEGORY": "Thêm danh mục",
+    "ADD_CLASS": "Thêm lớp học",
     "NAV": {
       "DASHBOARD": "Tổng Quan",
       "USERS": "Người Dùng",
       "COURSES": "Khóa Học",
+      "CATEGORIES": "Danh mục",
+      "CLASSES": "Lớp học",
       "CONTENT": "Nội Dung",
       "SETTINGS": "Cài Đặt"
     },
@@ -258,7 +339,10 @@
       "EDIT_USER": "Chỉnh sửa người dùng",
       "ADD_USER_DESC": "Thêm người dùng mới vào hệ thống",
       "USER_CREATED": "Đã tạo người dùng '{name}' thành công",
+      "USER_UPDATED": "Đã cập nhật người dùng '{name}' thành công",
       "CREATE_ERROR": "Không thể tạo người dùng",
+      "UPDATE_ERROR": "Không thể cập nhật người dùng",
+      "CANNOT_CHANGE_ROLE": "Bạn không có quyền thay đổi vai trò của người dùng này",
       "DELETE_MODAL_TITLE": "Xóa người dùng",
       "DELETE_CONFIRMATION": "Bạn có chắc chắn muốn xóa {count} người dùng? Hành động này không thể hoàn tác.",
       "DELETE_WARNING": "⚠️ Điều này sẽ xóa vĩnh viễn người dùng đã chọn và tất cả dữ liệu của họ.",
@@ -278,21 +362,143 @@
       "SUBTITLE": "Quản lý khóa học và bài giảng",
       "ALL_COURSES": "Tất Cả Khóa Học",
       "TOTAL": "khóa học",
+      "TITLE": "Tiêu đề",
+      "LEVEL": "Cấp độ",
+      "CATEGORY": "Danh mục",
+      "SELECT_CATEGORY": "Chọn danh mục",
       "COPY_COURSE_ID": "Sao chép ID khóa học",
       "COURSE_ID_COPIED": "ID khóa học đã được sao chép",
       "EDIT_COURSE": "Chỉnh sửa khóa học",
       "EDIT_COMING_SOON": "Chức năng chỉnh sửa sắp ra mắt",
       "VIEW_LESSONS": "Xem bài giảng",
+      "VIEW_COURSE": "Xem chi tiết khóa học",
       "DELETE_COURSE": "Xóa khóa học",
       "COURSE_DELETED": "Đã xóa khóa học",
       "COURSE_DELETED_DESC": "Khóa học đã được xóa.",
+      "ADD_COURSE_DESC": "Thêm khóa học mới vào hệ thống",
+      "COURSE_CREATED": "Đã tạo khóa học '{title}' thành công",
+      "COURSE_UPDATED": "Đã cập nhật khóa học '{title}' thành công",
+      "CREATE_ERROR": "Không thể tạo khóa học",
+      "UPDATE_ERROR": "Không thể cập nhật khóa học",
+      "COURSES_DELETED_SUCCESS": "Đã xóa khóa học thành công",
+      "DELETE_CONFIRMATION": "Xóa {count} khóa học?",
+      "DELETE_WARNING": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn các khóa học đã chọn và tất cả dữ liệu liên quan.",
+      "COURSES_TO_DELETE": "Các khóa học sẽ xóa:",
+      "AND_MORE": "và {count} khóa học nữa...",
+      "COURSE_ID": "ID Khóa học",
+      "LESSONS_COUNT": "Bài giảng",
+      "DESCRIPTION": "Mô tả",
+      "THUMBNAIL": "Hình thu nhỏ",
+      "TITLE_PLACEHOLDER": "Nhập tiêu đề khóa học",
+      "DESCRIPTION_PLACEHOLDER": "Nhập mô tả khóa học",
+      "THUMBNAIL_PLACEHOLDER": "Nhập URL hình thu nhỏ",
       "COLUMN_TITLE": "Tiêu đề",
       "COLUMN_LEVEL": "Cấp độ",
       "COLUMN_STATUS": "Trạng thái",
       "COLUMN_LESSONS": "Bài giảng",
       "COLUMN_ACTIONS": "Hành động",
       "SELECT_ALL": "Chọn tất cả",
-      "SELECT_ROW": "Chọn hàng"
+      "SELECT_ROW": "Chọn hàng",
+      "DELETE_MODAL_TITLE": "Xóa Khóa Học",
+      "STATUS": "Trạng thái",
+
+      "SCHEDULE": "Lịch học",
+      "ENROLL_IN_COURSE": "Đăng ký Khóa học",
+      "SELECT_CLASS": "Chọn Lớp học",
+      "SELECT_CLASS_ERROR": "Vui lòng chọn một lớp học",
+      "NO_AVAILABLE_CLASSES": "Không có Lớp học khả dụng",
+      "NO_AVAILABLE_CLASSES_DESC": "Hiện tại không có lớp học nào cho khóa học này. Vui lòng quay lại sau.",
+      "CONFIRM_ENROLLMENT": "Xác nhận Đăng ký",
+      "ENROLLED_SUCCESSFULLY": "Đã đăng ký khóa học thành công",
+      "ENROLL_ERROR": "Không thể đăng ký khóa học",
+      "LOGIN_TO_ENROLL": "Vui lòng đăng nhập để đăng ký khóa học này",
+      "ALREADY_ENROLLED": "Đã Đăng ký"
+    },
+    "CLASSES": {
+      "TITLE": "Lớp học",
+      "SUBTITLE": "Quản lý lịch học và đăng ký lớp",
+      "ALL_CLASSES": "Tất cả lớp học",
+      "TOTAL": "lớp học",
+      "NAME": "Tên",
+      "DESCRIPTION": "Mô tả",
+      "ROOM": "Phòng",
+      "START_DATE": "Ngày bắt đầu",
+      "END_DATE": "Ngày kết thúc",
+      "MAX_STUDENTS": "Số học viên tối đa",
+      "STATUS": "Trạng thái",
+      "STUDENTS": "Học viên",
+      "TEACHER": "Giáo viên",
+      "TEACHER_ID": "ID Giáo viên",
+      "COURSE": "Khóa học",
+      "SELECT_COURSE": "Chọn khóa học",
+      "STUDENTS_COUNT": "học viên",
+      "STUDENT_IDS": "ID Học viên",
+      "STUDENT_LIST": "Danh sách Học viên",
+      "SELECT_TEACHER": "Chọn giáo viên",
+      "SELECT_STUDENT": "Chọn học viên để thêm",
+      "STUDENT_ID_PLACEHOLDER": "Nhập ID học viên thủ công",
+      "COLUMN_NAME": "Tên lớp",
+      "COLUMN_COURSE": "Khóa học",
+      "COLUMN_START_DATE": "Ngày bắt đầu",
+      "COLUMN_END_DATE": "Ngày kết thúc",
+      "COLUMN_STATUS": "Trạng thái",
+      "COLUMN_STUDENTS": "Học viên",
+      "SELECT_ALL": "Chọn tất cả",
+      "SELECT_ROW": "Chọn hàng",
+      "FILTER_NAMES": "Lọc theo tên...",
+      "COPY_CLASS_ID": "Sao chép ID lớp học",
+      "CLASS_ID_COPIED": "ID lớp học đã được sao chép",
+      "VIEW_CLASS": "Xem chi tiết lớp học",
+      "EDIT_CLASS": "Chỉnh sửa lớp học",
+      "DELETE_CLASS": "Xóa lớp học",
+      "CLASS_DELETED": "Đã xóa lớp học",
+      "CLASS_ID": "ID Lớp học",
+      "ADD_CLASS_DESC": "Thêm lớp học mới vào hệ thống",
+      "CLASS_CREATED": "Đã tạo lớp học '{name}' thành công",
+      "CLASS_UPDATED": "Đã cập nhật lớp học thành công",
+      "CREATE_ERROR": "Không thể tạo lớp học",
+      "UPDATE_ERROR": "Không thể cập nhật lớp học",
+      "DELETE_ERROR": "Không thể xóa lớp học",
+      "CLASSES_DELETED_SUCCESS": "Đã xóa lớp học thành công",
+      "DELETE_CONFIRMATION": "Xóa {count} lớp học?",
+      "DELETE_WARNING": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn các lớp học đã chọn.",
+      "CLASSES_TO_DELETE": "Các lớp học sẽ xóa:",
+      "AND_MORE": "và {count} lớp học nữa...",
+      "DELETE_MODAL_TITLE": "Xóa lớp học"
+    },
+    "CATEGORIES": {
+      "TITLE": "Danh mục khóa học",
+      "SUBTITLE": "Quản lý danh mục và phân loại khóa học",
+      "ALL_CATEGORIES": "Tất cả danh mục",
+      "TOTAL": "danh mục",
+      "NAME": "Tên",
+      "DESCRIPTION": "Mô tả",
+      "NAME_PLACEHOLDER": "Nhập tên danh mục",
+      "DESCRIPTION_PLACEHOLDER": "Nhập mô tả danh mục",
+      "COLUMN_NAME": "Tên",
+      "COLUMN_DESCRIPTION": "Mô tả",
+      "SELECT_ALL": "Chọn tất cả",
+      "SELECT_ROW": "Chọn hàng",
+      "FILTER_NAMES": "Lọc theo tên...",
+      "COPY_CATEGORY_ID": "Sao chép ID danh mục",
+      "CATEGORY_ID_COPIED": "ID danh mục đã được sao chép",
+      "VIEW_CATEGORY": "Xem chi tiết danh mục",
+      "EDIT_CATEGORY": "Chỉnh sửa danh mục",
+      "DELETE_CATEGORY": "Xóa danh mục",
+      "CATEGORY_DELETED": "Đã xóa danh mục",
+      "CATEGORY_ID": "ID Danh mục",
+      "ADD_CATEGORY_DESC": "Thêm danh mục mới vào hệ thống",
+      "CATEGORY_CREATED": "Đã tạo danh mục '{name}' thành công",
+      "CATEGORY_UPDATED": "Đã cập nhật danh mục thành công",
+      "CREATE_ERROR": "Không thể tạo danh mục",
+      "UPDATE_ERROR": "Không thể cập nhật danh mục",
+      "DELETE_ERROR": "Không thể xóa danh mục",
+      "CATEGORIES_DELETED_SUCCESS": "Đã xóa danh mục thành công",
+      "DELETE_CONFIRMATION": "Xóa {count} danh mục?",
+      "DELETE_WARNING": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn các danh mục đã chọn.",
+      "CATEGORIES_TO_DELETE": "Các danh mục sẽ xóa:",
+      "AND_MORE": "và {count} danh mục nữa...",
+      "DELETE_MODAL_TITLE": "Xóa Danh mục"
     },
     "CONTENT": {
       "SUBTITLE": "Quản lý nội dung và tài liệu học tập",
@@ -350,30 +556,45 @@
     "SUPERADMIN": "Quản trị viên cấp cao"
   },
 
-  "COURSE": {
+  "COURSES": {
     "TITLE": "Tiêu đề",
     "LEVEL": "Cấp độ",
     "LESSONS": "Bài giảng",
-    "STATUS": {
-      "DRAFT": "Bản nháp",
-      "PUBLISHED": "Đã xuất bản",
-      "ARCHIVED": "Đã lưu trữ"
-    },
-    "LEVELS": {
-      "BEGINNER": "Cơ bản",
-      "INTERMEDIATE": "Trung cấp",
-      "ADVANCED": "Nâng cao"
-    },
-    "SUBTITLE": "Khám phá các khóa học tiếng Anh toàn diện của chúng tôi",
-    "COURSE_TITLE": "Khóa học {number}",
-    "COURSE_DESC": "Học tiếng Anh hiệu quả với chương trình học có cấu trúc của chúng tôi.",
-    "LEVEL_BEGINNER": "Cơ bản",
-    "LEVEL_INTERMEDIATE": "Trung cấp",
-    "LEVEL_ADVANCED": "Nâng cao",
-    "VIEW_COURSE": "Xem khóa học",
-    "ERROR": {
-      "FETCH_FAILED": "Không thể tải khóa học"
-    }
+    "STUDENTS": "Học viên",
+    "CLASSES": "Lớp học",
+    "ACTIVE_CLASSES": "Lớp đang hoạt động",
+    "SUBTITLE": "Khám phá và đăng ký các khóa học toàn diện của chúng tôi",
+    "ENROLLED": "Đã đăng ký",
+    "ENROLL_NOW": "Đăng ký ngay",
+    "REGISTER_NOW": "Đăng ký ngay",
+    "VIEW_SCHEDULE": "Xem lịch học",
+    "START_LEARNING": "Bắt đầu học",
+    "CONTINUE_LEARNING": "Tiếp tục học",
+    "NOT_AVAILABLE": "Chưa khả dụng",
+    "ABOUT": "Về khóa học này",
+    "WHAT_YOU_LEARN": "Bạn sẽ học được gì",
+    "LEARN_ITEM_1": "Chương trình tiếng Anh toàn diện phù hợp với trình độ của bạn",
+    "LEARN_ITEM_2": "Bài học tương tác với giáo viên bản ngữ có kinh nghiệm",
+    "LEARN_ITEM_3": "Lớp học nhỏ để được chú ý cá nhân",
+    "CURRICULUM": "Chương trình học",
+    "AVAILABLE_CLASSES": "Lớp học đang mở",
+    "NO_CLASSES": "Chưa có lớp học",
+    "NO_CLASSES_DESC": "Khóa học này chưa có lịch mở lớp",
+    "COMPLETED": "Đã hoàn thành",
+    "NO_LESSONS": "Chưa có bài giảng",
+    "NO_LESSONS_DESC": "Khóa học này chưa có bài giảng nào",
+    "LOCKED": "Đã khóa",
+    "YOUR_PROGRESS": "Tiến độ của bạn",
+    "COMPLETION": "Hoàn thành",
+    "LESSONS_COMPLETED": "Bài giảng đã hoàn thành",
+    "COURSE_INFO": "Thông tin khóa học",
+    "QUICK_INFO": "Thông tin nhanh",
+    "TOTAL_LESSONS": "Tổng số bài giảng",
+    "TOTAL_STUDENTS": "Tổng số học viên",
+    "COMPLETE": "Hoàn thành",
+    "NEED_HELP": "Cần hỗ trợ?",
+    "CONTACT_DESC": "Có thắc mắc về khóa học này? Đội ngũ của chúng tôi sẵn sàng hỗ trợ bạn.",
+    "CONTACT_US": "Liên hệ chúng tôi"
   },
 
   "PROFILE": {
@@ -562,5 +783,49 @@
       "PLACEHOLDER": "Nhập email của bạn",
       "BUTTON": "Đăng ký"
     }
+  },
+  "MEDIA": {
+    "NO_FILE_UPLOADED": "Không có file nào được tải lên",
+    "INVALID_FILE_TYPE": "Loại file không hợp lệ"
+  },
+  "CLASS": {
+    "STUDENT_ADDED": "Thêm học sinh vào lớp thành công",
+    "STUDENT_REMOVED": "Xóa học sinh khỏi lớp thành công",
+    "STUDENT_ALREADY_IN_CLASS": "Học sinh đã có trong lớp",
+    "STUDENT_NOT_IN_CLASS": "Học sinh không có trong lớp"
+  },
+  "TIMETABLE": {
+    "INVALID_CLASS_ID": "ID lớp học không hợp lệ"
+  },
+  "ENROLLMENT": {
+    "INVALID_USER_ID": "ID người dùng không hợp lệ",
+    "INVALID_COURSE_ID": "ID khóa học không hợp lệ",
+    "ALREADY_ENROLLED": "Đã đăng ký khóa học này",
+    "IS_ENROLLED": "Đã đăng ký",
+    "NOT_ENROLLED": "Chưa đăng ký",
+    "PROGRESS_UPDATED": "Cập nhật tiến độ thành công"
+  },
+  "CLASSES": {
+    "START": "Bắt đầu",
+    "END": "Kết thúc",
+    "STUDENTS": "Học viên",
+    "FULL": "Lớp đã đầy",
+    "SEATS_AVAILABLE": "chỗ còn trống",
+    "REGISTER": "Đăng ký"
+  },
+  "HOME": {
+    "HERO": {
+      "TITLE": "Thành thạo tiếng Anh với các khóa học do chuyên gia hướng dẫn",
+      "SUBTITLE": "Tham gia cùng hàng nghìn học viên đang cải thiện kỹ năng tiếng Anh với các khóa học toàn diện và bài giảng tương tác của chúng tôi"
+    },
+    "SEARCH_PLACEHOLDER": "Tìm kiếm khóa học...",
+    "COURSES": {
+      "TITLE": "Các khóa học có sẵn",
+      "SUBTITLE": "Chọn từ nhiều khóa học phù hợp với nhu cầu học tập của bạn"
+    },
+    "NO_COURSES": "Không tìm thấy khóa học",
+    "NO_COURSES_DESC": "Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn",
+    "LESSONS": "bài giảng",
+    "VIEW_DETAILS": "Xem chi tiết"
   }
 }
