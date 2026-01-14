@@ -227,7 +227,6 @@ flowchart TB
 ## Lược đồ cơ sở dữ liệu
 
 ```mermaid
-%% Chưa phải là lược đồ hoàn chỉnh, cần bổ sung thêm khi có yêu cầu cụ thể hơn
 erDiagram
 
   USER {
@@ -235,111 +234,138 @@ erDiagram
     string username UK
     string email UK
     bool isEmailVerified
-    string passwordHash
+    string password
     string fullName
     string role
-    string profilePicture
+    string profilePictureUrl
     date createdAt
     date updatedAt
   }
 
   SESSION {
-    ObjectId _id
-    ObjectId userId
+    ObjectId _id PK
+    ObjectId userId FK
     string refreshTokenHash
     string ipAddress
     string userAgent
     string deviceInfo
     bool revoked
     date revokedAt
+    date expiresAt
     date createdAt
     date updatedAt
+  }
+
+  OTP {
+    ObjectId _id PK
+    ObjectId userId FK
+    string otpHash
+    string verificationToken UK
+    string otpType
+    bool used
+    date createdAt
+  }
+
+  MEDIA {
+    ObjectId _id PK
+    string url
+    string type
+    ObjectId ownerId FK
+    date createdAt
+  }
+
+  COURSE_CATEGORY {
+    ObjectId _id PK
+    string name
+    string description
+    date createdAt
   }
 
   COURSE {
-    ObjectId _id
+    ObjectId _id PK
     string title
     string description
     string thumbnail
+    ObjectId authorId FK
+    ObjectId categoryId FK
     string level
+    string status
     ObjectId[] lessonIds
-    ObjectId authorId
+    ObjectId[] classIds
     date createdAt
     date updatedAt
   }
 
-  LESSON {
-    ObjectId _id
-    ObjectId courseId
-    string title
-    string content
-    ObjectId[] mediaIds
-    ObjectId quizId
-    number orderIndex
+  CLASS {
+    ObjectId _id PK
+    string name
+    ObjectId courseId FK
+    ObjectId teacherId FK
+    ObjectId[] studentIds
+    string room
+    string description
+    number maxStudents
+    string status
+    date startDate
+    date endDate
+    date openedAt
+    date endedAt
     date createdAt
     date updatedAt
   }
 
-  QUIZ {
-    ObjectId _id
-    ObjectId lessonId
-    ObjectId[] questionIds
-  }
-
-  QUESTION {
-    ObjectId _id
-    ObjectId quizId
-    string type
-    string prompt
-    string[] choices
-    string correctAnswer
-  }
-
-  ATTEMPT {
-    ObjectId _id
-    ObjectId userId
-    ObjectId quizId
-    number score
-    json answers
+  TIME_TABLE {
+    ObjectId _id PK
+    ObjectId classId FK
+    number dayOfWeek
+    date startTime
+    date endTime
+    string description
     date createdAt
+    date updatedAt
+  }
+
+  ENROLLMENT {
+    ObjectId _id PK
+    ObjectId userId FK
+    ObjectId courseId FK
+    string status
+    number price
+    number paidPrice
+    string paidMethod
+    number progressPercentage
+    date enrolledAt
+    date completedAt
+    date createdAt
+    date updatedAt
   }
 
   PROGRESS {
-    ObjectId _id
-    ObjectId userId
-    ObjectId courseId
+    ObjectId _id PK
+    ObjectId userId FK
+    ObjectId courseId FK
     ObjectId[] completedLessonIds
     number percentage
     date updatedAt
   }
 
-  MEDIA {
-    ObjectId _id
-    string url
-    string type
-    ObjectId ownerId
-    date createdAt
-  }
-
-  OTP {
-    ObjectId _id
-    ObjectId userId
-    string otpHash
-    string verificationToken
-    enum otpType
-    bool used
-    date createdAt
-  }
-
   USER ||--o{ SESSION : has
+  USER ||--o{ OTP : for_verification
+  USER ||--o{ MEDIA : owns
   USER ||--o{ COURSE : creates
-  COURSE ||--o{ LESSON : contains
-  LESSON ||--o{ MEDIA : uses
-  LESSON ||--o| QUIZ : has
-  QUIZ ||--o{ QUESTION : includes
-  USER ||--o{ ATTEMPT : submits
+  USER ||--o{ CLASS : teaches
+  USER ||--o{ ENROLLMENT : enrolls_in
   USER ||--o{ PROGRESS : tracks
+
+  COURSE ||--o{ COURSE_CATEGORY : belongs_to
+  COURSE ||--o{ CLASS : has_classes
+  COURSE ||--o{ ENROLLMENT : has_enrollments
   COURSE ||--o{ PROGRESS : progress_in
+
+  CLASS ||--o{ TIME_TABLE : has_schedule
+  CLASS ||--o{ USER : has_students
+
+  ENROLLMENT ||--o{ PROGRESS : tracks_progress
 ```
 
 ---
