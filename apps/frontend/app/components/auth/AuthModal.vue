@@ -77,9 +77,9 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
         ignoreResponseError: true,
       })
 
-      if (res.error) {
+      if (!res.success) {
         toast.add({
-          title: $t('ERROR_TITLE'),
+          title: $t('ERRORS.TITLE'),
           description: getFirstTranslation(res.message) || $t('AUTH.OTP.RESEND_FAILED'),
           icon: 'i-lucide-alert-circle',
           color: 'error',
@@ -94,7 +94,7 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
     }
 
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.LOGIN.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
@@ -130,7 +130,7 @@ async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promis
   catch (error: any) {
     console.error('Registration failed:', error)
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.REGISTER.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
@@ -183,7 +183,7 @@ async function onOtpSubmit(payload: FormSubmitEvent<OtpOnlyDto>): Promise<void> 
   catch (error: any) {
     console.error('OTP verification failed:', error)
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.VERIFICATION_FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
@@ -219,7 +219,7 @@ async function resendOtp(): Promise<void> {
   catch (error: any) {
     console.error('Failed to resend OTP:', error)
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.RESEND_FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
@@ -254,7 +254,7 @@ async function onForgotPasswordSubmit(payload: FormSubmitEvent<EmailOnlyDto>): P
   catch (error: any) {
     console.error('Password reset failed:', error)
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
@@ -290,7 +290,7 @@ async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>):
   catch (error: any) {
     console.error('Reset password failed:', error)
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',

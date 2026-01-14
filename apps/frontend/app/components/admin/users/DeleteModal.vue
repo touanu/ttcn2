@@ -24,7 +24,7 @@ async function onDelete() {
 
     if (userIds.length === 0) {
       toast.add({
-        title: $t('ERROR_TITLE'),
+        title: $t('ERRORS.TITLE'),
         description: $t('ADMIN.USERS.NO_USERS_SELECTED'),
         color: 'error',
       })
@@ -54,7 +54,7 @@ async function onDelete() {
   }
   catch (err: any) {
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: err?.message || $t('ADMIN.USERS.DELETE_ERROR'),
       color: 'error',
     })

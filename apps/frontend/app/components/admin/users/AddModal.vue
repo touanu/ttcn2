@@ -14,6 +14,7 @@ const state = reactive<Partial<CreateUserWithRoleDto>>({
 })
 
 const toast = useToast()
+const validateForm = createFormValidator(createUserWithRoleSchema)
 
 async function onSubmit(event: FormSubmitEvent<CreateUserWithRoleDto>) {
   try {
@@ -44,7 +45,7 @@ async function onSubmit(event: FormSubmitEvent<CreateUserWithRoleDto>) {
   }
   catch (err: any) {
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: err?.message || $t('ADMIN.USERS.CREATE_ERROR'),
       color: 'error',
     })
@@ -59,6 +60,7 @@ async function onSubmit(event: FormSubmitEvent<CreateUserWithRoleDto>) {
     <template #body>
       <UForm
         :schema="createUserWithRoleSchema"
+        :validate="validateForm"
         :state="state"
         class="space-y-4"
         @submit="onSubmit"
