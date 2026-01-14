@@ -1,4 +1,4 @@
-import type { MediaDB } from '@/interfaces/media.interface'
+import type { MediaDB } from '@interfaces/media.interface'
 import { MEDIA_TYPES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 

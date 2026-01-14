@@ -1,8 +1,10 @@
 import type { Course } from '@shared/types'
 import type { ObjectId } from 'mongoose'
 
-export interface CourseDB extends Omit<Course, '_id' | 'authorId' | 'lessonIds'> {
+export interface CourseDB extends Omit<Course, '_id' | 'authorId' | 'lessonIds' | 'categoryId' | 'classIds'> {
   _id?: ObjectId
   authorId: ObjectId
   lessonIds: ObjectId[]
+  classIds: ObjectId[]
+  categoryId: ObjectId
 }

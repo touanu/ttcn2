@@ -1,4 +1,4 @@
-import type { UserDB } from '@/interfaces'
+import type { UserDB } from '@interfaces/users.interface'
 import { USER_ROLES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 

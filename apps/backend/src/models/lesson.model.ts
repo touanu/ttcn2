@@ -1,4 +1,4 @@
-import type { LessonDB } from '@/interfaces/lessons.interface'
+import type { LessonDB } from '@interfaces/lessons.interface'
 import { model, Schema } from 'mongoose'
 
 const LessonSchema = new Schema<LessonDB>({

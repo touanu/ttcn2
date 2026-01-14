@@ -1,6 +1,7 @@
-import type { Attempt, Course, Lesson, Media, Progress, Question, Quiz, User } from '@shared/types'
+import type { Attempt, Course, Enrollment, Lesson, Media, Progress, Question, Quiz, TimeTable, User } from '@shared/types'
 import type { ObjectId } from 'mongoose'
-import type { AttemptDB, CourseDB, LessonDB, MediaDB, ProgressDB, QuestionDB, QuizDB, UserDB } from '@/interfaces'
+import type { Class } from 'zod/v4/core/util'
+import type { AttemptDB, ClassDB, CourseDB, EnrollmentDB, LessonDB, MediaDB, ProgressDB, QuestionDB, QuizDB, TimeTableDB, UserDB } from '@/interfaces'
 
 /**
  * Convert ObjectId to string
@@ -107,5 +108,40 @@ export function convertMediaToResponse(media: MediaDB): Media {
     ...media,
     _id: toStringId(media._id),
     ownerId: media.ownerId.toString(),
+  }
+}
+
+/**
+ * Convert ClassDB to Class for API response
+ */
+export function convertClassToResponse(classData: ClassDB): Class {
+  return {
+    ...classData,
+    _id: toStringId(classData._id),
+    teacherId: classData.teacherId.toString(),
+    studentIds: toStringIds(classData.studentIds),
+  }
+}
+
+/**
+ * Convert TimeTableDB to TimeTable for API response
+ */
+export function convertTimeTableToResponse(timeTable: TimeTableDB): TimeTable {
+  return {
+    ...timeTable,
+    _id: toStringId(timeTable._id),
+    classId: timeTable.classId.toString(),
+  }
+}
+
+/**
+ * Convert EnrollmentDB to Enrollment for API response
+ */
+export function convertEnrollmentToResponse(enrollment: EnrollmentDB): Enrollment {
+  return {
+    ...enrollment,
+    _id: toStringId(enrollment._id),
+    userId: enrollment.userId.toString(),
+    courseId: enrollment.courseId.toString(),
   }
 }

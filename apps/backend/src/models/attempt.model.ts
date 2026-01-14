@@ -1,4 +1,4 @@
-import type { AttemptDB } from '@/interfaces'
+import type { AttemptDB } from '@interfaces/attempts.interface'
 import { model, Schema } from 'mongoose'
 
 const AttemptSchema = new Schema<AttemptDB>({

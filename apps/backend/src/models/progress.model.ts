@@ -1,4 +1,4 @@
-import type { ProgressDB } from '@/interfaces/progress.interface'
+import type { ProgressDB } from '@interfaces/progress.interface'
 import { model, Schema } from 'mongoose'
 
 const ProgressSchema = new Schema<ProgressDB>({

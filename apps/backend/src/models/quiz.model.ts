@@ -1,4 +1,4 @@
-import type { QuestionDB, QuizDB } from '@/interfaces'
+import type { QuestionDB, QuizDB } from '@interfaces/quizzes.interface'
 import { QUESTION_TYPES } from '@shared/types'
 import { model, Schema } from 'mongoose'
 
