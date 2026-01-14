@@ -1,36 +1,35 @@
-import type { AccessTokenPayload, RefreshTokenData, ResponseBody } from '@shared/types'
+import type { AccessTokenPayload, RefreshTokenData, SuccessResponseBody } from '@shared/types'
 import type { H3Event } from 'h3'
 import jwt from 'jsonwebtoken'
 
-const appliedPaths = [
-  '/api/auth/logout',
-  '/api/profile',
-  '/api/profile/stats',
-  '/api/admin/stats',
-  '/api/admin/users/recent',
-  '/api/admin/users',
-  '/api/admin/courses',
+const appliedPaths: string | string[] = [
 ]
 
 async function refreshAccessToken(
   event: H3Event,
   sessionId: string,
   refreshToken: string,
-): Promise<RefreshTokenData> {
-  const res = await useAPI<ResponseBody>(event, `/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-    body: {
-      sessionId,
-      refreshToken,
+): Promise<RefreshTokenData | undefined> {
+  const res = await useAPI<SuccessResponseBody<RefreshTokenData>>(
+    event,
+    '/auth/refresh',
+    {
+      method: 'POST',
+      body: {
+        sessionId,
+        refreshToken,
+      },
     },
-  })
+    async (error) => {
+      if (error.data?.error?.message === 'AUTH.INVALID_SESSION_ID') {
+        await clearUserSession(event)
+        return
+      }
+      throw error
+    },
+  )
 
-  if (res.message === 'AUTH.INVALID_REFRESH_TOKEN') {
-    await clearUserSession(event)
-  }
-
-  return res.data as RefreshTokenData
+  return res?.data as RefreshTokenData
 }
 
 export default defineEventHandler(async (event) => {
@@ -70,6 +69,12 @@ export default defineEventHandler(async (event) => {
   catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       const tokenData = await refreshAccessToken(event, session.secure.sessionId, session.secure.refreshToken)
+      if (!tokenData) {
+        await clearUserSession(event)
+        throw createError({ status: 401, message: 'AUTH.UNAUTHORIZED' })
+      }
+
+      // Update session with new tokens
       session.secure.accessToken = tokenData.accessToken.token
       session.secure.refreshToken = tokenData.refreshToken.token
       session.secure.sessionId = tokenData.sessionId
@@ -84,7 +89,7 @@ export default defineEventHandler(async (event) => {
         }
       }
 
-      await setUserSession(event, session)
+      await replaceUserSession(event, session)
     }
     else {
       logger.error('Xác thực access token thất bại:', error)
