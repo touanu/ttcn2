@@ -37,7 +37,7 @@ async function onSubmit(payload: FormSubmitEvent<PasswordOnlyDto>): Promise<void
   }
   catch (error: any) {
     toast.add({
-      title: $t('ERROR_TITLE'),
+      title: $t('ERRORS.TITLE'),
       description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.VERIFICATION_FAILED'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
