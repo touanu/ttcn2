@@ -8,9 +8,6 @@ export default defineEventHandler(async (event) => {
     // Fetch courses
     const coursesResponse = await useAPI<any[]>(event, '/courses')
 
-    // Fetch lessons count
-    const lessonsResponse = await useAPI<{ total: number }>(event, '/lessons/count')
-
     const totalCourses = coursesResponse.length
     const activeCourses = coursesResponse.filter((course: any) => course.status === 'published').length
 
@@ -18,7 +15,7 @@ export default defineEventHandler(async (event) => {
       totalUsers: usersResponse.total || 0,
       totalCourses,
       activeCourses,
-      totalLessons: lessonsResponse.total || 0,
+      totalLessons: 0, // TODO: Implement lessons count when lessons feature is ready
     } satisfies DashboardStats
   }
   catch (error) {

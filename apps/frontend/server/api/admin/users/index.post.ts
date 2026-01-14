@@ -11,6 +11,13 @@ export default defineEventHandler(async (event) => {
     body,
   })
 
+  if (!user) {
+    throw createError({
+      statusCode: 500,
+      message: 'Failed to create user',
+    })
+  }
+
   return {
     success: true,
     message: await translate(event, 'ADMIN.USERS.USER_CREATED', [user.fullName]),
