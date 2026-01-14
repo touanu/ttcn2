@@ -1,9 +1,5 @@
 export default defineNuxtRouteMiddleware(async () => {
-  if (!isAuthenticated) {
-    return navigateTo('/login')
-  }
-
-  if (!isAdmin) {
+  if (await denies(isAdmin)) {
     return navigateTo('/')
   }
 })

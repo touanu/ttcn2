@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (!isAuthenticated) {
+  if (await denies(isAuthenticated)) {
     // Redirect to login page with return URL
     return navigateTo({
       path: '/login',

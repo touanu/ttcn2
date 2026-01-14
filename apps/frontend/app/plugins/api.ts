@@ -12,7 +12,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       const toast = useToast()
       const formatedResponse = response._data as ResponseBody
       toast.add({
-        title: $t('ERROR_TITLE'),
+        title: $t('ERRORS.TITLE'),
         description: getFirstTranslation(formatedResponse.message) || $t('GENERIC_ERROR'),
         icon: 'i-lucide-alert-circle',
         color: 'error',

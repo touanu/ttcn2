@@ -1,5 +1,4 @@
-import type { Permission } from '@shared/constants'
-import type { UserRole } from '@shared/types'
+import type { Permission, UserRole } from '@shared/types'
 
 /**
  * Composable để quản lý quyền người dùng trong Vue components
