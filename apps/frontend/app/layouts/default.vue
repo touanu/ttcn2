@@ -38,37 +38,6 @@ onMounted(() => {
   })
 })
 
-const navigationItems = ref<NavigationMenuItem[]>([
-  {
-    label: $t('NAVIGATION.MENU_TITLE'),
-    type: 'label',
-  },
-  {
-    label: $t('NAVIGATION.HOME'),
-    to: '/',
-    icon: 'i-ph-house',
-    active: route.path.startsWith('/'),
-  },
-  {
-    label: $t('NAVIGATION.COURSES'),
-    to: '/courses',
-    icon: 'i-ph-book-open',
-    active: route.path.startsWith('/courses'),
-  },
-  {
-    label: $t('NAVIGATION.ROADMAP'),
-    to: '/roadmap',
-    icon: 'i-ph-map-trifold',
-    active: route.path.startsWith('/roadmap'),
-  },
-  // {
-  //   label: $t('NAVIGATION.BLOG'),
-  //   to: '/blog',
-  //   icon: 'i-ph-newspaper',
-  //   active: route.path.startsWith('/blog'),
-  // },
-])
-
 const loginItem: NavigationMenuItem = {
   label: $t('AUTH.BUTTON.LOGIN'),
   to: '/login',
@@ -77,6 +46,12 @@ const loginItem: NavigationMenuItem = {
 }
 
 const userActionItems = ref<DropdownMenuItem[]>([
+  {
+    label: $t('ADMIN.TITLE'),
+    to: '/admin',
+    icon: 'i-ph-shield-checkered',
+    disabled: await allows(isAdmin),
+  },
   {
     label: $t('NAVIGATION.USER.DROPDOWN.PROFILE'),
     to: '/profile',
@@ -101,6 +76,14 @@ const userActionItems = ref<DropdownMenuItem[]>([
     class: 'cursor-pointer',
   },
 ])
+
+if (await allows(isAdmin)) {
+  userActionItems.value.unshift({
+    label: $t('ADMIN.TITLE'),
+    to: '/admin',
+    icon: 'i-ph-shield-checkered',
+  })
+}
 
 const navigationUserActionMenuItems = computed(() => {
   const items: NavigationMenuItem[] = [
@@ -127,8 +110,12 @@ const navigationUserActionMenuItems = computed(() => {
       </div>
     </template>
 
-    <UNavigationMenu
-      :items="navigationItems"
+    <UInput
+      icon="i-lucide-search"
+      size="md" variant="outline"
+      :placeholder="$t('FORMS.SEARCH_PLACEHOLDER')"
+      class="h-9"
+      :loading="false"
     />
 
     <template #right>
@@ -187,18 +174,16 @@ const navigationUserActionMenuItems = computed(() => {
     </template>
 
     <template #body>
-      <LayoutSearchBox
+      <UInput
+        icon="i-lucide-search"
+        size="md" variant="outline"
         :placeholder="$t('FORMS.SEARCH_PLACEHOLDER')"
-        class="mb-4"
+        class="mb-4 h-9 flex items-center gap-2"
+        :loading="false"
       />
 
       <UNavigationMenu
         :items="navigationUserActionMenuItems"
-        orientation="vertical"
-      />
-
-      <UNavigationMenu
-        :items="navigationItems"
         orientation="vertical"
       />
     </template>

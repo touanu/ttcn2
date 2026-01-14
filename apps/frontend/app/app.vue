@@ -26,6 +26,10 @@ useHead({
     dir,
   },
 })
+
+onMounted(() => {
+  useUserSession().fetch()
+})
 </script>
 
 <template>

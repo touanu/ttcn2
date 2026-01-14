@@ -21,6 +21,16 @@ const items = computed<NavigationMenuItem[][]>(() => [
       to: '/admin/courses',
     },
     {
+      label: $t('ADMIN.NAV.CATEGORIES'),
+      icon: 'i-heroicons-tag',
+      to: '/admin/categories',
+    },
+    {
+      label: $t('ADMIN.NAV.CLASSES'),
+      icon: 'i-heroicons-user-group',
+      to: '/admin/classes',
+    },
+    {
       label: $t('ADMIN.NAV.CONTENT'),
       icon: 'i-heroicons-document-text',
       to: '/admin/content',
