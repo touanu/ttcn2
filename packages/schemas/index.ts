@@ -10,6 +10,7 @@ config({
 })
 
 export * from './auth'
+export * from './class'
 export * from './course'
 export * from './lesson'
 export * from './media'

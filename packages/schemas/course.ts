@@ -1,12 +1,15 @@
 import z from 'zod'
 
 export const courseLevelSchema = z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED'])
+export const courseStatusSchema = z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'])
 
 export const courseSchema = z.object({
   title: z.string().min(1, 'FORMS.COURSE.TITLE_REQUIRED').max(200, 'FORMS.COURSE.TITLE_MAX_LENGTH'),
   description: z.string().min(1, 'FORMS.COURSE.DESCRIPTION_REQUIRED'),
-  thumbnail: z.string().url('FORMS.COURSE.INVALID_THUMBNAIL_URL'),
+  thumbnail: z.string(),
+  categoryId: z.string().min(1, 'FORMS.COURSE.CATEGORY_REQUIRED'),
   level: courseLevelSchema,
+  status: courseStatusSchema.optional(),
   lessonIds: z.array(z.string()).optional(),
 })
 

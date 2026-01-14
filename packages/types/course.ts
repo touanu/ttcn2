@@ -10,9 +10,18 @@ export interface Course {
   description: string
   thumbnail: string
   authorId: string
+  categoryId: string
   level: CourseLevel
   status: CourseStatus
   lessonIds: string[]
+  classIds: string[]
   createdAt: Date
   updatedAt: Date
+}
+
+export interface CourseCategory {
+  _id?: string
+  name: string
+  description: string
+  createdAt: Date
 }

@@ -17,6 +17,7 @@ export const createUserSchema = z.object({
   fullName: z.string()
     .min(3, 'FORMS.FULLNAME.MIN_LENGTH')
     .max(100, 'FORMS.FULLNAME.MAX_LENGTH'),
+  role: userRoleSchema.default('student'),
 })
 export type CreateUserDto = z.infer<typeof createUserSchema>
 
