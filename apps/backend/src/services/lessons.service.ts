@@ -1,4 +1,4 @@
-import type { LessonDB } from '@/interfaces/lessons.interface'
+import type { LessonDB } from '@interfaces/lessons.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { LessonModel } from '@models/lesson.model'
 import { logger } from '@utils/logger'

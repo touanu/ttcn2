@@ -4,6 +4,7 @@ import { HttpException } from '@exceptions/HttpException'
 import { AuthService } from '@services/auth.service'
 import { UsersService } from '@services/users.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertUserToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -19,7 +20,7 @@ export class AuthController {
 
     const response: SuccessResponseBody<User> = {
       success: true,
-      data: signUpUserData,
+      data: convertUserToResponse(signUpUserData),
       message: 'AUTH.REGISTER.SUCCESS',
     }
 
@@ -60,7 +61,7 @@ export class AuthController {
   public refreshSession: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { sessionId, refreshToken } = req.body
     const session = await this.authService.getSessionById(sessionId)
-    const user = await this.userService.getUserByIdInternal(session.userId.toString())
+    const user = await this.userService.getUserById(session.userId.toString())
     const data: RefreshTokenData = await this.authService.refreshSession(user, session, refreshToken)
 
     const response: SuccessResponseBody<RefreshTokenData> = {

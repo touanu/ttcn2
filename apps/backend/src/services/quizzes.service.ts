@@ -1,4 +1,4 @@
-import type { QuestionDB, QuizDB } from '@/interfaces/quizzes.interface'
+import type { QuestionDB, QuizDB } from '@interfaces/quizzes.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { QuestionModel, QuizModel } from '@models/quiz.model'
 import { logger } from '@utils/logger'

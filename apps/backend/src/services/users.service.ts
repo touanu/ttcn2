@@ -1,10 +1,8 @@
-import type { Permission } from '@shared/constants'
-import type { User } from '@shared/types'
-import type { UserDB } from '@/interfaces'
+import type { UserDB } from '@interfaces/users.interface'
+import type { Permission, User } from '@shared/types'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
 import { getRolePermissions } from '@shared/utils'
-import { convertUserToResponse } from '@utils/convertToResponse'
 import { compare, hash } from 'bcryptjs'
 import { injectable } from 'tsyringe'
 
@@ -14,25 +12,18 @@ export class UsersService {
     return await compare(currentPassword, hashedPassword)
   }
 
-  async getUserById(id: string): Promise<User> {
-    const user = await UserModel.findById(id).lean<UserDB>().exec()
-    if (!user)
-      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
-    return convertUserToResponse(user)
-  }
-
-  async getUserByIdInternal(id: string): Promise<UserDB> {
+  async getUserById(id: string): Promise<UserDB> {
     const user = await UserModel.findById(id).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
-  async findUserByUsername(username: string): Promise<User> {
+  async findUserByUsername(username: string): Promise<UserDB> {
     const user = await UserModel.findOne({ username }).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
-    return convertUserToResponse(user)
+    return user
   }
 
   async findUserByUsernameInternal(username: string): Promise<UserDB> {
@@ -49,17 +40,17 @@ export class UsersService {
     return user
   }
 
-  async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<UserDB> {
     const user = await UserModel.findOne({ email }).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
-    return convertUserToResponse(user)
+    return user
   }
 
   async getAllUsers(options?: {
     sort?: string
     limit?: number
-  }): Promise<User[]> {
+  }): Promise<UserDB[]> {
     const query = UserModel.find()
 
     // Apply sorting
@@ -78,15 +69,14 @@ export class UsersService {
       query.limit(options.limit)
     }
 
-    const users = await query.lean<UserDB[]>().exec()
-    return users.map(convertUserToResponse)
+    return await query.lean<UserDB[]>().exec()
   }
 
   async getUsersCount(): Promise<number> {
     return await UserModel.countDocuments().exec()
   }
 
-  async createUser(user: User): Promise<User> {
+  async createUser(user: User): Promise<UserDB> {
     const exists = await UserModel.exists({
       $or: [
         { email: user.email },
@@ -101,10 +91,10 @@ export class UsersService {
     const { _id, ...userWithoutId } = user
     const created = await UserModel.create({ ...userWithoutId, password: hashedPassword })
 
-    return convertUserToResponse(created.toObject())
+    return created.toObject()
   }
 
-  async updateUser(id: string, update: Partial<User>): Promise<User> {
+  async updateUser(id: string, update: Partial<User>): Promise<UserDB> {
     if (typeof update.password === 'string' && update.password.length > 0) {
       update = { ...update, password: await hash(update.password, 10) }
     }
@@ -117,7 +107,7 @@ export class UsersService {
     if (!updated)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
 
-    return convertUserToResponse(updated)
+    return updated
   }
 
   async deleteUser(id: string): Promise<void> {

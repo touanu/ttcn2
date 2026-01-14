@@ -1,6 +1,6 @@
+import type { CourseDB } from '@interfaces/courses.interface'
 import type { Course } from '@shared/types'
 import type { ObjectId } from 'mongoose'
-import type { CourseDB } from '@/interfaces'
 import { HttpException } from '@exceptions/HttpException'
 import { CourseModel } from '@models/course.model'
 import { injectable } from 'tsyringe'

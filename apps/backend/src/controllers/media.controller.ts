@@ -1,6 +1,6 @@
+import type { RequestWithUser } from '@interfaces/auth.interface'
 import type { Media, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
-import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaService } from '@services/media.service'
 import { asyncHandler } from '@utils/asyncHandler'
@@ -20,7 +20,27 @@ export class MediaController {
     if (!userId)
       throw new HttpException(401, 'AUTH.UNAUTHORIZED')
 
-    const { url, type } = req.body
+    if (!req.file)
+      throw new HttpException(400, 'MEDIA.FILE_REQUIRED')
+
+    // Extract subfolder from destination path (e.g., 'uploads/images' -> 'images')
+    const subfolder = req.file.destination.split('/').pop()
+
+    // Generate URL with proper subdirectory
+    const url = `/uploads/${subfolder}/${req.file.filename}`
+
+    // Determine media type from file mimetype
+    let type: 'IMAGE' | 'VIDEO' | 'AUDIO' | 'DOCUMENT' = 'IMAGE'
+    if (req.file.mimetype.startsWith('video/')) {
+      type = 'VIDEO'
+    }
+    else if (req.file.mimetype.startsWith('audio/')) {
+      type = 'AUDIO'
+    }
+    else if (req.file.mimetype.includes('pdf') || req.file.mimetype.includes('document')) {
+      type = 'DOCUMENT'
+    }
+
     const media = await this.mediaService.createMedia({ url, type, ownerId: userId as any })
 
     const response: SuccessResponseBody<Media> = {

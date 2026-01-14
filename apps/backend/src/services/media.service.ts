@@ -1,4 +1,4 @@
-import type { MediaDB } from '@/interfaces/media.interface'
+import type { MediaDB } from '@interfaces/media.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaModel } from '@models/media.model'
 import { logger } from '@utils/logger'
@@ -24,7 +24,7 @@ export class MediaService {
     const media = await MediaModel.findById(mediaId).lean<MediaDB>().exec()
 
     if (!media)
-      throw new HttpException(404, 'MEDIA.NOT_FOUND')
+      throw new HttpException(404, 'MESSAGES.NOT_FOUND', { resource: 'media' })
 
     return media
   }
@@ -42,7 +42,7 @@ export class MediaService {
     const media = await MediaModel.findById(mediaId)
 
     if (!media)
-      throw new HttpException(404, 'MEDIA.NOT_FOUND')
+      throw new HttpException(404, 'MESSAGES.NOT_FOUND', { resource: 'media' })
 
     if (media.ownerId.toString() !== userId)
       throw new HttpException(403, 'MEDIA.DELETE_FORBIDDEN')

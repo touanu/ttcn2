@@ -1,6 +1,6 @@
+import type { RequestWithUser } from '@interfaces/auth.interface'
 import type { Progress, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
-import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { ProgressService } from '@services/progress.service'
 import { asyncHandler } from '@utils/asyncHandler'

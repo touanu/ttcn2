@@ -1,5 +1,5 @@
 import type { OTPType } from '@shared/types'
-import type { Types } from 'mongoose'
+import type { ObjectId, Types } from 'mongoose'
 import { randomBytes, randomInt } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { OTPModel } from '@models/otp.model'
@@ -19,7 +19,7 @@ export class OtpService {
    * @returns Mã OTP và token xác thực (nếu có)
    */
   public async requestOTP(
-    userId: string,
+    userId: ObjectId,
     type: OTPType,
     generateToken: boolean = false,
   ): Promise<{ otp: string, verificationToken?: string }> {
@@ -46,7 +46,7 @@ export class OtpService {
    * @param otp - Mã OTP cần xác thực
    */
   public async verifyOTP(
-    userId: string,
+    userId: ObjectId,
     type: OTPType,
     otp: string,
   ): Promise<void> {

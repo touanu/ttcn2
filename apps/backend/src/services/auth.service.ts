@@ -1,3 +1,4 @@
+import type { UserDB } from '@interfaces/users.interface'
 import type { Session } from '@models/sessions.model'
 import type {
   AccessTokenPayload,
@@ -8,7 +9,6 @@ import type {
   Token,
 } from '@shared/types'
 import type { ObjectId } from 'mongoose'
-import type { UserDB } from '@/interfaces/users.interface'
 import { randomBytes } from 'node:crypto'
 import { HttpException } from '@exceptions/HttpException'
 import { SessionModel } from '@models/sessions.model'
