@@ -58,23 +58,21 @@ function handleViewDelete(classItem: Class) {
   deleteModalOpen.value = true
 }
 
-const { data: classes, status, refresh: refreshClasses } = await useFetch<Class[]>('/api/admin/classes', {
+const { data: classes, status, refresh: refreshClasses } = await useAPI<Class[]>('/api/admin/classes', {
   lazy: true,
   server: false,
-  default: () => [],
   key: 'admin-classes',
 })
 
-const { data: courses } = await useFetch<Course[]>('/api/admin/courses', {
+const { data: courses } = await useAPI<Course[]>('/api/admin/courses', {
+  lazy: true,
   server: false,
-  default: () => [],
   key: 'admin-courses-for-classes',
 })
 
-const { data: users } = await useFetch<User[]>('/api/admin/users', {
+const { data: users } = await useAPI<User[]>('/api/admin/users', {
   lazy: true,
   server: false,
-  default: () => [],
   key: 'admin-users-for-classes',
 })
 
@@ -231,7 +229,7 @@ const columns: TableColumn<Class>[] = [
       return h(UBadge, {
         color: statusColors[row.original.status || 'PENDING'],
         variant: 'subtle',
-      }, () => $t(`ADMIN.CLASSES.STATUS_${row.original.status || 'PENDING'}`))
+      }, () => $t(`STATUS.CLASS.${row.original.status || 'PENDING'}`))
     },
   },
   {

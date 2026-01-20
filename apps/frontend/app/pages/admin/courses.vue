@@ -3,17 +3,16 @@ import type { TableColumn } from '@nuxt/ui'
 import type { Course } from '@shared/types'
 import type { Row } from '@tanstack/table-core'
 import { getPaginationRowModel } from '@tanstack/table-core'
-import { upperFirst } from 'scule'
 
 definePageMeta({
   layout: 'admin',
   middleware: ['admin'],
 })
 
-const UBadge = resolveComponent('UBadge')
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 const UCheckbox = resolveComponent('UCheckbox')
+const img = resolveComponent('img')
 
 const toast = useToast()
 const table = useTemplateRef('table')
@@ -72,23 +71,10 @@ function handleCreated() {
   // useFetch will automatically refetch
 }
 
-const { data, status } = await useFetch<Course[]>('/api/admin/courses', {
+const { data, status } = await useAPI<Course[]>('/api/admin/courses', {
   lazy: true,
   server: false,
-  default: () => [],
 })
-
-const { data: categories } = await useFetch<any[]>('/api/categories', {
-  server: false,
-  default: () => [],
-})
-
-function getCategoryName(categoryId: string): string {
-  if (!categoryId)
-    return '-'
-  const category = categories.value?.find(c => c._id === categoryId)
-  return category?.name || categoryId
-}
 
 function getRowItems(row: Row<Course>) {
   return [
@@ -105,6 +91,7 @@ function getRowItems(row: Row<Course>) {
           toast.add({
             title: $t('ADMIN.USERS.COPIED_TO_CLIPBOARD'),
             description: $t('ADMIN.COURSES.COURSE_ID_COPIED'),
+            icon: 'i-lucide-check-circle',
           })
         }
       },
@@ -125,10 +112,6 @@ function getRowItems(row: Row<Course>) {
       onSelect() {
         openEditModal(row.original)
       },
-    },
-    {
-      label: $t('ADMIN.COURSES.VIEW_LESSONS'),
-      icon: 'i-heroicons-book-open',
     },
     {
       type: 'separator',
@@ -165,6 +148,15 @@ const columns: TableColumn<Course>[] = [
       }),
   },
   {
+    accessorKey: 'thumbnail',
+    header: 'Thumbnail',
+    cell: ({ row }) =>
+      h(img, {
+        src: row.original.thumbnail,
+        class: 'max-w-xs',
+      }),
+  },
+  {
     accessorKey: 'title',
     header: ({ column }) => {
       const isSorted = column.getIsSorted()
@@ -185,56 +177,13 @@ const columns: TableColumn<Course>[] = [
     cell: ({ row }) => {
       return h('div', undefined, [
         h('p', { class: 'font-medium text-highlighted' }, row.original.title),
-        h('p', { class: 'text-sm text-muted truncate max-w-md' }, row.original.description),
       ])
     },
   },
   {
-    accessorKey: 'level',
-    header: $t('ADMIN.COURSES.COLUMN_LEVEL'),
-    filterFn: 'equals',
-    cell: ({ row }) => {
-      const color = {
-        BEGINNER: 'success' as const,
-        INTERMEDIATE: 'warning' as const,
-        ADVANCED: 'error' as const,
-      }[row.original.level]
-
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        upperFirst(row.original.level))
-    },
-  },
-  {
-    accessorKey: 'categoryId',
-    header: $t('ADMIN.COURSES.CATEGORY'),
-    cell: ({ row }) => {
-      return h('span', {}, getCategoryName(row.original.categoryId))
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: $t('ADMIN.COURSES.COLUMN_STATUS'),
-    filterFn: 'equals',
-    cell: ({ row }) => {
-      const color = {
-        PUBLISHED: 'success' as const,
-        DRAFT: 'warning' as const,
-        ARCHIVED: 'neutral' as const,
-      }[row.original.status]
-
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        upperFirst(row.original.status))
-    },
-  },
-  {
-    accessorKey: 'lessonsCount',
-    header: $t('ADMIN.COURSES.COLUMN_LESSONS'),
-    cell: ({ row }) => row.original.lessonIds?.length || 0,
-  },
-  {
     accessorKey: 'classesCount',
     header: $t('ADMIN.COURSES.CLASSES'),
-    cell: ({ row }) => row.original.classIds?.length || 0,
+    cell: ({ row }) => row.original.classes?.length || 0,
   },
   {
     id: 'actions',

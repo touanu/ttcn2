@@ -5,21 +5,12 @@ definePageMeta({
   layout: 'admin',
 })
 
-// Fetch dashboard stats
-const { data: stats, status: statsStatus } = await useFetch('/api/admin/stats', {
+const { data: stats, status: statsStatus } = await useAPI<DashboardStats>('/api/admin/stats', {
   lazy: true,
-  default: () => ({
-    totalUsers: 0,
-    totalCourses: 0,
-    activeCourses: 0,
-    totalLessons: 0,
-  }),
 })
 
-// Fetch recent users
-const { data: recentUsers } = await useFetch<User[]>('/api/admin/users/recent', {
+const { data: recentUsers } = await useAPI<User[]>('/api/admin/users/recent', {
   lazy: true,
-  default: () => [],
 })
 
 // Helper function to format numbers

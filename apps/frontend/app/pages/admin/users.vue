@@ -79,8 +79,9 @@ function handleDeleted() {
   }
 }
 
-const { data, status } = await useFetch<User[]>('/api/admin/users', {
+const { data, status } = await useAPI<User[]>('/api/admin/users', {
   lazy: true,
+  server: false,
 })
 
 function getRowItems(row: Row<User>) {
