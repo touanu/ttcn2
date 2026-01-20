@@ -34,7 +34,7 @@ export async function useAPI<T>(
     return res?.data as T
   }
   catch (error: any) {
-    logger.error(`API ${endpoint}:`, error)
+    console.error(`API ${endpoint}:`, error)
 
     if (onError) {
       await onError(error)
@@ -45,7 +45,7 @@ export async function useAPI<T>(
       statusCode: error.statusCode || 500,
       message: error.data?.error?.message
         ? await translate(event, error.data.error.message)
-        : (error.statusMessage || await translate(event, 'INTERNAL_SERVER_ERROR')),
+        : await translate(event, 'INTERNAL_SERVER_ERROR'),
       data: { errorCode: error.data?.error?.message },
     })
   }

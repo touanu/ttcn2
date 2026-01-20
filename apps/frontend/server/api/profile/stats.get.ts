@@ -1,4 +1,4 @@
-import type { Progress } from '@shared/types'
+import type { Enrollment } from '@shared/types'
 
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event)
@@ -10,28 +10,19 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Fetch user's progress data
-  const progress = await useAPI<Progress[]>(event, '/progress/me', {
+  // Fetch user's enrollment data
+  const enrollments = await useAPI<Enrollment[]>(event, `/enrollments/user/${session.user._id}`, {
     method: 'GET',
   })
 
   // Calculate statistics
-  const coursesEnrolled = progress.length
-  const lessonsCompleted = progress.reduce((total, course) => {
-    return total + (course.completedLessonIds?.length || 0)
-  }, 0)
-
-  // Calculate achievements (example: 1 achievement per completed course)
-  const achievements = progress.filter(course => course.percentage === 100).length
-
-  // Calculate day streak (placeholder - would need to track login history)
-  // For now, return 0 or implement basic logic
-  const dayStreak = 0
+  const coursesEnrolled = enrollments.length
+  const activeEnrollments = enrollments.filter(e => e.status === 'ACTIVE').length
+  const completedEnrollments = enrollments.filter(e => e.status === 'COMPLETED').length
 
   return {
     coursesEnrolled,
-    lessonsCompleted,
-    achievements,
-    dayStreak,
+    activeEnrollments,
+    completedEnrollments,
   }
 })

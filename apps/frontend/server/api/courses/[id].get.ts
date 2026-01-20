@@ -1,0 +1,18 @@
+import type { Course } from '@shared/types'
+
+export default defineEventHandler(async (event) => {
+  const id = getRouterParam(event, 'id')
+
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      message: await translate(event, 'COURSES.ID_REQUIRED'),
+    })
+  }
+
+  const course = await useAPI<Course>(event, `/courses/${id}`, {
+    method: 'GET',
+  })
+
+  return course
+})

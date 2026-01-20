@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   // Không cho phép đăng ký với vai trò admin hoặc superadmin
   user.role = user.role === 'admin' || user.role === 'superadmin' ? 'student' : user.role
 
-  await useAPI<void>(event, '/users', {
+  await useAPI<void>(event, '/register', {
     method: 'POST',
     body: user,
   })

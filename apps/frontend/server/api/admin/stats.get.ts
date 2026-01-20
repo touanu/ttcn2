@@ -1,4 +1,4 @@
-import type { DashboardStats } from '@shared/types'
+import type { Course } from '@shared/types'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -6,15 +6,15 @@ export default defineEventHandler(async (event) => {
     const usersResponse = await useAPI<{ total: number }>(event, '/users/count')
 
     // Fetch courses
-    const coursesResponse = await useAPI<any[]>(event, '/courses')
+    const coursesResponse = await useAPI<Course[]>(event, '/courses')
 
-    const totalCourses = coursesResponse.length
-    const activeCourses = coursesResponse.filter((course: any) => course.status === 'published').length
+    const totalCourses = coursesResponse?.length || 0
+    // const activeCourses = coursesResponse?.filter((course: any) => course.status === 'published').length || 0
 
     return {
-      totalUsers: usersResponse.total || 0,
+      totalUsers: usersResponse?.total || 0,
       totalCourses,
-      activeCourses,
+      activeCourses: 0,
       totalLessons: 0, // TODO: Implement lessons count when lessons feature is ready
     } satisfies DashboardStats
   }

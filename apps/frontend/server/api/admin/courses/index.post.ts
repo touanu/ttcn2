@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!user.id) {
     throw createError({
       statusCode: 401,
-      message: 'Unauthorized',
+      message: await translate(event, 'AUHT.UNAUTHORIZED'),
     })
   }
 
@@ -26,16 +26,9 @@ export default defineEventHandler(async (event) => {
     body: courseData,
   })
 
-  if (!course) {
-    throw createError({
-      statusCode: 500,
-      message: 'Failed to create course',
-    })
-  }
-
   return {
     success: true,
-    message: await translate(event, 'ADMIN.COURSES.COURSE_CREATED', [course.title]),
+    message: await translate(event, 'ADMIN.COURSES.COURSE_CREATED', { course: 'coursetitle' }),
     data: course,
   } as SuccessResponseBody<Course>
 })
