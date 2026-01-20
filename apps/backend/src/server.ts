@@ -1,6 +1,5 @@
 /* eslint-disable perfectionist/sort-imports */
 /* eslint-disable no-console */
-
 import 'reflect-metadata'
 import process from 'node:process'
 import { AuthRoute } from '@routes/auth.route'
@@ -9,6 +8,7 @@ import { CoursesRoute } from '@routes/courses.route'
 import { EnrollmentRoute } from '@routes/enrollment.route'
 import { MediaRoute } from '@routes/media.route'
 import { UsersRoute } from '@routes/users.route'
+import { PaymentRoute } from '@routes/payment.route'
 import { container } from 'tsyringe'
 import App from '@/app'
 import '@shared/config'
@@ -19,13 +19,13 @@ const routes = [
   container.resolve(AuthRoute),
   container.resolve(CoursesRoute),
   container.resolve(MediaRoute),
+  container.resolve(PaymentRoute),
   container.resolve(ClassRoute),
   container.resolve(EnrollmentRoute),
 ]
 
 // Tạo instance của ứng dụng
 const appInstance = new App(routes)
-
 // Khởi động server
 const server = appInstance.listen()
 
