@@ -1,35 +1,21 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CreateCourseDto } from '@shared/schemas'
-import type { CourseCategory } from '@shared/types'
+import type { Media } from '@shared/types'
 import { createCourseSchema } from '@shared/schemas'
 
+const { $api } = useNuxtApp()
 const open = ref(false)
 
 const state = reactive<Partial<CreateCourseDto>>({
   title: undefined,
   description: undefined,
   thumbnail: undefined,
-  categoryId: undefined,
-  level: 'BEGINNER',
-  lessonIds: [],
 })
 
 const thumbnailFile = ref<File | null>(null)
 const uploading = ref(false)
-
-const toast = useToast()
 const validateForm = createFormValidator(createCourseSchema)
-
-// Fetch categories
-const { data: categories } = await useFetch<CourseCategory[]>('/api/categories')
-
-const categoryOptions = computed(() => {
-  return categories.value?.map(cat => ({
-    label: cat.name,
-    value: cat._id!,
-  })) || []
-})
 
 watch(thumbnailFile, (file) => {
   if (file) {
@@ -40,73 +26,43 @@ watch(thumbnailFile, (file) => {
 async function handleFileChange(file: File) {
   uploading.value = true
 
-  try {
-    const formData = new FormData()
-    formData.append('file', file)
+  const formData = new FormData()
+  formData.append('file', file)
 
-    const response = await $fetch<{ url: string }>('/api/media/upload', {
-      method: 'POST',
-      body: formData,
-    })
+  const image = await $api<Media>('/api/media/upload', {
+    method: 'POST',
+    body: formData,
+    ignoreResponseError: true,
+  })
 
-    state.thumbnail = response.url
-
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: 'Thumbnail uploaded successfully',
-      color: 'success',
-    })
+  if (image && image.url) {
+    state.thumbnail = image.url
   }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERRORS.TITLE'),
-      description: err?.message || 'Failed to upload thumbnail',
-      color: 'error',
-    })
+  else {
     thumbnailFile.value = null
     state.thumbnail = undefined
   }
-  finally {
-    uploading.value = false
-  }
+
+  uploading.value = false
 }
 
 async function onSubmit(event: FormSubmitEvent<CreateCourseDto>) {
-  try {
-    await $fetch('/api/admin/courses', {
-      method: 'POST',
-      body: event.data,
-    })
+  await $api('/api/admin/courses', {
+    method: 'POST',
+    body: event.data,
+  })
 
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.COURSES.COURSE_CREATED', { title: event.data.title }),
-      color: 'success',
-    })
+  // Reset form
+  Object.assign(state, {
+    title: undefined,
+    description: undefined,
+    thumbnail: undefined,
+  })
+  thumbnailFile.value = null
 
-    open.value = false
-
-    // Reset form
-    Object.assign(state, {
-      title: undefined,
-      description: undefined,
-      thumbnail: undefined,
-      categoryId: undefined,
-      level: 'BEGINNER',
-      lessonIds: [],
-    })
-    thumbnailFile.value = null
-
-    // Refresh the courses list
-    await refreshNuxtData()
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERRORS.TITLE'),
-      description: err?.message || $t('ADMIN.COURSES.CREATE_ERROR'),
-      color: 'error',
-    })
-  }
+  // Refresh the courses list
+  await refreshNuxtData()
+  open.value = false
 }
 </script>
 
@@ -121,6 +77,7 @@ async function onSubmit(event: FormSubmitEvent<CreateCourseDto>) {
         :state="state"
         class="space-y-4"
         @submit="onSubmit"
+        @error="(event) => console.log(event)"
       >
         <UFormField :label="$t('ADMIN.COURSES.TITLE')" name="title" required>
           <UInput v-model="state.title" :placeholder="$t('ADMIN.COURSES.TITLE_PLACEHOLDER')" class="w-full" />
@@ -130,15 +87,6 @@ async function onSubmit(event: FormSubmitEvent<CreateCourseDto>) {
           <UTextarea v-model="state.description" :placeholder="$t('ADMIN.COURSES.DESCRIPTION_PLACEHOLDER')" :rows="4" class="w-full" />
         </UFormField>
 
-        <UFormField :label="$t('ADMIN.COURSES.CATEGORY')" name="categoryId" required>
-          <USelect
-            v-model="state.categoryId"
-            :items="categoryOptions"
-            :placeholder="$t('ADMIN.COURSES.SELECT_CATEGORY')"
-            class="w-full"
-          />
-        </UFormField>
-
         <UFormField :label="$t('ADMIN.COURSES.THUMBNAIL')" name="thumbnail" required>
           <div class="space-y-2">
             <UFileUpload
@@ -146,6 +94,10 @@ async function onSubmit(event: FormSubmitEvent<CreateCourseDto>) {
               accept="image/*"
               :disabled="uploading"
               :loading="uploading"
+              class="min-h-48"
+              highlight
+              :label="$t('MEDIA.LABEL')"
+              :description="$t('MEDIA.DESCRIPTION.IMG', { max: '2' })"
             />
             <!-- <div v-if="state.thumbnail" class="relative w-full h-48 rounded-lg overflow-hidden border border-default mt-2">
               <img :src="state.thumbnail" alt="Thumbnail preview" class="w-full h-full object-cover">
@@ -153,29 +105,12 @@ async function onSubmit(event: FormSubmitEvent<CreateCourseDto>) {
           </div>
         </UFormField>
 
-        <UFormField :label="$t('ADMIN.COURSES.LEVEL')" name="level" required>
-          <USelect
-            v-model="state.level"
-            :items="[
-              { label: $t('LEVELS.BEGINNER'), value: 'BEGINNER' },
-              { label: $t('LEVELS.INTERMEDIATE'), value: 'INTERMEDIATE' },
-              { label: $t('LEVELS.ADVANCED'), value: 'ADVANCED' },
-            ]"
-            class="w-full"
-          />
-        </UFormField>
-
         <div class="flex justify-end gap-2">
           <UButton
-            :label="$t('COMMON.CANCEL')"
-            color="neutral"
-            variant="subtle"
-            @click="open = false"
-          />
-          <UButton
-            type="submit"
             :label="$t('COMMON.CREATE')"
             color="primary"
+            variant="solid"
+            type="submit"
           />
         </div>
       </UForm>

@@ -11,54 +11,6 @@ const emit = defineEmits<{
 }>()
 const open = defineModel<boolean>('open', { required: true })
 
-const { data: categories } = await useFetch<any[]>('/api/categories', {
-  server: false,
-  default: () => [],
-})
-
-const categoryName = computed(() => {
-  if (!props.course?.categoryId)
-    return $t('COMMON.NOT_AVAILABLE')
-  const category = categories.value?.find(c => c._id === props.course?.categoryId)
-  return category?.name || $t('COMMON.NOT_AVAILABLE')
-})
-
-const levelColor = computed(() => {
-  const level = props.course?.level || 'BEGINNER'
-  return {
-    BEGINNER: 'success' as const,
-    INTERMEDIATE: 'warning' as const,
-    ADVANCED: 'error' as const,
-  }[level]
-})
-
-const statusColor = computed(() => {
-  const status = props.course?.status || 'DRAFT'
-  return {
-    DRAFT: 'neutral' as const,
-    PUBLISHED: 'success' as const,
-    ARCHIVED: 'error' as const,
-  }[status]
-})
-
-const levelLabel = computed(() => {
-  const level = props.course?.level || 'BEGINNER'
-  return {
-    BEGINNER: $t('LEVELS.BEGINNER'),
-    INTERMEDIATE: $t('LEVELS.INTERMEDIATE'),
-    ADVANCED: $t('LEVELS.ADVANCED'),
-  }[level]
-})
-
-const statusLabel = computed(() => {
-  const status = props.course?.status || 'DRAFT'
-  return {
-    DRAFT: $t('STATUS.COURSE.DRAFT'),
-    PUBLISHED: $t('STATUS.COURSE.PUBLISHED'),
-    ARCHIVED: $t('STATUS.COURSE.ARCHIVED'),
-  }[status]
-})
-
 function formatDate(date?: Date | string) {
   if (!date)
     return $t('COMMON.NOT_AVAILABLE')
@@ -95,14 +47,6 @@ function handleDelete() {
           <h3 class="text-lg font-semibold text-highlighted">
             {{ course.title }}
           </h3>
-          <div class="flex items-center gap-2 mt-2">
-            <UBadge :color="levelColor" variant="subtle" size="sm">
-              {{ levelLabel }}
-            </UBadge>
-            <UBadge :color="statusColor" variant="subtle" size="sm">
-              {{ statusLabel }}
-            </UBadge>
-          </div>
         </div>
 
         <!-- Course Details -->
@@ -119,37 +63,10 @@ function handleDelete() {
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="text-sm font-medium text-muted">
-                {{ $t('ADMIN.COURSES.CATEGORY') }}
-              </label>
-              <p class="mt-1 text-sm text-highlighted">
-                {{ categoryName }}
-              </p>
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-muted">
                 {{ $t('ADMIN.COURSES.CLASSES') }}
               </label>
               <p class="mt-1 text-sm text-highlighted">
-                {{ course.classIds?.length || 0 }} {{ $t('ADMIN.COURSES.CLASSES').toLowerCase() }}
-              </p>
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-muted">
-                {{ $t('ADMIN.COURSES.COURSE_ID') }}
-              </label>
-              <p class="mt-1 text-sm text-highlighted font-mono">
-                {{ course._id || $t('COMMON.NOT_AVAILABLE') }}
-              </p>
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-muted">
-                {{ $t('ADMIN.COURSES.LESSONS_COUNT') }}
-              </label>
-              <p class="mt-1 text-sm text-highlighted">
-                {{ course.lessonIds?.length || 0 }} {{ $t('ADMIN.COURSES.LESSONS') }}
+                {{ course.classes?.length || 0 }} {{ $t('ADMIN.COURSES.CLASSES').toLowerCase() }}
               </p>
             </div>
 
@@ -177,13 +94,6 @@ function handleDelete() {
 
     <template #footer>
       <div class="flex justify-between items-center w-full">
-        <UButton
-          :label="$t('COMMON.CLOSE')"
-          color="neutral"
-          variant="subtle"
-          @click="open = false"
-        />
-
         <div class="flex justify-between gap-2">
           <div class="flex gap-2">
             <UButton

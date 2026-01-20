@@ -18,17 +18,13 @@ const open = computed({
 })
 
 // Fetch courses to display course title
-const { data: courses } = useFetch<Course[]>('/api/admin/courses', {
+const { data: courses } = await useAPI<Course[]>('/api/admin/courses', {
   key: 'admin-courses-for-class-view',
-  server: false,
-  default: () => [],
 })
 
 // Fetch users to display student names
-const { data: users } = useFetch<User[]>('/api/admin/users', {
+const { data: users } = await useAPI<User[]>('/api/admin/users', {
   key: 'admin-users-for-class-view',
-  server: false,
-  default: () => [],
 })
 
 function getCourseName(courseId: string): string {
@@ -124,7 +120,14 @@ function getTeacherName(teacherId: string): string {
             {{ $t('ADMIN.CLASSES.STATUS') }}
           </div>
           <UBadge
-            :color="classItem.status === 'ACTIVE' ? 'success' : classItem.status === 'COMPLETED' ? 'neutral' : classItem.status === 'CANCELLED' ? 'error' : 'warning'"
+            :color="classItem.status === 'ACTIVE'
+              ? 'success'
+              : classItem.status === 'COMPLETED'
+                ? 'neutral'
+                : classItem?.status === 'CANCELLED'
+                  ? 'error'
+                  : classItem?.status === 'PENDING'
+                    ? 'warning' : 'error'"
             variant="subtle"
           >
             {{ $t(`ADMIN.CLASSES.STATUS_${classItem.status}`) }}

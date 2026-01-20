@@ -8,6 +8,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   deleted: []
 }>()
+const { $api } = useNuxtApp()
 const open = defineModel<boolean>('open', { required: true })
 const toast = useToast()
 const isDeleting = ref(false)
@@ -18,38 +19,27 @@ async function handleDelete() {
 
   isDeleting.value = true
 
-  try {
-    // Delete courses one by one
-    await Promise.all(
-      props.courses.map(course =>
-        $fetch(`/api/admin/courses/${course._id}`, {
-          method: 'DELETE',
-        }),
-      ),
-    )
+  // Delete courses one by one
+  await Promise.all(
+    props.courses.map(course =>
+      $api(`/api/admin/courses/${course._id}`, {
+        method: 'DELETE',
+      }),
+    ),
+  )
 
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.COURSES.COURSES_DELETED_SUCCESS', { count: props.courses.length }),
-      color: 'success',
-    })
+  toast.add({
+    title: $t('COMMON.SUCCESS'),
+    description: $t('ADMIN.COURSES.COURSES_DELETED_SUCCESS', { count: props.courses.length }),
+    color: 'success',
+  })
 
-    open.value = false
-    emit('deleted')
+  open.value = false
+  emit('deleted')
 
-    // Refresh the courses list
-    await refreshNuxtData()
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERRORS.TITLE'),
-      description: err?.message || $t('ADMIN.COURSES.DELETE_ERROR'),
-      color: 'error',
-    })
-  }
-  finally {
-    isDeleting.value = false
-  }
+  // Refresh the courses list
+  await refreshNuxtData()
+  isDeleting.value = false
 }
 </script>
 

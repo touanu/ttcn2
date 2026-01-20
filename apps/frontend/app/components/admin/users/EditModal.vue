@@ -10,6 +10,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   updated: []
 }>()
+
+const { $api } = useNuxtApp()
 const open = defineModel<boolean>('open', { required: true })
 const { canManageUserRole } = useUserAbilities()
 const toast = useToast()
@@ -35,31 +37,22 @@ async function onSubmit(event: FormSubmitEvent<Partial<User>>) {
   if (!props.user?._id)
     return
 
-  try {
-    await $fetch(`/api/admin/users/${props.user._id}`, {
-      method: 'PATCH',
-      body: event.data,
-    })
+  await $api(`/api/admin/users/${props.user._id}`, {
+    method: 'PATCH',
+    body: event.data,
+  })
 
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.USERS.USER_UPDATED', { name: event.data.fullName }),
-      color: 'success',
-    })
+  toast.add({
+    title: $t('COMMON.SUCCESS'),
+    description: $t('ADMIN.USERS.USER_UPDATED', { name: event.data.fullName }),
+    color: 'success',
+  })
 
-    open.value = false
-    emit('updated')
+  open.value = false
+  emit('updated')
 
-    // Refresh the users list
-    await refreshNuxtData()
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERRORS.TITLE'),
-      description: err?.message || $t('ADMIN.USERS.UPDATE_ERROR'),
-      color: 'error',
-    })
-  }
+  // Refresh the users list
+  await refreshNuxtData()
 }
 
 const canChangeRole = computed(() => {

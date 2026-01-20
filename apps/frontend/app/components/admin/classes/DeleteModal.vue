@@ -11,6 +11,7 @@ const emit = defineEmits<{
   'deleted': []
 }>()
 
+const { $api } = useNuxtApp()
 const open = computed({
   get: () => props.open ?? false,
   set: value => emit('update:open', value),
@@ -34,17 +35,11 @@ async function handleDelete() {
   isDeleting.value = true
 
   try {
-    await $fetch('/api/admin/classes/bulk-delete', {
+    await $api('/api/admin/classes/bulk-delete', {
       method: 'POST',
       body: {
         ids: props.classes.map(c => c._id),
       },
-    })
-
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.CLASSES.CLASSES_DELETED_SUCCESS'),
-      color: 'success',
     })
 
     open.value = false

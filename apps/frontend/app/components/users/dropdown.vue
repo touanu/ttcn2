@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
-import type { ResponseBody } from '@shared/types'
 
+const { $api } = useNuxtApp()
 const { fetch: fetchSession } = useUserSession()
 
 const userActionItems = ref<DropdownMenuItem[]>([
@@ -18,10 +18,7 @@ const userActionItems = ref<DropdownMenuItem[]>([
   {
     label: $t('NAVIGATION.USER.DROPDOWN.LOGOUT'),
     onClick: async () => {
-      const res = await $fetch<ResponseBody>('/api/auth/logout', { method: 'POST' })
-      if (!res.success)
-        console.error('Logout failed:', res.message)
-
+      $api('/api/auth/logout', { method: 'POST' })
       fetchSession()
       await navigateTo('/')
     },
