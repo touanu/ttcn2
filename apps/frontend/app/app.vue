@@ -5,6 +5,7 @@ const { locale } = useI18n()
 const route = useRoute()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
+const { fetch: refreshSession, clear: clearSession } = useUserSession()
 
 useHead({
   title: route.meta.title ? `${route.meta.title} - Englearn` : 'Englearn',
@@ -28,7 +29,12 @@ useHead({
 })
 
 onMounted(() => {
-  useUserSession().fetch()
+  $fetch('/api/auth/refresh', { method: 'POST' })
+    .then(refreshSession)
+    .catch(async () => {
+      await clearSession()
+      await navigateTo('/login')
+    })
 })
 </script>
 
