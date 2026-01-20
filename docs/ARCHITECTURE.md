@@ -274,49 +274,36 @@ erDiagram
     date createdAt
   }
 
-  COURSE_CATEGORY {
-    ObjectId _id PK
-    string name
-    string description
-    date createdAt
-  }
-
   COURSE {
     ObjectId _id PK
     string title
     string description
     string thumbnail
-    ObjectId authorId FK
-    ObjectId categoryId FK
-    string level
+    ObjectId teacher FK
     string status
-    ObjectId[] lessonIds
-    ObjectId[] classIds
+    ObjectId[] lessons
+    ObjectId[] classes
     date createdAt
     date updatedAt
   }
 
-  CLASS {
+  "CLASS" {
     ObjectId _id PK
     string name
-    ObjectId courseId FK
-    ObjectId teacherId FK
-    ObjectId[] studentIds
+    ObjectId course FK
+    ObjectId teacher FK
+    ObjectId[] students
     string room
     string description
     number maxStudents
     string status
     date startDate
     date endDate
-    date openedAt
-    date endedAt
-    date createdAt
-    date updatedAt
   }
 
   TIME_TABLE {
     ObjectId _id PK
-    ObjectId classId FK
+    ObjectId class FK
     number dayOfWeek
     date startTime
     date endTime
@@ -327,45 +314,29 @@ erDiagram
 
   ENROLLMENT {
     ObjectId _id PK
-    ObjectId userId FK
-    ObjectId courseId FK
+    ObjectId user FK
+    ObjectId course FK
     string status
-    number price
-    number paidPrice
-    string paidMethod
+    %% number price
+    %% number paidPrice
+    %% string paidMethod
     number progressPercentage
     date enrolledAt
     date completedAt
-    date createdAt
-    date updatedAt
-  }
-
-  PROGRESS {
-    ObjectId _id PK
-    ObjectId userId FK
-    ObjectId courseId FK
-    ObjectId[] completedLessonIds
-    number percentage
-    date updatedAt
   }
 
   USER ||--o{ SESSION : has
   USER ||--o{ OTP : for_verification
   USER ||--o{ MEDIA : owns
   USER ||--o{ COURSE : creates
-  USER ||--o{ CLASS : teaches
+  USER ||--o{ "CLASS" : teaches
   USER ||--o{ ENROLLMENT : enrolls_in
-  USER ||--o{ PROGRESS : tracks
 
-  COURSE ||--o{ COURSE_CATEGORY : belongs_to
-  COURSE ||--o{ CLASS : has_classes
+  COURSE ||--o{ "CLASS" : has_classes
   COURSE ||--o{ ENROLLMENT : has_enrollments
-  COURSE ||--o{ PROGRESS : progress_in
 
-  CLASS ||--o{ TIME_TABLE : has_schedule
-  CLASS ||--o{ USER : has_students
-
-  ENROLLMENT ||--o{ PROGRESS : tracks_progress
+  "CLASS" ||--o{ TIME_TABLE : has_schedule
+  "CLASS" ||--o{ USER : has_students
 ```
 
 ---

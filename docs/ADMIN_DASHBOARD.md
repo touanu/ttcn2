@@ -231,8 +231,8 @@ Usage in templates:
 The dashboard uses proper TypeScript types:
 
 ```typescript
-import type { User as BackendUser } from '@shared/interfaces';
 import type { TableColumn } from '@nuxt/ui';
+import type { User as BackendUser } from '@shared/interfaces';
 import type { Row } from '@tanstack/table-core';
 
 // Alias to avoid conflict with nuxt-auth-utils User type
@@ -331,8 +331,13 @@ The dashboard follows a consistent color system:
 Use Tailwind utilities and Nuxt UI colors:
 
 ```vue
-<UBadge color="success" variant="subtle">Published</UBadge>
-<UButton color="primary" variant="solid">Save</UButton>
+<UBadge color="success" variant="subtle">
+Published
+</UBadge>
+
+<UButton color="primary" variant="solid">
+Save
+</UButton>
 ```
 
 ### Best Practices

@@ -115,7 +115,7 @@ router.get('/admin/dashboard', AuthMiddleware, requireRole('admin', 'superadmin'
 Yêu cầu người dùng có quyền cụ thể:
 
 ```typescript
-import { requirePermission, requireAnyPermission, requireAllPermissions } from '@middlewares/rbac.middleware';
+import { requireAllPermissions, requireAnyPermission, requirePermission } from '@middlewares/rbac.middleware';
 import { PERMISSIONS } from '@shared/constants';
 
 // Người dùng phải có TẤT CẢ các quyền được chỉ định
