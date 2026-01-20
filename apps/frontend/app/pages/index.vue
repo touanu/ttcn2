@@ -7,22 +7,19 @@ definePageMeta({
 })
 
 const searchQuery = ref('')
-const selectedLevel = ref('all')
 
-const { data: courses, pending } = await useFetch<Course[]>('/api/courses')
+const { data: courses, pending } = await useAPI<Course[]>('/api/courses')
 
 const filteredCourses = computed(() => {
-  if (!courses.value)
+  if (!courses?.value)
     return []
 
   return courses.value.filter((course) => {
     const matchesSearch
       = course.title.toLowerCase().includes(searchQuery.value.toLowerCase())
         || course.description.toLowerCase().includes(searchQuery.value.toLowerCase())
-        || course.status === 'PUBLISHED'
-    const matchesLevel = selectedLevel.value === 'all' || course.level === selectedLevel.value.toUpperCase()
 
-    return matchesSearch && matchesLevel
+    return matchesSearch
   })
 })
 </script>
@@ -49,17 +46,6 @@ const filteredCourses = computed(() => {
                 :placeholder="$t('HOME.SEARCH_PLACEHOLDER')"
                 size="xl"
                 class="flex-1"
-              />
-              <USelect
-                v-model="selectedLevel"
-                :items="[
-                  { label: $t('COMMON.ALL'), value: 'all' },
-                  { label: $t('LEVELS.BEGINNER'), value: 'beginner' },
-                  { label: $t('LEVELS.INTERMEDIATE'), value: 'intermediate' },
-                  { label: $t('LEVELS.ADVANCED'), value: 'advanced' },
-                ]"
-                size="xl"
-                class="w-48"
               />
             </div>
           </div>
@@ -113,49 +99,29 @@ const filteredCourses = computed(() => {
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white line-clamp-2">
                 {{ course.title }}
               </h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                {{ course.description }}
-              </p>
 
               <div class="flex items-center gap-3 pt-2">
-                <UBadge :color="course.level === 'BEGINNER' ? 'success' : course.level === 'INTERMEDIATE' ? 'warning' : 'error'" variant="subtle" size="sm">
-                  {{ $t(`LEVELS.${course.level}`) }}
-                </UBadge>
                 <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                   <UIcon name="i-heroicons:user-group" class="h-4 w-4" />
-                  <span>{{ course.classIds?.length || 0 }}</span>
+                  <span>{{ course.classes?.length || 0 }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <UIcon name="i-heroicons-calendar" class="h-4 w-4" />
+                  <span>{{ course.classes?.length || 0 }}</span>
                 </div>
               </div>
             </div>
 
             <USeparator />
 
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <UBadge
-                  :color="course.status === 'PUBLISHED' ? 'success' : course.status === 'DRAFT' ? 'warning' : 'neutral'"
-                  variant="subtle"
-                  size="sm"
-                >
-                  {{ $t(`STATUS.COURSE.${course.status}`) }}
-                </UBadge>
-              </div>
+            <div class="flex items-center justify-end">
               <UButton
-                v-if="course.status === 'PUBLISHED'"
                 color="primary"
                 size="sm"
                 trailing-icon="i-heroicons-arrow-right"
                 @click.stop="navigateTo(`/courses/${course._id}`)"
               >
                 {{ $t('HOME.VIEW_DETAILS') }}
-              </UButton>
-              <UButton
-                v-else
-                color="neutral"
-                size="sm"
-                disabled
-              >
-                {{ $t('COURSES.NOT_AVAILABLE') }}
               </UButton>
             </div>
           </div>

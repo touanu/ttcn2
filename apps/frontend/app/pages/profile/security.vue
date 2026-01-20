@@ -7,11 +7,12 @@ import { formatDate } from '~/utils/profile'
 definePageMeta({
 })
 
+const { $api } = useNuxtApp()
 const toast = useToast()
 const { locale } = useI18n()
 const router = useRouter()
 
-const { data: user } = await useFetch<User>('/api/profile')
+const { data: user } = await useAPI<User>('/api/profile')
 
 const passwordSchema = z.object({
   currentPassword: basePasswordSchema,
@@ -35,36 +36,24 @@ const isDeletingAccount = ref(false)
 async function onChangePassword() {
   isChangingPassword.value = true
 
-  try {
-    await $fetch('/api/users/change-password', {
-      method: 'POST',
-      body: {
-        currentPassword: passwordForm.currentPassword,
-        newPassword: passwordForm.newPassword,
-      },
-    })
+  await $api('/api/users/change-password', {
+    method: 'POST',
+    body: {
+      currentPassword: passwordForm.currentPassword,
+      newPassword: passwordForm.newPassword,
+    },
+  })
 
-    toast.add({
-      title: $t('PROFILE.SUCCESS.PASSWORD_UPDATED'),
-      color: 'success',
-      icon: 'i-heroicons-check-circle',
-    })
+  toast.add({
+    title: $t('PROFILE.SUCCESS.PASSWORD_UPDATED'),
+    color: 'success',
+    icon: 'i-heroicons-check-circle',
+  })
 
-    passwordForm.currentPassword = ''
-    passwordForm.newPassword = ''
-    passwordForm.confirmPassword = ''
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('PROFILE.ERROR.PASSWORD_UPDATE_FAILED'),
-      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
-      color: 'error',
-      icon: 'i-heroicons-x-circle',
-    })
-  }
-  finally {
-    isChangingPassword.value = false
-  }
+  passwordForm.currentPassword = ''
+  passwordForm.newPassword = ''
+  passwordForm.confirmPassword = ''
+  isChangingPassword.value = false
 }
 
 async function onDeleteAccount() {

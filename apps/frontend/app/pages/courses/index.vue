@@ -5,7 +5,7 @@ definePageMeta({
   title: 'Courses',
 })
 
-const { data: courses, pending, error } = await useFetch<Course[]>('/api/courses')
+const { data: courses, pending, error } = await useAPI<Course[]>('/api/courses')
 </script>
 
 <template>
@@ -43,21 +43,9 @@ const { data: courses, pending, error } = await useFetch<Course[]>('/api/courses
                 {{ course.title }}
               </h3>
             </div>
-            <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              {{ course.description }}
-            </p>
-            <div class="flex items-center gap-4 pt-2">
-              <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                <UIcon name="i-heroicons-book-open" class="h-4 w-4" />
-                <span>{{ course.lessonIds?.length || 0 }} lessons</span>
-              </div>
-            </div>
           </div>
           <USeparator />
           <div class="flex items-center justify-between">
-            <UBadge color="primary" variant="subtle" size="md">
-              {{ course.level }}
-            </UBadge>
             <UButton color="primary" size="sm" trailing-icon="i-heroicons-arrow-right" :to="`/courses/${course._id}`">
               {{ $t('COURSES.VIEW_COURSE') }}
             </UButton>

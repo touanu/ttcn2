@@ -8,7 +8,7 @@ interface FAQ {
   answer: string
 }
 
-const { data: faqsData, pending, error } = await useFetch<FAQ[]>('/api/faqs')
+const { data: faqsData, pending, error } = await useAPI<FAQ[]>('/api/faqs')
 const faqs = computed(() => faqsData.value || [])
 </script>
 

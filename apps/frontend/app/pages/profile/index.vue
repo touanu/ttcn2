@@ -14,9 +14,9 @@ interface UserStats {
 }
 
 const { locale } = useI18n()
-const { data: user, pending, error, refresh } = await useFetch<User>('/api/profile')
+const { data: user, pending, error, refresh } = await useAPI<User>('/api/profile')
 
-const { data: stats, pending: statsPending } = await useFetch<UserStats>('/api/profile/stats')
+const { data: stats, pending: statsPending } = await useAPI<UserStats>('/api/profile/stats')
 
 const formattedCreatedAt = computed(() => formatDate(user.value?.createdAt, locale.value))
 const formattedUpdatedAt = computed(() => formatDate(user.value?.updatedAt, locale.value))
