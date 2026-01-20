@@ -133,7 +133,10 @@
       "FAILED": "Password reset failed. Please try again.",
       "NEW_PASSWORD_LABEL": "New Password",
       "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
-      "RESET_BUTTON": "Reset Password"
+      "RESET_BUTTON": "Reset Password",
+      "DESCRIPTION": "Enter your email address to receive a password reset code.",
+      "REMEMBER_PASSWORD": "Remember your password?",
+      "TITLE": "Reset Your Password"
     },
     "PERMISSIONS": {
       "ACCESS_DENIED": "Admin access denied."
@@ -228,7 +231,6 @@
     "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Either email or username is required.",
     "EITHER_OTP_OR_HASH_REQUIRED": "Either OTP or hash is required."
   },
-
   "COMMON": {
     "CANCEL": "Cancel",
     "CLOSE": "Close",
@@ -284,7 +286,6 @@
       "UNKNOWN": "An unknown error occurred"
     }
   },
-
   "ADMIN": {
     "TITLE": "Admin Panel",
     "DASHBOARD": "Dashboard",
@@ -412,7 +413,8 @@
       "ENROLLED_SUCCESSFULLY": "Successfully enrolled in the course",
       "ENROLL_ERROR": "Failed to enroll in the course",
       "LOGIN_TO_ENROLL": "Please login to enroll in this course",
-      "ALREADY_ENROLLED": "Already Enrolled"
+      "ALREADY_ENROLLED": "Already Enrolled",
+      "CLASSES": "Classes"
     },
     "CLASSES": {
       "TITLE": "Classes",
@@ -545,9 +547,11 @@
       "RESET_DATABASE": "Reset Database",
       "RESET_DATABASE_DESC": "Reset database to initial state (WARNING: This cannot be undone)",
       "RESET": "Reset"
+    },
+    "STATUS": {
+      "COURSES": "Courses"
     }
   },
-
   "ROLES": {
     "ALL": "All Roles",
     "STUDENT": "Student",
@@ -555,7 +559,6 @@
     "ADMIN": "Admin",
     "SUPERADMIN": "Super Admin"
   },
-
   "COURSES": {
     "TITLE": "Title",
     "LEVEL": "Level",
@@ -594,9 +597,19 @@
     "COMPLETE": "Complete",
     "NEED_HELP": "Need Help?",
     "CONTACT_DESC": "Have questions about this course? Our team is here to help you.",
-    "CONTACT_US": "Contact Us"
+    "CONTACT_US": "Contact Us",
+    "ALREADY_ENROLLED": "You are already enrolled in this course",
+    "CONFIRM_ENROLLMENT": "Confirm enrollment in this course?",
+    "ENROLLED_SUCCESSFULLY": "You have been enrolled successfully",
+    "ENROLL_IN_COURSE": "Enroll in Course",
+    "LOGIN_TO_ENROLL": "Please log in to enroll in this course",
+    "NO_AVAILABLE_CLASSES": "No Available Classes",
+    "NO_AVAILABLE_CLASSES_DESC": "There are no classes available for this course",
+    "SCHEDULE": "Schedule",
+    "SELECT_CLASS": "Select a Class",
+    "SELECT_CLASS_ERROR": "Please select a class to enroll",
+    "VIEW_COURSE": "View Course"
   },
-
   "PROFILE": {
     "TITLE": "My Profile",
     "SUBTITLE": "Manage your account settings and preferences",
@@ -675,7 +688,6 @@
       "STATS_FAILED": "Failed to load statistics"
     }
   },
-
   "CONTACT": {
     "PHONE_NUMBER": "Phone number",
     "EMAIL": "Email",
@@ -786,7 +798,11 @@
   },
   "MEDIA": {
     "NO_FILE_UPLOADED": "No file uploaded",
-    "INVALID_FILE_TYPE": "Invalid file type"
+    "INVALID_FILE_TYPE": "Invalid file type",
+    "LABEL": "Drop your file here",
+    "DESCRIPTION": {
+      "IMG": "SVG, PNG, JPG or GIF (max. {1}MB)"
+    }
   },
   "CLASS": {
     "STUDENT_ADDED": "Student added to class successfully",
@@ -827,5 +843,6 @@
     "NO_COURSES_DESC": "Try adjusting your search or filters",
     "LESSONS": "lessons",
     "VIEW_DETAILS": "View Details"
-  }
+  },
+  "ERROR_TITLE": "Something went wrong"
 }

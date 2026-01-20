@@ -45,7 +45,6 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   routeRules: {
-    '/': { prerender: true },
     '/admin/**': { appMiddleware: ['auth', 'admin'] },
     '/uploads/**': { proxy: `${BE_URL}/uploads/**` },
   },
@@ -72,6 +71,15 @@ export default defineNuxtConfig({
     }],
     experimental: {
       localeDetector: 'localeDetector.ts',
+    },
+  },
+
+  vite: {
+    server: {
+      allowedHosts: [
+        '.lhr.life',
+        '.ngrok-free.app',
+      ],
     },
   },
 })

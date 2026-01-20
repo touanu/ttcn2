@@ -125,20 +125,24 @@
       "BACK_TO_LOGIN": "Quay lại đăng nhập"
     },
     "PASSWORD_RESET": {
-      "TITLE": "Đặt lại mật khẩu của bạn",
-      "DESCRIPTION": "Vui lòng nhập mật khẩu mới cho tài khoản của bạn.",
+      "TITLE": "Đặt lại mật khẩu",
+      "DESCRIPTION": "Nhập địa chỉ email của bạn để nhận mã đặt lại mật khẩu.",
       "RESET_EMAIL_SENT": "Mã đặt lại mật khẩu đã được gửi đến email của bạn.",
       "SUCCESS": "Đặt lại mật khẩu thành công!",
       "FAILED": "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
       "NEW_PASSWORD_LABEL": "Mật khẩu mới",
       "NEW_PASSWORD_PLACEHOLDER": "Nhập mật khẩu mới của bạn",
       "RESET_BUTTON": "Đặt lại mật khẩu",
-      "REMEMBER_PASSWORD": "Đã nhớ mật khẩu rồi?"
+      "REMEMBER_PASSWORD": "Nhớ mật khẩu của bạn?",
+      "OTP_SENT": "Mã đặt lại mật khẩu đã được gửi tới email của bạn."
     },
     "PERMISSIONS": {
       "ACCESS_DENIED": "Quyền truy cập quản trị bị từ chối."
     },
-    "TERMS_AGREEMENT": "Bằng cách đăng ký, bạn đồng ý với"
+    "TERMS_AGREEMENT": "Bằng cách đăng ký, bạn đồng ý với",
+    "LOGOUT": {
+      "SUCCESS": "Đăng xuất thành công!"
+    }
   },
   "USERS": {
     "GET_SUCCESS": "Lấy thông tin người dùng thành công.",
@@ -228,7 +232,6 @@
     "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Cần cung cấp email hoặc tên người dùng.",
     "EITHER_OTP_OR_HASH_REQUIRED": "Cần cung cấp OTP hoặc hash."
   },
-
   "COMMON": {
     "CANCEL": "Hủy",
     "CLOSE": "Đóng",
@@ -284,7 +287,6 @@
       "UNKNOWN": "Đã xảy ra lỗi không xác định"
     }
   },
-
   "ADMIN": {
     "TITLE": "Quản Trị",
     "DASHBOARD": "Tổng Quan",
@@ -356,7 +358,8 @@
         "SUBSCRIBED": "Đã đăng ký",
         "UNSUBSCRIBED": "Hủy đăng ký",
         "BOUNCED": "Bị trả về"
-      }
+      },
+      "SUPERADMIN_PROTECTED": "Tài khoản superadmin được bảo vệ và không thể bị xóa"
     },
     "COURSES": {
       "SUBTITLE": "Quản lý khóa học và bài giảng",
@@ -401,7 +404,6 @@
       "SELECT_ROW": "Chọn hàng",
       "DELETE_MODAL_TITLE": "Xóa Khóa Học",
       "STATUS": "Trạng thái",
-
       "SCHEDULE": "Lịch học",
       "ENROLL_IN_COURSE": "Đăng ký Khóa học",
       "SELECT_CLASS": "Chọn Lớp học",
@@ -412,7 +414,8 @@
       "ENROLLED_SUCCESSFULLY": "Đã đăng ký khóa học thành công",
       "ENROLL_ERROR": "Không thể đăng ký khóa học",
       "LOGIN_TO_ENROLL": "Vui lòng đăng nhập để đăng ký khóa học này",
-      "ALREADY_ENROLLED": "Đã Đăng ký"
+      "ALREADY_ENROLLED": "Đã Đăng ký",
+      "CLASSES": "Lớp học"
     },
     "CLASSES": {
       "TITLE": "Lớp học",
@@ -545,9 +548,11 @@
       "RESET_DATABASE": "Đặt Lại Cơ Sở Dữ Liệu",
       "RESET_DATABASE_DESC": "Đặt lại cơ sở dữ liệu về trạng thái ban đầu (CẢNH BÁO: Không thể hoàn tác)",
       "RESET": "Đặt lại"
+    },
+    "STATUS": {
+      "COURSES": "Khóa học"
     }
   },
-
   "ROLES": {
     "ALL": "Tất Cả Vai Trò",
     "STUDENT": "Học viên",
@@ -555,8 +560,8 @@
     "ADMIN": "Quản trị viên",
     "SUPERADMIN": "Quản trị viên cấp cao"
   },
-
   "COURSES": {
+    "ID_REQUIRED": "Mã khóa học không hợp lệ.",
     "TITLE": "Tiêu đề",
     "LEVEL": "Cấp độ",
     "LESSONS": "Bài giảng",
@@ -594,9 +599,19 @@
     "COMPLETE": "Hoàn thành",
     "NEED_HELP": "Cần hỗ trợ?",
     "CONTACT_DESC": "Có thắc mắc về khóa học này? Đội ngũ của chúng tôi sẵn sàng hỗ trợ bạn.",
-    "CONTACT_US": "Liên hệ chúng tôi"
+    "CONTACT_US": "Liên hệ chúng tôi",
+    "ALREADY_ENROLLED": "Bạn đã đăng ký khóa học này",
+    "CONFIRM_ENROLLMENT": "Xác nhận đăng ký khóa học này?",
+    "ENROLLED_SUCCESSFULLY": "Bạn đã đăng ký thành công",
+    "ENROLL_IN_COURSE": "Đăng ký khóa học",
+    "LOGIN_TO_ENROLL": "Vui lòng đăng nhập để đăng ký khóa học này",
+    "NO_AVAILABLE_CLASSES": "Không có lớp học",
+    "NO_AVAILABLE_CLASSES_DESC": "Không có lớp học nào có sẵn cho khóa học này",
+    "SCHEDULE": "Lịch học",
+    "SELECT_CLASS": "Chọn lớp học",
+    "SELECT_CLASS_ERROR": "Vui lòng chọn lớp học để đăng ký",
+    "VIEW_COURSE": "Xem khóa học"
   },
-
   "PROFILE": {
     "TITLE": "Hồ sơ của tôi",
     "SUBTITLE": "Quản lý cài đặt tài khoản và tùy chọn của bạn",
@@ -675,7 +690,6 @@
       "STATS_FAILED": "Không thể tải thống kê"
     }
   },
-
   "CONTACT": {
     "PHONE_NUMBER": "Số điện thoại",
     "EMAIL": "Email",
@@ -786,7 +800,11 @@
   },
   "MEDIA": {
     "NO_FILE_UPLOADED": "Không có file nào được tải lên",
-    "INVALID_FILE_TYPE": "Loại file không hợp lệ"
+    "INVALID_FILE_TYPE": "Loại file không hợp lệ",
+    "LABEL": "Thả tệp tin ở đây",
+    "DESCRIPTION": {
+      "IMG": "SVG, PNG, JPG hoặc GIF (tối đa {max}MB)"
+    }
   },
   "CLASS": {
     "STUDENT_ADDED": "Thêm học sinh vào lớp thành công",
@@ -827,5 +845,6 @@
     "NO_COURSES_DESC": "Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn",
     "LESSONS": "bài giảng",
     "VIEW_DETAILS": "Xem chi tiết"
-  }
+  },
+  "ERROR_TITLE": "Có lỗi xảy ra"
 }
