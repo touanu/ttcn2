@@ -5,8 +5,8 @@
   "private": true,
   "main": "index.ts",
   "dependencies": {
-    "@shared/constants": "workspace:*",
-    "@shared/utils": "workspace:*",
+    "@shared/constants": "*",
+    "@shared/utils": "*",
     "zod": "^4.2.1"
   }
 }

@@ -20,12 +20,7 @@ export interface ErrorResponseBody extends ResponseBody {
   }
 }
 
-export type SuccessResponseBody<T> = T extends undefined | void
-  ? ResponseBody<T> & {
-    success: true
-    data?: T
-  }
-  : ResponseBody<T> & {
-    success: true
-    data: T
-  }
+export interface SuccessResponseBody<T> extends ResponseBody<T> {
+  success: true
+  data?: T
+}
