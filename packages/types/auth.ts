@@ -1,4 +1,4 @@
-import type { Permission } from '@shared/constants'
+import type { Permission } from '@shared/types'
 import type { UserRole } from './user'
 
 export interface AccessTokenPayload {

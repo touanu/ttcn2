@@ -262,6 +262,15 @@ definePageMeta({
 </script>
 
 <!-- Hiển thị có điều kiện -->
+<script setup lang="ts">
+const { hasPermission, isAdmin } = usePermissions();
+
+if (hasPermission(PERMISSIONS.COURSES.DELETE)) {
+  // Cho phép xóa
+}
+</script>
+
+<!-- Kiểm tra lập trình -->
 <template>
   <Can :permission="PERMISSIONS.COURSES.UPDATE">
     <button @click="edit">Chỉnh sửa</button>
@@ -271,15 +280,6 @@ definePageMeta({
     <AdminPanel />
   </HasRole>
 </template>
-
-<!-- Kiểm tra lập trình -->
-<script setup lang="ts">
-const { hasPermission, isAdmin } = usePermissions();
-
-if (hasPermission(PERMISSIONS.COURSES.DELETE)) {
-  // Cho phép xóa
-}
-</script>
 ```
 
 ## Luồng Xác Thực

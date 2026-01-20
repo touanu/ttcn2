@@ -11,10 +11,6 @@ export default defineEventHandler(async (event) => {
 
   await useAPI<undefined>(event, '/auth/logout', {
     method: 'POST',
-    credentials: 'include',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     body: { sessionId },
   })
 

@@ -18,7 +18,10 @@ const UCheckbox = resolveComponent('UCheckbox')
 const toast = useToast()
 const table = useTemplateRef('table')
 const deleteModalOpen = ref(false)
+const viewModalOpen = ref(false)
+const editModalOpen = ref(false)
 const usersToDelete = ref<User[]>([])
+const selectedUser = ref<User | null>(null)
 const { canDeleteUser } = useUserAbilities()
 
 const columnFilters = ref([{
@@ -49,6 +52,26 @@ function openDeleteModal() {
   }
 }
 
+function openViewModal(user: User) {
+  selectedUser.value = user
+  viewModalOpen.value = true
+}
+
+function openEditModal(user: User) {
+  selectedUser.value = user
+  editModalOpen.value = true
+}
+
+function handleViewEdit(user: User) {
+  selectedUser.value = user
+  editModalOpen.value = true
+}
+
+function handleViewDelete(user: User) {
+  usersToDelete.value = [user]
+  deleteModalOpen.value = true
+}
+
 function handleDeleted() {
   // Clear selection after delete
   if (table.value?.tableApi) {
@@ -56,8 +79,9 @@ function handleDeleted() {
   }
 }
 
-const { data, status } = await useFetch<User[]>('/api/admin/users', {
+const { data, status } = await useAPI<User[]>('/api/admin/users', {
   lazy: true,
+  server: false,
 })
 
 function getRowItems(row: Row<User>) {
@@ -79,7 +103,7 @@ function getRowItems(row: Row<User>) {
         }
         else {
           toast.add({
-            title: $t('ERROR_TITLE'),
+            title: $t('ERRORS.TITLE'),
             description: $t('ADMIN.USERS.USER_ID_NOT_FOUND'),
             color: 'error',
           })
@@ -92,10 +116,16 @@ function getRowItems(row: Row<User>) {
     {
       label: $t('ADMIN.USERS.VIEW_PROFILE'),
       icon: 'i-lucide-user',
+      onSelect() {
+        openViewModal(row.original)
+      },
     },
     {
       label: $t('ADMIN.USERS.EDIT_USER'),
       icon: 'i-lucide-pencil',
+      onSelect() {
+        openEditModal(row.original)
+      },
     },
     {
       type: 'separator',
@@ -392,5 +422,18 @@ const pagination = ref({
     v-model:open="deleteModalOpen"
     :users="usersToDelete"
     @deleted="handleDeleted"
+  />
+
+  <AdminUsersViewModal
+    v-model:open="viewModalOpen"
+    :user="selectedUser"
+    @edit="handleViewEdit"
+    @delete="handleViewDelete"
+  />
+
+  <AdminUsersEditModal
+    v-model:open="editModalOpen"
+    :user="selectedUser"
+    @updated="handleDeleted"
   />
 </template>

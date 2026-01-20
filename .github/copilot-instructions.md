@@ -209,9 +209,9 @@ export class UserRoute implements Routes {
 ### Validation
 
 ```typescript
+import { validationMiddleware } from '@middlewares/validation.middleware';
 // Use Zod schemas from shared packages
 import { userCreateSchema } from '@shared/schemas';
-import { validationMiddleware } from '@middlewares/validation.middleware';
 
 router.post('/users', validationMiddleware(userCreateSchema), controller.create);
 ```

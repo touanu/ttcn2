@@ -1,4 +1,5 @@
-import type { MediaDB } from '@/interfaces/media.interface'
+import type { MediaDB } from '@interfaces/media.interface'
+import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaModel } from '@models/media.model'
 import { logger } from '@utils/logger'
@@ -24,13 +25,13 @@ export class MediaService {
     const media = await MediaModel.findById(mediaId).lean<MediaDB>().exec()
 
     if (!media)
-      throw new HttpException(404, 'MEDIA.NOT_FOUND')
+      throw new HttpException(404, 'MESSAGES.NOT_FOUND', { resource: 'media' })
 
     return media
   }
 
-  public async getMediaByOwner(ownerId: string): Promise<MediaDB[]> {
-    const mediaList = await MediaModel.find({ ownerId } as any)
+  public async getMediaByOwner(ownerId: ObjectId): Promise<MediaDB[]> {
+    const mediaList = await MediaModel.find({ ownerId })
       .sort({ createdAt: -1 })
       .lean<MediaDB[]>()
       .exec()
@@ -42,7 +43,7 @@ export class MediaService {
     const media = await MediaModel.findById(mediaId)
 
     if (!media)
-      throw new HttpException(404, 'MEDIA.NOT_FOUND')
+      throw new HttpException(404, 'MESSAGES.NOT_FOUND', { resource: 'media' })
 
     if (media.ownerId.toString() !== userId)
       throw new HttpException(403, 'MEDIA.DELETE_FORBIDDEN')

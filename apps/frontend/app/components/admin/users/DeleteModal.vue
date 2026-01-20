@@ -9,6 +9,7 @@ const emit = defineEmits<{
   deleted: []
 }>()
 
+const { $api } = useNuxtApp()
 const open = defineModel<boolean>('open', { default: false })
 const toast = useToast()
 const isDeleting = ref(false)
@@ -19,49 +20,39 @@ async function onDelete() {
 
   isDeleting.value = true
 
-  try {
-    const userIds = props.users.map(u => u._id).filter(Boolean)
+  const userIds = props.users.map(u => u._id).filter(Boolean)
 
-    if (userIds.length === 0) {
-      toast.add({
-        title: $t('ERROR_TITLE'),
-        description: $t('ADMIN.USERS.NO_USERS_SELECTED'),
-        color: 'error',
-      })
-      return
-    }
-
-    // Delete users one by one or in batch
-    const deletePromises = userIds.map(id =>
-      $fetch(`/api/admin/users/${id}`, {
-        method: 'DELETE',
-      }),
-    )
-
-    await Promise.all(deletePromises)
-
+  if (userIds.length === 0) {
     toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.USERS.USERS_DELETED_SUCCESS', { count: userIds.length }),
-      color: 'success',
-    })
-
-    open.value = false
-    emit('deleted')
-
-    // Refresh the users list
-    await refreshNuxtData()
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: err?.message || $t('ADMIN.USERS.DELETE_ERROR'),
+      title: $t('ERRORS.TITLE'),
+      description: $t('ADMIN.USERS.NO_USERS_SELECTED'),
       color: 'error',
     })
+    return
   }
-  finally {
-    isDeleting.value = false
-  }
+
+  // Delete users one by one or in batch
+  const deletePromises = userIds.map(id =>
+    $api(`/api/admin/users/${id}`, {
+      method: 'DELETE',
+    }),
+  )
+
+  await Promise.all(deletePromises)
+
+  toast.add({
+    title: $t('COMMON.SUCCESS'),
+    description: $t('ADMIN.USERS.USERS_DELETED_SUCCESS', { count: userIds.length }),
+    color: 'success',
+  })
+
+  open.value = false
+  emit('deleted')
+
+  // Refresh the users list
+  await refreshNuxtData()
+
+  isDeleting.value = false
 }
 </script>
 

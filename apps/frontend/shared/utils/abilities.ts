@@ -52,46 +52,6 @@ export const publishCourse = defineAbility((user: { permissions: string[] }) => 
   return user.permissions.includes(PERMISSIONS.COURSES.PUBLISH)
 })
 
-// Lesson management abilities
-export const viewLessons = defineAbility({ allowGuest: true }, (user: { permissions: string[] } | null) => {
-  if (!user)
-    return true
-  return user.permissions.includes(PERMISSIONS.LESSONS.VIEW)
-})
-
-export const createLesson = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.LESSONS.CREATE)
-})
-
-export const updateLesson = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.LESSONS.UPDATE)
-})
-
-export const deleteLesson = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.LESSONS.DELETE)
-})
-
-// Quiz management abilities
-export const viewQuizzes = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.QUIZZES.VIEW)
-})
-
-export const createQuiz = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.QUIZZES.CREATE)
-})
-
-export const updateQuiz = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.QUIZZES.UPDATE)
-})
-
-export const deleteQuiz = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.QUIZZES.DELETE)
-})
-
-export const gradeQuiz = defineAbility((user: { permissions: string[] }) => {
-  return user.permissions.includes(PERMISSIONS.QUIZZES.GRADE)
-})
-
 // Enrollment abilities
 export const viewEnrollments = defineAbility((user: { permissions: string[] }) => {
   return user.permissions.includes(PERMISSIONS.ENROLLMENTS.VIEW)

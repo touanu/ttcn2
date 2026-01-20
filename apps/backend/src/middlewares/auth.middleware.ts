@@ -1,6 +1,6 @@
+import type { RequestWithUser } from '@interfaces/auth.interface'
 import type { AccessTokenPayload } from '@shared/types'
 import type { NextFunction, Request, Response } from 'express'
-import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
 import { ACCESS_TOKEN_SECRET } from '@shared/config'

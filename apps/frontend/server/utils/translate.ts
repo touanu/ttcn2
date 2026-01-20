@@ -7,7 +7,7 @@ import type { H3Event } from 'h3'
  * @param vars - Mảng biến để thay thế trong chuỗi dịch
  * @returns Chuỗi dịch đã được nối lại, ngăn cách bằng dấu phẩy
  */
-export async function translate(event: H3Event, rawKeys: string, vars: string[] = []): Promise<string> {
+export async function translate(event: H3Event, rawKeys: string, vars: Record<string, unknown> = {}): Promise<string> {
   if (!rawKeys)
     return ''
 

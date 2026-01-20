@@ -46,5 +46,13 @@ export class CoursesRoute implements Routes {
       requirePermission([PERMISSIONS.COURSES.DELETE]),
       this.coursesController.deleteCourse,
     )
+    this.router.get(
+      `${this.path}/:id/classes/count`,
+      this.coursesController.getClassesCount,
+    )
+    this.router.get(
+      `${this.path}/:id/classes`,
+      this.coursesController.getClassesDetail,
+    )
   }
 }

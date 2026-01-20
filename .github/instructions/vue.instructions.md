@@ -80,7 +80,7 @@ Hướng dẫn xây dựng ứng dụng VueJS 3 chất lượng cao với Compos
 
 ### Lấy Dữ liệu
 
-- Dùng composable như `useFetch` (Nuxt) hoặc thư viện như Vue Query
+- Dùng composable như `useFetch` (Nuxt), `useAPI` hoặc thư viện như Vue Query
 - Xử lý rõ ràng các trạng thái loading, error và success
 - Hủy các yêu cầu cũ khi component bị hủy hoặc tham số thay đổi
 - Triển khai cập nhật lạc quan (optimistic update) và hoàn tác khi lỗi

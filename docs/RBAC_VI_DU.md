@@ -17,8 +17,8 @@ router.get('/admin/dashboard', AuthMiddleware, requireRole('admin', 'superadmin'
 ### 2. Bảo Vệ Route Theo Quyền
 
 ```typescript
-import { PERMISSIONS } from '@shared/constants';
 import { requirePermission } from '@middlewares/rbac.middleware';
+import { PERMISSIONS } from '@shared/constants';
 
 router.put('/courses/:id', AuthMiddleware, requirePermission([PERMISSIONS.COURSES.UPDATE]), controller.updateCourse);
 ```
@@ -241,17 +241,17 @@ import { PERMISSIONS } from '@shared/constants';
   <div class="navigation">
     <!-- Menu admin -->
     <HasRole role="admin">
-      <RouterLink to="/admin">Bảng điều khiển Admin</RouterLink>
+      <RouterLink to="/admin"> Bảng điều khiển Admin </RouterLink>
     </HasRole>
 
     <!-- Menu giáo viên -->
     <HasRole :roles="['teacher', 'admin']">
-      <RouterLink to="/teaching">Giảng dạy</RouterLink>
+      <RouterLink to="/teaching"> Giảng dạy </RouterLink>
     </HasRole>
 
     <!-- Menu học sinh -->
     <HasRole role="student">
-      <RouterLink to="/my-courses">Khóa học của tôi</RouterLink>
+      <RouterLink to="/my-courses"> Khóa học của tôi </RouterLink>
     </HasRole>
   </div>
 </template>
@@ -304,7 +304,6 @@ const isTeacherUser = isTeacher.value;
 function handleEdit() {
   if (!canEdit.value) {
     showError('Bạn không có quyền chỉnh sửa khóa học này');
-    return;
   }
   // Tiếp tục xử lý
 }
@@ -312,7 +311,6 @@ function handleEdit() {
 function handlePublish() {
   if (!canPublish.value) {
     showError('Bạn không có đủ quyền để xuất bản');
-    return;
   }
   // Tiếp tục xử lý
 }
@@ -640,15 +638,15 @@ const canPublish = hasPermission(PERMISSIONS.COURSES.PUBLISH);
 ### Import Statements
 
 ```typescript
+import type { RequestWithUser } from '@shared/interfaces';
+import type { UserRole } from '@shared/types';
 // Backend
 import { AuthMiddleware } from '@middlewares/auth.middleware';
-import { requireRole, requirePermission, requireAnyPermission, requireAllPermissions } from '@middlewares/rbac.middleware';
-import { PERMISSIONS } from '@shared/constants';
-import type { RequestWithUser } from '@shared/interfaces';
+import { requireAllPermissions, requireAnyPermission, requirePermission, requireRole } from '@middlewares/rbac.middleware';
 
+import { PERMISSIONS } from '@shared/constants';
 // Frontend
 import { PERMISSIONS } from '@shared/constants';
-import type { UserRole } from '@shared/types';
 ```
 
 ### Backend Middleware Order

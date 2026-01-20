@@ -31,6 +31,8 @@ export class UsersRoute implements Routes {
   private initializeRoutes() {
     this.router.get(
       this.path,
+      AuthMiddleware,
+      requirePermission([PERMISSIONS.USERS.VIEW]),
       this.userController.getUsers,
     )
     this.router.get(
@@ -39,8 +41,15 @@ export class UsersRoute implements Routes {
     )
     this.router.post(
       this.path,
+      AuthMiddleware,
+      requirePermission([PERMISSIONS.USERS.CREATE]),
       ValidationMiddleware(createUserSchema),
       this.userController.createUser,
+    )
+    this.router.post(
+      '/register',
+      ValidationMiddleware(createUserSchema),
+      this.userController.registerStudent,
     )
     this.router.post(
       `${this.path}/request-verify-email`,
@@ -76,7 +85,7 @@ export class UsersRoute implements Routes {
       this.userController.verifyPasswordResetToken,
     )
 
-    // Parameterized routes (:id) must come AFTER all specific routes
+    // Parameterized routes (:id)
     this.router.get(
       `${this.path}/:id/permissions`,
       AuthMiddleware,
@@ -100,6 +109,8 @@ export class UsersRoute implements Routes {
     )
     this.router.patch(
       `${this.path}/:id`,
+      AuthMiddleware,
+      requirePermission([PERMISSIONS.USERS.UPDATE]),
       ValidationMiddleware(updateUserSchema),
       this.userController.updateUser,
     )

@@ -24,7 +24,7 @@ Cho mỗi route được bảo vệ:
 
   ```typescript
   import { AuthMiddleware } from '@middlewares/auth.middleware';
-  import { requireRole, requirePermission } from '@middlewares/rbac.middleware';
+  import { requirePermission, requireRole } from '@middlewares/rbac.middleware';
   import { PERMISSIONS } from '@shared/constants';
   ```
 
@@ -125,7 +125,6 @@ Cho mỗi trang được bảo vệ:
   function doAction() {
     if (!hasPermission(PERMISSIONS.COURSES.UPDATE)) {
       showError('Không có quyền');
-      return;
     }
     // Tiếp tục
   }

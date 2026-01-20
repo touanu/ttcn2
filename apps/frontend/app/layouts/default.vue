@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
-import type { ResponseBody } from '@shared/types'
 
+const { $api } = useNuxtApp()
 const { setLocale, getLocaleCookie } = useI18n()
 const route = useRoute()
 const { loggedIn, user, fetch: fetchSession } = useUserSession()
@@ -38,37 +38,6 @@ onMounted(() => {
   })
 })
 
-const navigationItems = ref<NavigationMenuItem[]>([
-  {
-    label: $t('NAVIGATION.MENU_TITLE'),
-    type: 'label',
-  },
-  {
-    label: $t('NAVIGATION.HOME'),
-    to: '/',
-    icon: 'i-ph-house',
-    active: route.path.startsWith('/'),
-  },
-  {
-    label: $t('NAVIGATION.COURSES'),
-    to: '/courses',
-    icon: 'i-ph-book-open',
-    active: route.path.startsWith('/courses'),
-  },
-  {
-    label: $t('NAVIGATION.ROADMAP'),
-    to: '/roadmap',
-    icon: 'i-ph-map-trifold',
-    active: route.path.startsWith('/roadmap'),
-  },
-  // {
-  //   label: $t('NAVIGATION.BLOG'),
-  //   to: '/blog',
-  //   icon: 'i-ph-newspaper',
-  //   active: route.path.startsWith('/blog'),
-  // },
-])
-
 const loginItem: NavigationMenuItem = {
   label: $t('AUTH.BUTTON.LOGIN'),
   to: '/login',
@@ -90,10 +59,7 @@ const userActionItems = ref<DropdownMenuItem[]>([
   {
     label: $t('NAVIGATION.USER.DROPDOWN.LOGOUT'),
     onClick: async () => {
-      const res = await $fetch<ResponseBody>('/api/auth/logout', { method: 'POST' })
-      if (!res.success)
-        console.error('Logout failed:', res.message)
-
+      await $api('/api/auth/logout', { method: 'POST' })
       fetchSession()
       await navigateTo('/')
     },
@@ -116,6 +82,23 @@ const navigationUserActionMenuItems = computed(() => {
     items.push(loginItem)
   return items
 })
+
+async function addAdminLink() {
+  const firstLink = userActionItems.value[0]
+  const student = await allows(isStudent)
+  const isFirstLinkAdmin = firstLink?.to === '/admin'
+
+  if (isFirstLinkAdmin && student) {
+    userActionItems.value.shift()
+  }
+  else if (!isFirstLinkAdmin && !student) {
+    userActionItems.value.unshift({
+      label: $t('ADMIN.TITLE'),
+      to: '/admin',
+      icon: 'i-ph-shield-checkered',
+    })
+  }
+}
 </script>
 
 <template>
@@ -123,13 +106,9 @@ const navigationUserActionMenuItems = computed(() => {
     <template #title>
       <div class="flex items-center gap-2 font-semibold text-lg">
         <LayoutLogo class="w-auto h-8 shrink-0" />
-        <span class="">Englearn</span>
+        <span>Englearn</span>
       </div>
     </template>
-
-    <UNavigationMenu
-      :items="navigationItems"
-    />
 
     <template #right>
       <UDropdownMenu :items="languageItems">
@@ -166,12 +145,14 @@ const navigationUserActionMenuItems = computed(() => {
 
           class="capitalize"
         />
-        <UsersDropdown
+        <UDropdownMenu
+          :items="userActionItems"
           :content="{
             align: 'end',
             side: 'bottom',
             sideOffset: 10,
           }"
+          @update:open="addAdminLink"
         >
           <UButton
             color="neutral"
@@ -179,7 +160,7 @@ const navigationUserActionMenuItems = computed(() => {
             class="hover:bg-elevated cursor-pointer"
             icon="i-ph-dots-three-vertical"
           />
-        </UsersDropdown>
+        </UDropdownMenu>
       </div>
       <div v-else class="hidden sm:block">
         <AuthModal />
@@ -187,18 +168,16 @@ const navigationUserActionMenuItems = computed(() => {
     </template>
 
     <template #body>
-      <LayoutSearchBox
+      <UInput
+        icon="i-lucide-search"
+        size="md" variant="outline"
         :placeholder="$t('FORMS.SEARCH_PLACEHOLDER')"
-        class="mb-4"
+        class="mb-4 h-9 flex items-center gap-2"
+        :loading="false"
       />
 
       <UNavigationMenu
         :items="navigationUserActionMenuItems"
-        orientation="vertical"
-      />
-
-      <UNavigationMenu
-        :items="navigationItems"
         orientation="vertical"
       />
     </template>

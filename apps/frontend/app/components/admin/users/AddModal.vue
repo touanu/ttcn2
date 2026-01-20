@@ -3,6 +3,7 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import type { CreateUserWithRoleDto } from '@shared/schemas'
 import { createUserWithRoleSchema } from '@shared/schemas'
 
+const { $api } = useNuxtApp()
 const open = ref(false)
 
 const state = reactive<Partial<CreateUserWithRoleDto>>({
@@ -13,42 +14,27 @@ const state = reactive<Partial<CreateUserWithRoleDto>>({
   role: 'student',
 })
 
-const toast = useToast()
+const validateForm = createFormValidator(createUserWithRoleSchema)
 
 async function onSubmit(event: FormSubmitEvent<CreateUserWithRoleDto>) {
-  try {
-    await $fetch('/api/admin/users', {
-      method: 'POST',
-      body: event.data,
-    })
+  await $api('/api/admin/users', {
+    method: 'POST',
+    body: event.data,
+  })
 
-    toast.add({
-      title: $t('COMMON.SUCCESS'),
-      description: $t('ADMIN.USERS.USER_CREATED', { name: event.data.fullName }),
-      color: 'success',
-    })
+  open.value = false
 
-    open.value = false
+  // Reset form
+  Object.assign(state, {
+    fullName: undefined,
+    username: undefined,
+    email: undefined,
+    password: undefined,
+    role: 'student',
+  })
 
-    // Reset form
-    Object.assign(state, {
-      fullName: undefined,
-      username: undefined,
-      email: undefined,
-      password: undefined,
-      role: 'student',
-    })
-
-    // Refresh the users list
-    await refreshNuxtData()
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: err?.message || $t('ADMIN.USERS.CREATE_ERROR'),
-      color: 'error',
-    })
-  }
+  // Refresh the users list
+  await refreshNuxtData()
 }
 </script>
 
@@ -59,6 +45,7 @@ async function onSubmit(event: FormSubmitEvent<CreateUserWithRoleDto>) {
     <template #body>
       <UForm
         :schema="createUserWithRoleSchema"
+        :validate="validateForm"
         :state="state"
         class="space-y-4"
         @submit="onSubmit"

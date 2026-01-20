@@ -1,11 +1,53 @@
 {
-  "ERROR_TITLE": "Error",
+  "MESSAGES": {
+    "CREATED": "{resource} created successfully",
+    "UPDATED": "{resource} updated successfully",
+    "DELETED": "{resource} deleted successfully",
+    "FOUND": "{resource} retrieved successfully",
+    "NOT_FOUND": "{resource} not found",
+    "INVALID_ID": "Invalid {resource} ID",
+    "ALREADY_EXISTS": "{resource} already exists"
+  },
+  "ERRORS": {
+    "TITLE": "Error",
+    "GENERIC": "An unexpected error occurred. Please try again later.",
+    "INTERNAL_SERVER": "Internal server error. Please try again later.",
+    "ROUTE_NOT_FOUND": "Route not found.",
+    "VALIDATION_FAILED": "Validation failed.",
+    "RATE_LIMIT": "Too many requests. Please try again later.",
+    "INVALID_TYPE": "Invalid type",
+    "UNKNOWN": "An unknown error occurred",
+    "FETCH_FAILED": "Failed to load {resource}",
+    "CREATE_FAILED": "Failed to create {resource}",
+    "UPDATE_FAILED": "Failed to update {resource}",
+    "DELETE_FAILED": "Failed to delete {resource}"
+  },
   "SUCCESS_TITLE": "Success",
-  "GENERIC_ERROR": "An unexpected error occurred. Please try again later.",
-  "INTERNAL_SERVER_ERROR": "Internal server error. Please try again later.",
-  "ROUTE_NOT_FOUND": "Route not found.",
-  "VALIDATION_FAILED": "Validation failed.",
-  "RATE_LIMIT_REACHED": "Too many requests. Please try again later.",
+  "STATUS": {
+    "COURSE": {
+      "PUBLISHED": "Published",
+      "DRAFT": "Draft",
+      "ARCHIVED": "Archived"
+    },
+    "CLASS": {
+      "ACTIVE": "Active",
+      "PENDING": "Pending",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "USER": {
+      "ALL": "All",
+      "SUBSCRIBED": "Subscribed",
+      "UNSUBSCRIBED": "Unsubscribed",
+      "BOUNCED": "Bounced"
+    }
+  },
+  "LEVELS": {
+    "BEGINNER": "Beginner",
+    "INTERMEDIATE": "Intermediate",
+    "ADVANCED": "Advanced",
+    "EXPERT": "Expert"
+  },
   "NAVIGATION": {
     "MENU_TITLE": "Navigation",
     "HOME": "Home",
@@ -23,6 +65,7 @@
   },
   "AUTH": {
     "UNAUTHORIZED": "You are not authorized to access this resource.",
+    "LOGIN_REQUIRED": "Authentication Required",
     "USER_NOT_FOUND": "User not found.",
     "AUTHENTICATION_FAILED": "Authentication failed.",
     "ACCESS_TOKEN_NOT_FOUND": "Access token not found.",
@@ -90,7 +133,10 @@
       "FAILED": "Password reset failed. Please try again.",
       "NEW_PASSWORD_LABEL": "New Password",
       "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
-      "RESET_BUTTON": "Reset Password"
+      "RESET_BUTTON": "Reset Password",
+      "DESCRIPTION": "Enter your email address to receive a password reset code.",
+      "REMEMBER_PASSWORD": "Remember your password?",
+      "TITLE": "Reset Your Password"
     },
     "PERMISSIONS": {
       "ACCESS_DENIED": "Admin access denied."
@@ -169,13 +215,25 @@
       "REQUIRED": "Hash is required.",
       "CANNOT_BE_EMPTY": "Hash cannot be empty."
     },
+    "COURSE": {
+      "TITLE_REQUIRED": "Course title is required",
+      "TITLE_MAX_LENGTH": "Course title must not exceed {max} characters",
+      "DESCRIPTION_REQUIRED": "Course description is required",
+      "CATEGORY_REQUIRED": "Course category is required",
+      "INVALID_THUMBNAIL_URL": "Invalid thumbnail URL"
+    },
+    "CATEGORY": {
+      "NAME_REQUIRED": "Category name is required",
+      "NAME_MAX_LENGTH": "Category name must not exceed {max} characters",
+      "DESCRIPTION_REQUIRED": "Category description is required"
+    },
     "REMEMBER_ME": "Remember me?",
     "EITHER_EMAIL_OR_USERNAME_REQUIRED": "Either email or username is required.",
     "EITHER_OTP_OR_HASH_REQUIRED": "Either OTP or hash is required."
   },
-
   "COMMON": {
     "CANCEL": "Cancel",
+    "CLOSE": "Close",
     "SAVE": "Save",
     "SAVE_CHANGES": "Save Changes",
     "DELETE": "Delete",
@@ -187,6 +245,7 @@
     "SEARCH": "Search",
     "FILTER": "Filter",
     "ACTIONS": "Actions",
+    "ADD": "Add",
     "EMAIL": "Email",
     "NAME": "Name",
     "FULL_NAME": "Full Name",
@@ -198,26 +257,49 @@
     "CREATED": "Created",
     "ALL": "All",
     "OF": "of",
+    "YES": "Yes",
+    "NO": "No",
     "VERIFIED": "Verified",
     "UNVERIFIED": "Unverified",
     "SHOWING": "Showing",
     "MANAGE": "Manage",
     "SUCCESS": "Success",
+    "USER_ID": "User ID",
+    "NOT_AVAILABLE": "N/A",
+    "CREATED_AT": "Created At",
+    "UPDATED_AT": "Updated At",
+    "EMAIL_VERIFIED": "Email Verified",
+    "START": "Start",
+    "REVIEW": "Review",
+    "COMING_SOON": "Coming Soon",
+    "BACK": "Back",
+    "DAYS": {
+      "MONDAY": "Monday",
+      "TUESDAY": "Tuesday",
+      "WEDNESDAY": "Wednesday",
+      "THURSDAY": "Thursday",
+      "FRIDAY": "Friday",
+      "SATURDAY": "Saturday",
+      "SUNDAY": "Sunday"
+    },
     "ERROR": {
       "UNKNOWN": "An unknown error occurred"
     }
   },
-
   "ADMIN": {
     "TITLE": "Admin Panel",
     "DASHBOARD": "Dashboard",
     "BACK_TO_SITE": "Back to Site",
     "WELCOME": "Welcome back",
     "WELCOME_SUBTITLE": "Here's an overview of your platform",
+    "ADD_CATEGORY": "Add Category",
+    "ADD_CLASS": "Add class",
     "NAV": {
       "DASHBOARD": "Dashboard",
       "USERS": "Users",
       "COURSES": "Courses",
+      "CATEGORIES": "Categories",
+      "CLASSES": "Classes",
       "CONTENT": "Content",
       "SETTINGS": "Settings"
     },
@@ -258,7 +340,10 @@
       "EDIT_USER": "Edit user",
       "ADD_USER_DESC": "Add a new user to the system",
       "USER_CREATED": "User '{name}' created successfully",
+      "USER_UPDATED": "User '{name}' updated successfully",
       "CREATE_ERROR": "Failed to create user",
+      "UPDATE_ERROR": "Failed to update user",
+      "CANNOT_CHANGE_ROLE": "You don't have permission to change this user's role",
       "DELETE_MODAL_TITLE": "Delete Users",
       "DELETE_CONFIRMATION": "Are you sure you want to delete {count} user(s)? This action cannot be undone.",
       "DELETE_WARNING": "⚠️ This will permanently delete the selected users and all their data.",
@@ -267,7 +352,6 @@
       "NO_USERS_SELECTED": "No users selected for deletion",
       "USER_ID_REQUIRED": "User ID is required",
       "AND_MORE": "and {count} more...",
-      "CANNOT_DELETE_SUPERADMIN": "Cannot delete superadmin",
       "SUPERADMIN_PROTECTED": "Superadmin accounts are protected and cannot be deleted",
       "STATUS": {
         "ALL": "All",
@@ -280,21 +364,143 @@
       "SUBTITLE": "Manage courses and lessons",
       "ALL_COURSES": "All Courses",
       "TOTAL": "courses",
+      "TITLE": "Title",
+      "LEVEL": "Level",
+      "CATEGORY": "Category",
+      "SELECT_CATEGORY": "Select a category",
       "COPY_COURSE_ID": "Copy course ID",
       "COURSE_ID_COPIED": "Course ID copied to clipboard",
       "EDIT_COURSE": "Edit course",
       "EDIT_COMING_SOON": "Edit functionality coming soon",
       "VIEW_LESSONS": "View lessons",
+      "VIEW_COURSE": "View course details",
       "DELETE_COURSE": "Delete course",
       "COURSE_DELETED": "Course deleted",
       "COURSE_DELETED_DESC": "The course has been deleted.",
+      "ADD_COURSE_DESC": "Add a new course to the system",
+      "COURSE_CREATED": "Course '{title}' created successfully",
+      "COURSE_UPDATED": "Course '{title}' updated successfully",
+      "CREATE_ERROR": "Failed to create course",
+      "UPDATE_ERROR": "Failed to update course",
+      "COURSES_DELETED_SUCCESS": "Courses deleted successfully",
+      "DELETE_CONFIRMATION": "Delete {count} course(s)?",
+      "DELETE_WARNING": "This action cannot be undone. This will permanently delete the selected course(s) and all associated data.",
+      "COURSES_TO_DELETE": "Courses to delete:",
+      "AND_MORE": "and {count} more...",
+      "COURSE_ID": "Course ID",
+      "LESSONS_COUNT": "Lessons",
+      "DESCRIPTION": "Description",
+      "THUMBNAIL": "Thumbnail",
+      "TITLE_PLACEHOLDER": "Enter course title",
+      "DESCRIPTION_PLACEHOLDER": "Enter course description",
+      "THUMBNAIL_PLACEHOLDER": "Enter thumbnail URL",
       "COLUMN_TITLE": "Title",
       "COLUMN_LEVEL": "Level",
       "COLUMN_STATUS": "Status",
       "COLUMN_LESSONS": "Lessons",
       "COLUMN_ACTIONS": "Actions",
       "SELECT_ALL": "Select all",
-      "SELECT_ROW": "Select row"
+      "SELECT_ROW": "Select row",
+      "DELETE_MODAL_TITLE": "Delete Course(s)",
+      "STATUS": "Status",
+      "SCHEDULE": "Schedule",
+      "ENROLL_IN_COURSE": "Enroll in Course",
+      "SELECT_CLASS": "Select a Class",
+      "SELECT_CLASS_ERROR": "Please select a class",
+      "NO_AVAILABLE_CLASSES": "No Available Classes",
+      "NO_AVAILABLE_CLASSES_DESC": "There are currently no available classes for this course. Please check back later.",
+      "CONFIRM_ENROLLMENT": "Confirm Enrollment",
+      "ENROLLED_SUCCESSFULLY": "Successfully enrolled in the course",
+      "ENROLL_ERROR": "Failed to enroll in the course",
+      "LOGIN_TO_ENROLL": "Please login to enroll in this course",
+      "ALREADY_ENROLLED": "Already Enrolled",
+      "CLASSES": "Classes"
+    },
+    "CLASSES": {
+      "TITLE": "Classes",
+      "SUBTITLE": "Manage class schedules and enrollments",
+      "ALL_CLASSES": "All Classes",
+      "TOTAL": "classes",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "ROOM": "Room",
+      "START_DATE": "Start Date",
+      "END_DATE": "End Date",
+      "MAX_STUDENTS": "Max Students",
+      "STATUS": "Status",
+      "STUDENTS": "Students",
+      "TEACHER": "Teacher",
+      "TEACHER_ID": "Teacher ID",
+      "COURSE": "Course",
+      "SELECT_COURSE": "Select a course",
+      "STUDENTS_COUNT": "students",
+      "STUDENT_IDS": "Student IDs",
+      "STUDENT_LIST": "Student List",
+      "SELECT_TEACHER": "Select a teacher",
+      "SELECT_STUDENT": "Select a student to add",
+      "STUDENT_ID_PLACEHOLDER": "Enter student ID manually",
+      "COLUMN_NAME": "Class Name",
+      "COLUMN_COURSE": "Course",
+      "COLUMN_START_DATE": "Start Date",
+      "COLUMN_END_DATE": "End Date",
+      "COLUMN_STATUS": "Status",
+      "COLUMN_STUDENTS": "Students",
+      "SELECT_ALL": "Select all",
+      "SELECT_ROW": "Select row",
+      "FILTER_NAMES": "Filter by name...",
+      "COPY_CLASS_ID": "Copy class ID",
+      "CLASS_ID_COPIED": "Class ID copied to clipboard",
+      "VIEW_CLASS": "View class details",
+      "EDIT_CLASS": "Edit class",
+      "DELETE_CLASS": "Delete class",
+      "CLASS_DELETED": "Class deleted",
+      "CLASS_ID": "Class ID",
+      "ADD_CLASS_DESC": "Add a new class to the system",
+      "CLASS_CREATED": "Class '{name}' created successfully",
+      "CLASS_UPDATED": "Class updated successfully",
+      "CREATE_ERROR": "Failed to create class",
+      "UPDATE_ERROR": "Failed to update class",
+      "DELETE_ERROR": "Failed to delete class",
+      "CLASSES_DELETED_SUCCESS": "Classes deleted successfully",
+      "DELETE_CONFIRMATION": "Delete {count} class(es)?",
+      "DELETE_WARNING": "This action cannot be undone. This will permanently delete the selected class(es).",
+      "CLASSES_TO_DELETE": "Classes to delete:",
+      "AND_MORE": "and {count} more...",
+      "DELETE_MODAL_TITLE": "Delete Class(es)"
+    },
+    "CATEGORIES": {
+      "TITLE": "Course Categories",
+      "SUBTITLE": "Manage course categories and classifications",
+      "ALL_CATEGORIES": "All Categories",
+      "TOTAL": "categories",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "NAME_PLACEHOLDER": "Enter category name",
+      "DESCRIPTION_PLACEHOLDER": "Enter category description",
+      "COLUMN_NAME": "Name",
+      "COLUMN_DESCRIPTION": "Description",
+      "SELECT_ALL": "Select all",
+      "SELECT_ROW": "Select row",
+      "FILTER_NAMES": "Filter by name...",
+      "COPY_CATEGORY_ID": "Copy category ID",
+      "CATEGORY_ID_COPIED": "Category ID copied to clipboard",
+      "VIEW_CATEGORY": "View category details",
+      "EDIT_CATEGORY": "Edit category",
+      "DELETE_CATEGORY": "Delete category",
+      "CATEGORY_DELETED": "Category deleted",
+      "CATEGORY_ID": "Category ID",
+      "ADD_CATEGORY_DESC": "Add a new category to the system",
+      "CATEGORY_CREATED": "Category '{name}' created successfully",
+      "CATEGORY_UPDATED": "Category updated successfully",
+      "CREATE_ERROR": "Failed to create category",
+      "UPDATE_ERROR": "Failed to update category",
+      "DELETE_ERROR": "Failed to delete category",
+      "CATEGORIES_DELETED_SUCCESS": "Categories deleted successfully",
+      "DELETE_CONFIRMATION": "Delete {count} category(ies)?",
+      "DELETE_WARNING": "This action cannot be undone. This will permanently delete the selected category(ies).",
+      "CATEGORIES_TO_DELETE": "Categories to delete:",
+      "AND_MORE": "and {count} more...",
+      "DELETE_MODAL_TITLE": "Delete Category(ies)"
     },
     "CONTENT": {
       "SUBTITLE": "Manage educational content and materials",
@@ -341,9 +547,11 @@
       "RESET_DATABASE": "Reset Database",
       "RESET_DATABASE_DESC": "Reset database to initial state (WARNING: This cannot be undone)",
       "RESET": "Reset"
+    },
+    "STATUS": {
+      "COURSES": "Courses"
     }
   },
-
   "ROLES": {
     "ALL": "All Roles",
     "STUDENT": "Student",
@@ -351,23 +559,57 @@
     "ADMIN": "Admin",
     "SUPERADMIN": "Super Admin"
   },
-
   "COURSES": {
     "TITLE": "Title",
     "LEVEL": "Level",
     "LESSONS": "Lessons",
-    "STATUS": {
-      "DRAFT": "Draft",
-      "PUBLISHED": "Published",
-      "ARCHIVED": "Archived"
-    },
-    "LEVELS": {
-      "BEGINNER": "Beginner",
-      "INTERMEDIATE": "Intermediate",
-      "ADVANCED": "Advanced"
-    }
+    "STUDENTS": "Students",
+    "CLASSES": "Classes",
+    "ACTIVE_CLASSES": "Active Classes",
+    "SUBTITLE": "Browse and enroll in our comprehensive courses",
+    "ENROLLED": "Enrolled",
+    "ENROLL_NOW": "Enroll Now",
+    "REGISTER_NOW": "Register Now",
+    "VIEW_SCHEDULE": "View Schedule",
+    "START_LEARNING": "Start Learning",
+    "CONTINUE_LEARNING": "Continue Learning",
+    "NOT_AVAILABLE": "Not Available",
+    "ABOUT": "About This Course",
+    "WHAT_YOU_LEARN": "What You'll Learn",
+    "LEARN_ITEM_1": "Comprehensive English curriculum tailored to your level",
+    "LEARN_ITEM_2": "Interactive lessons with experienced native teachers",
+    "LEARN_ITEM_3": "Small class sizes for personalized attention",
+    "CURRICULUM": "Curriculum",
+    "AVAILABLE_CLASSES": "Available Classes",
+    "NO_CLASSES": "No Classes Available",
+    "NO_CLASSES_DESC": "There are no classes scheduled for this course yet",
+    "COMPLETED": "Completed",
+    "NO_LESSONS": "No Lessons Available",
+    "NO_LESSONS_DESC": "This course doesn't have any lessons yet",
+    "LOCKED": "Locked",
+    "YOUR_PROGRESS": "Your Progress",
+    "COMPLETION": "Completion",
+    "LESSONS_COMPLETED": "Lessons Completed",
+    "COURSE_INFO": "Course Information",
+    "QUICK_INFO": "Quick Information",
+    "TOTAL_LESSONS": "Total Lessons",
+    "TOTAL_STUDENTS": "Total Students",
+    "COMPLETE": "Complete",
+    "NEED_HELP": "Need Help?",
+    "CONTACT_DESC": "Have questions about this course? Our team is here to help you.",
+    "CONTACT_US": "Contact Us",
+    "ALREADY_ENROLLED": "You are already enrolled in this course",
+    "CONFIRM_ENROLLMENT": "Confirm enrollment in this course?",
+    "ENROLLED_SUCCESSFULLY": "You have been enrolled successfully",
+    "ENROLL_IN_COURSE": "Enroll in Course",
+    "LOGIN_TO_ENROLL": "Please log in to enroll in this course",
+    "NO_AVAILABLE_CLASSES": "No Available Classes",
+    "NO_AVAILABLE_CLASSES_DESC": "There are no classes available for this course",
+    "SCHEDULE": "Schedule",
+    "SELECT_CLASS": "Select a Class",
+    "SELECT_CLASS_ERROR": "Please select a class to enroll",
+    "VIEW_COURSE": "View Course"
   },
-
   "PROFILE": {
     "TITLE": "My Profile",
     "SUBTITLE": "Manage your account settings and preferences",
@@ -446,7 +688,6 @@
       "STATS_FAILED": "Failed to load statistics"
     }
   },
-
   "CONTACT": {
     "PHONE_NUMBER": "Phone number",
     "EMAIL": "Email",
@@ -554,5 +795,54 @@
       "PLACEHOLDER": "Enter your email",
       "BUTTON": "Subscribe"
     }
-  }
+  },
+  "MEDIA": {
+    "NO_FILE_UPLOADED": "No file uploaded",
+    "INVALID_FILE_TYPE": "Invalid file type",
+    "LABEL": "Drop your file here",
+    "DESCRIPTION": {
+      "IMG": "SVG, PNG, JPG or GIF (max. {1}MB)"
+    }
+  },
+  "CLASS": {
+    "STUDENT_ADDED": "Student added to class successfully",
+    "STUDENT_REMOVED": "Student removed from class successfully",
+    "STUDENT_ALREADY_IN_CLASS": "Student is already in class",
+    "STUDENT_NOT_IN_CLASS": "Student is not in class"
+  },
+  "TIMETABLE": {
+    "INVALID_CLASS_ID": "Invalid class ID"
+  },
+  "ENROLLMENT": {
+    "INVALID_USER_ID": "Invalid user ID",
+    "INVALID_COURSE_ID": "Invalid course ID",
+    "ALREADY_ENROLLED": "Already enrolled in this course",
+    "IS_ENROLLED": "Is enrolled",
+    "NOT_ENROLLED": "Not enrolled",
+    "PROGRESS_UPDATED": "Progress updated successfully"
+  },
+  "CLASSES": {
+    "START": "Start",
+    "END": "End",
+    "STUDENTS": "Students",
+    "FULL": "Class Full",
+    "SEATS_AVAILABLE": "seats available",
+    "REGISTER": "Register"
+  },
+  "HOME": {
+    "HERO": {
+      "TITLE": "Master English with Expert-Led Courses",
+      "SUBTITLE": "Join thousands of learners improving their English skills with our comprehensive courses and interactive lessons"
+    },
+    "SEARCH_PLACEHOLDER": "Search for courses...",
+    "COURSES": {
+      "TITLE": "Available Courses",
+      "SUBTITLE": "Choose from our wide range of courses tailored to your learning needs"
+    },
+    "NO_COURSES": "No Courses Found",
+    "NO_COURSES_DESC": "Try adjusting your search or filters",
+    "LESSONS": "lessons",
+    "VIEW_DETAILS": "View Details"
+  },
+  "ERROR_TITLE": "Something went wrong"
 }

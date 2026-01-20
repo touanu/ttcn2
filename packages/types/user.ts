@@ -22,10 +22,3 @@ export interface RequestVerifyEmailResponse {
   data: { email: string }
   message?: string
 }
-
-export interface DashboardStats {
-  totalUsers: number
-  totalCourses: number
-  activeCourses: number
-  totalLessons: number
-}

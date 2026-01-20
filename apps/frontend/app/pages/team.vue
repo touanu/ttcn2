@@ -5,7 +5,7 @@ definePageMeta({
   title: 'Our Team',
 })
 
-const { data: response, pending, error } = await useFetch<{ data: User[] }>('/api/team')
+const { data: response, pending, error } = await useAPI<{ data: User[] }>('/api/team')
 const teamMembers = computed(() => response.value?.data || [])
 </script>
 

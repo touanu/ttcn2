@@ -5,11 +5,12 @@ import { updateUserSchema } from '@shared/schemas/user'
 definePageMeta({
 })
 
+const { $api } = useNuxtApp()
 const toast = useToast()
 const { setLocale, locale } = useI18n()
 
 // Fetch current user data
-const { data: user, pending, error } = await useFetch<User>('/api/profile')
+const { data: user, pending, error } = await useAPI<User>('/api/profile')
 
 // Form state
 const formState = reactive({
@@ -57,57 +58,36 @@ function resetForm() {
 async function onSubmit() {
   isSubmitting.value = true
 
-  try {
-    const updatedUser = await $fetch<User>('/api/profile', {
-      method: 'PATCH',
-      body: formState,
-    })
+  const updatedUser = await $api<User>('/api/profile', {
+    method: 'PATCH',
+    body: formState,
+  })
 
-    // Update the user data
-    user.value = updatedUser
+  // Update the user data
+  user.value = updatedUser
 
-    toast.add({
-      title: $t('PROFILE.SUCCESS.UPDATED'),
-      color: 'success',
-      icon: 'i-heroicons-check-circle',
-    })
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('PROFILE.ERROR.UPDATE_FAILED'),
-      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
-      color: 'error',
-      icon: 'i-heroicons-x-circle',
-    })
-  }
-  finally {
-    isSubmitting.value = false
-  }
+  toast.add({
+    title: $t('PROFILE.SUCCESS.UPDATED'),
+    color: 'success',
+    icon: 'i-heroicons-check-circle',
+  })
+
+  isSubmitting.value = false
 }
 
 // Request email verification
 async function requestVerifyEmail() {
-  try {
-    await $fetch('/api/users/request-verify-email', {
-      method: 'POST',
-      body: { email: formState.email },
-    })
+  await $api('/api/users/request-verify-email', {
+    method: 'POST',
+    body: { email: formState.email },
+  })
 
-    toast.add({
-      title: $t('PROFILE.SUCCESS.VERIFICATION_SENT'),
-      description: $t('PROFILE.SUCCESS.VERIFICATION_SENT_DESC'),
-      color: 'success',
-      icon: 'i-heroicons-envelope',
-    })
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('PROFILE.ERROR.VERIFICATION_FAILED'),
-      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
-      color: 'error',
-      icon: 'i-heroicons-x-circle',
-    })
-  }
+  toast.add({
+    title: $t('PROFILE.SUCCESS.VERIFICATION_SENT'),
+    description: $t('PROFILE.SUCCESS.VERIFICATION_SENT_DESC'),
+    color: 'success',
+    icon: 'i-heroicons-envelope',
+  })
 }
 </script>
 

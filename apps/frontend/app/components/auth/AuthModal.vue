@@ -5,6 +5,7 @@ import type { EmailOnlyDto, PasswordOnlyDto } from '@shared/schemas/user'
 import type { ResponseBody, SuccessResponseBody } from '@shared/types'
 import type { OTPType } from '@shared/types/otp'
 
+const { $api } = useNuxtApp()
 const open = ref<boolean>(false)
 const currentForm = ref<'login' | 'register' | 'otp' | 'forgot-password' | 'reset-password'>('login')
 const userEmail = ref<string>('')
@@ -47,258 +48,134 @@ function closeModal(): void {
 }
 
 async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<void> {
-  try {
-    isLoading.value = true
-    await $fetch<ResponseBody>('/api/auth/login', {
-      method: 'POST',
-      body: payload.data,
-    })
+  isLoading.value = true
+  const response = await $api<ResponseBody>('/api/auth/login', {
+    method: 'POST',
+    body: payload.data,
+    ignoreResponseError: true,
+  })
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.LOGIN.SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
-
-    closeModal()
-    await refreshSession()
-    await navigateTo('/')
-  }
-  catch (error: any) {
-    console.error('Login failed:', error)
-
-    if (error.data?.data?.errorCode === 'AUTH.EMAIL_NOT_VERIFIED') {
-      const res = await $fetch<ResponseBody>('/api/users/request-verify-email', {
-        method: 'POST',
-        body: {
-          username: payload.data.username,
+  if (!response.success) {
+    if (response.message === 'AUTH.EMAIL_NOT_VERIFIED') {
+      const res = await $api<SuccessResponseBody<{ email: string }>>(
+        '/api/users/request-verify-email',
+        {
+          method: 'POST',
+          body: {
+            username: payload.data.username,
+          },
+          ignoreResponseError: true,
         },
-        ignoreResponseError: true,
-      })
+      )
 
-      if (res.error) {
-        toast.add({
-          title: $t('ERROR_TITLE'),
-          description: getFirstTranslation(res.message) || $t('AUTH.OTP.RESEND_FAILED'),
-          icon: 'i-lucide-alert-circle',
-          color: 'error',
-        })
-        return
-      }
-
-      const rqVerifyEmailResponse = res as SuccessResponseBody<{ email: string }>
-      userEmail.value = rqVerifyEmailResponse.data?.email || payload.data.username
-
+      userEmail.value = res.data?.email || payload.data.username
       switchToOtp('EMAIL_VERIFICATION')
+      return
     }
 
     toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.LOGIN.FAILED'),
+      title: $t('ERRORS.TITLE'),
+      description: $t(response.message || 'GENERIC_ERROR'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
+    return
   }
-  finally {
-    isLoading.value = false
-  }
+
+  closeModal()
+  await refreshSession()
+  await navigateTo('/')
+
+  isLoading.value = false
 }
 
 async function onRegisterSubmit(payload: FormSubmitEvent<CreateUserDto>): Promise<void> {
-  try {
-    isLoading.value = true
+  isLoading.value = true
 
-    const res = await $fetch<ResponseBody>('/api/users/register', {
-      method: 'POST',
-      body: payload.data,
-    })
+  const res = await $api<SuccessResponseBody<{ email: string }>>('/api/users/register', {
+    method: 'POST',
+    body: payload.data,
+  })
 
-    const rqRegisterResponse = res as SuccessResponseBody<{ email: string }>
-    userEmail.value = rqRegisterResponse.data?.email || payload.data.email
+  userEmail.value = res.data?.email || payload.data.email
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.REGISTER.SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
+  // Switch to OTP verification
+  switchToOtp('EMAIL_VERIFICATION')
 
-    // Switch to OTP verification
-    switchToOtp('EMAIL_VERIFICATION')
-  }
-  catch (error: any) {
-    console.error('Registration failed:', error)
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.REGISTER.FAILED'),
-      icon: 'i-lucide-alert-circle',
-      color: 'error',
-    })
-  }
-  finally {
-    isLoading.value = false
-  }
+  isLoading.value = false
 }
 
 async function onOtpSubmit(payload: FormSubmitEvent<OtpOnlyDto>): Promise<void> {
-  try {
-    isLoading.value = true
+  isLoading.value = true
 
-    const otpString = Array.isArray(payload.data.otp)
-      ? payload.data.otp.join('')
-      : payload.data.otp
+  const otpString = Array.isArray(payload.data.otp)
+    ? payload.data.otp.join('')
+    : payload.data.otp
 
-    if (otpMode.value === 'EMAIL_VERIFICATION') {
-      await $fetch<ResponseBody>('/api/users/verify-email', {
-        method: 'POST',
-        body: {
-          email: userEmail.value,
-          otp: otpString,
-        },
-      })
-
-      toast.add({
-        title: $t('SUCCESS_TITLE'),
-        description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
-        icon: 'i-lucide-check-circle',
-        color: 'success',
-      })
-
-      closeModal()
-    }
-    else {
-      verifiedOtp.value = otpString
-
-      toast.add({
-        title: $t('SUCCESS_TITLE'),
-        description: $t('AUTH.OTP.VERIFICATION_SUCCESS'),
-        icon: 'i-lucide-check-circle',
-        color: 'success',
-      })
-
-      switchToResetPassword()
-    }
-  }
-  catch (error: any) {
-    console.error('OTP verification failed:', error)
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.VERIFICATION_FAILED'),
-      icon: 'i-lucide-alert-circle',
-      color: 'error',
+  if (otpMode.value === 'EMAIL_VERIFICATION') {
+    await $api('/api/users/verify-email', {
+      method: 'POST',
+      body: {
+        email: userEmail.value,
+        otp: otpString,
+      },
     })
+
+    closeModal()
   }
-  finally {
-    isLoading.value = false
+  else {
+    verifiedOtp.value = otpString
+    switchToResetPassword()
   }
+  isLoading.value = false
 }
 
 async function resendOtp(): Promise<void> {
-  try {
-    isLoading.value = true
+  isLoading.value = true
 
-    const endpoint = otpMode.value === 'EMAIL_VERIFICATION'
-      ? '/api/users/request-verify-email'
-      : '/api/users/request-reset-password'
+  const endpoint = otpMode.value === 'EMAIL_VERIFICATION'
+    ? '/api/users/request-verify-email'
+    : '/api/users/request-reset-password'
 
-    await $fetch<ResponseBody>(endpoint, {
-      method: 'POST',
-      body: {
-        email: userEmail.value,
-      },
-    })
+  await $api(endpoint, {
+    method: 'POST',
+    body: {
+      email: userEmail.value,
+    },
+  })
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.OTP.RESEND_SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
-  }
-  catch (error: any) {
-    console.error('Failed to resend OTP:', error)
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.OTP.RESEND_FAILED'),
-      icon: 'i-lucide-alert-circle',
-      color: 'error',
-    })
-  }
-  finally {
-    isLoading.value = false
-  }
+  isLoading.value = false
 }
 
 async function onForgotPasswordSubmit(payload: FormSubmitEvent<EmailOnlyDto>): Promise<void> {
-  try {
-    isLoading.value = true
+  isLoading.value = true
 
-    await $fetch<ResponseBody>('/api/users/request-reset-password', {
-      method: 'POST',
-      body: payload.data,
-    })
+  await $api('/api/users/request-reset-password', {
+    method: 'POST',
+    body: payload.data,
+  })
 
-    userEmail.value = payload.data.email
+  userEmail.value = payload.data.email
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.PASSWORD_RESET.SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
-
-    // Switch to OTP form for verification
-    switchToOtp('PASSWORD_RESET')
-  }
-  catch (error: any) {
-    console.error('Password reset failed:', error)
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
-      icon: 'i-lucide-alert-circle',
-      color: 'error',
-    })
-  }
-  finally {
-    isLoading.value = false
-  }
+  // Switch to OTP form for verification
+  switchToOtp('PASSWORD_RESET')
+  isLoading.value = false
 }
 
 async function onResetPasswordSubmit(payload: FormSubmitEvent<PasswordOnlyDto>): Promise<void> {
-  try {
-    isLoading.value = true
+  isLoading.value = true
 
-    await $fetch<ResponseBody>('/api/users/reset-password', {
-      method: 'POST',
-      body: {
-        email: userEmail.value,
-        otp: verifiedOtp.value,
-        newPassword: payload.data.newPassword,
-      },
-    })
+  await $api('/api/users/reset-password', {
+    method: 'POST',
+    body: {
+      email: userEmail.value,
+      otp: verifiedOtp.value,
+      newPassword: payload.data.newPassword,
+    },
+  })
 
-    toast.add({
-      title: $t('SUCCESS_TITLE'),
-      description: $t('AUTH.PASSWORD_RESET.SUCCESS'),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    })
-
-    switchToLogin()
-  }
-  catch (error: any) {
-    console.error('Reset password failed:', error)
-    toast.add({
-      title: $t('ERROR_TITLE'),
-      description: getFirstTranslation(error.data?.message) || $t('AUTH.PASSWORD_RESET.FAILED'),
-      icon: 'i-lucide-alert-circle',
-      color: 'error',
-    })
-  }
-  finally {
-    isLoading.value = false
-  }
+  switchToLogin()
+  isLoading.value = false
 }
 </script>
 

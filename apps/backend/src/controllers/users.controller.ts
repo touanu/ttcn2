@@ -1,11 +1,12 @@
-import type { Permission } from '@shared/constants'
-import type { RequestVerifyEmailResponse, SuccessResponseBody, User, UserRole } from '@shared/types'
+import type { RequestWithUser } from '@interfaces/auth.interface'
+import type { UserDB } from '@interfaces/users.interface'
+import type { Permission, RequestVerifyEmailResponse, SuccessResponseBody, User, UserRole } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
-import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import { OtpService } from '@services/otp.service'
 import { UsersService } from '@services/users.service'
 import { asyncHandler } from '@utils/asyncHandler'
+import { convertUserToResponse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -31,10 +32,10 @@ export class UsersController {
       }
     }
 
-    const users = await this.userService.getAllUsers(options)
+    const users = await this.userService.findAllUsers(options)
     const response: SuccessResponseBody<User[]> = {
       success: true,
-      data: users,
+      data: users.map(convertUserToResponse),
       message: 'USERS.GET_ALL_SUCCESS',
     }
 
@@ -54,11 +55,11 @@ export class UsersController {
 
   getUserById: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
 
     const response: SuccessResponseBody<User> = {
       success: true,
-      data: user,
+      data: convertUserToResponse(user),
       message: 'USERS.GET_SUCCESS',
     }
 
@@ -71,7 +72,20 @@ export class UsersController {
 
     const response: SuccessResponseBody<User> = {
       success: true,
-      data: user,
+      data: convertUserToResponse(user),
+      message: 'USERS.CREATE_SUCCESS',
+    }
+
+    res.status(201).json(response)
+  })
+
+  registerStudent: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const userData: User = req.body
+    const user = await this.userService.createUser({ ...userData, role: 'student' })
+
+    const response: SuccessResponseBody<User> = {
+      success: true,
+      data: convertUserToResponse(user),
       message: 'USERS.CREATE_SUCCESS',
     }
 
@@ -85,7 +99,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<User> = {
       success: true,
-      data: user,
+      data: convertUserToResponse(user),
       message: 'USERS.UPDATE_SUCCESS',
     }
 
@@ -96,7 +110,7 @@ export class UsersController {
     const userId: string = req.params.id
     const { currentPassword, newPassword }: { currentPassword: string, newPassword: string } = req.body
 
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
     const isMatch = await this.userService.comparePassword(currentPassword, user.password)
     if (!isMatch) {
       throw new HttpException(400, 'USERS.CURRENT_PASSWORD_INCORRECT')
@@ -120,7 +134,7 @@ export class UsersController {
     }
 
     // Lấy thông tin người dùng cần xóa
-    const targetUser = await this.userService.getUserByIdInternal(userId)
+    const targetUser = await this.userService.findUserById(userId)
     const actorRole: UserRole = userReq.user.role ?? 'student'
     const targetRole: UserRole = targetUser.role ?? 'student'
 
@@ -163,13 +177,13 @@ export class UsersController {
   public requestEmailVerification: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     let { email, username } = req.body
 
-    let user: User
+    let user: UserDB
     if (username) {
       user = await this.userService.findUserByUsername(username)
       email = user.email
     }
     else {
-      user = await this.userService.getUserByEmail(email)
+      user = await this.userService.findUserByEmail(email)
     }
 
     if (user.isEmailVerified)
@@ -192,7 +206,7 @@ export class UsersController {
 
   public verifyEmail: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (user.isEmailVerified)
       throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
@@ -201,7 +215,7 @@ export class UsersController {
       throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
 
     await this.otpService.verifyOTP(user._id, 'EMAIL_VERIFICATION', otp)
-    await this.userService.updateUser(user._id, { isEmailVerified: true })
+    await this.userService.updateUser(user._id.toString(), { isEmailVerified: true })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
@@ -213,7 +227,7 @@ export class UsersController {
 
   public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (!user._id)
       throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
@@ -231,13 +245,13 @@ export class UsersController {
 
   public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp, newPassword } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (!user._id)
       throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
 
     await this.otpService.verifyOTP(user._id, 'PASSWORD_RESET', otp)
-    await this.userService.updateUser(user._id, { password: newPassword })
+    await this.userService.updateUser(user._id.toString(), { password: newPassword })
 
     const response: SuccessResponseBody<undefined> = {
       success: true,
@@ -290,7 +304,7 @@ export class UsersController {
 
     const response: SuccessResponseBody<User> = {
       success: true,
-      data: user,
+      data: convertUserToResponse(user),
       message: 'USERS.ROLE_UPDATE_SUCCESS',
     }
 
@@ -302,7 +316,7 @@ export class UsersController {
    */
   public getUserPermissions: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
     const permissions = await this.userService.getUserPermissions(userId)
 
     const response: SuccessResponseBody<{ role: UserRole, permissions: Permission[] }> = {

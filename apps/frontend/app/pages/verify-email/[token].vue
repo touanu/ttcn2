@@ -11,7 +11,7 @@ const route = useRoute()
 const token = route.params.token as string
 const isEmailVerified = ref<boolean>()
 
-const { data } = await useFetch<SuccessResponseBody<undefined>>(
+const { data } = await useAPI<SuccessResponseBody<undefined>>(
   `/api/users/verify-email/${token}`,
   {
     method: 'POST',

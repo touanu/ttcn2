@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
+import type { Course } from '@shared/types'
 import type { Row } from '@tanstack/table-core'
 import { getPaginationRowModel } from '@tanstack/table-core'
-import { upperFirst } from 'scule'
 
 definePageMeta({
   layout: 'admin',
   middleware: ['admin'],
 })
 
-const UBadge = resolveComponent('UBadge')
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 const UCheckbox = resolveComponent('UCheckbox')
+const img = resolveComponent('img')
 
 const toast = useToast()
 const table = useTemplateRef('table')
+const addModalOpen = ref(false)
+const deleteModalOpen = ref(false)
+const viewModalOpen = ref(false)
+const editModalOpen = ref(false)
+const coursesToDelete = ref<Course[]>([])
+const selectedCourse = ref<Course | null>(null)
 
 const columnFilters = ref([{
   id: 'title',
@@ -24,19 +30,50 @@ const columnFilters = ref([{
 const columnVisibility = ref()
 const rowSelection = ref({})
 
-interface Course {
-  _id: string
-  title: string
-  description: string
-  level: 'beginner' | 'intermediate' | 'advanced'
-  status: 'draft' | 'published' | 'archived'
-  lessonsCount: number
-  createdAt: string
+function openDeleteModal() {
+  const selectedRows = table.value?.tableApi?.getFilteredSelectedRowModel().rows || []
+  coursesToDelete.value = selectedRows.map(row => row.original)
+
+  if (coursesToDelete.value.length > 0) {
+    deleteModalOpen.value = true
+  }
 }
 
-const { data, status } = await useFetch<Course[]>('/api/admin/courses', {
+function openViewModal(course: Course) {
+  selectedCourse.value = course
+  viewModalOpen.value = true
+}
+
+function openEditModal(course: Course) {
+  selectedCourse.value = course
+  editModalOpen.value = true
+}
+
+function handleViewEdit(course: Course) {
+  selectedCourse.value = course
+  editModalOpen.value = true
+}
+
+function handleViewDelete(course: Course) {
+  coursesToDelete.value = [course]
+  deleteModalOpen.value = true
+}
+
+function handleDeleted() {
+  // Clear selection after delete
+  if (table.value?.tableApi) {
+    table.value.tableApi.resetRowSelection()
+  }
+}
+
+function handleCreated() {
+  // Refresh data after create
+  // useFetch will automatically refetch
+}
+
+const { data, status } = await useAPI<Course[]>('/api/admin/courses', {
   lazy: true,
-  default: () => [],
+  server: false,
 })
 
 function getRowItems(row: Row<Course>) {
@@ -54,6 +91,7 @@ function getRowItems(row: Row<Course>) {
           toast.add({
             title: $t('ADMIN.USERS.COPIED_TO_CLIPBOARD'),
             description: $t('ADMIN.COURSES.COURSE_ID_COPIED'),
+            icon: 'i-lucide-check-circle',
           })
         }
       },
@@ -62,18 +100,18 @@ function getRowItems(row: Row<Course>) {
       type: 'separator',
     },
     {
-      label: $t('ADMIN.COURSES.EDIT_COURSE'),
-      icon: 'i-heroicons-pencil',
+      label: $t('ADMIN.COURSES.VIEW_COURSE'),
+      icon: 'i-heroicons-eye',
       onSelect() {
-        toast.add({
-          title: $t('ADMIN.COURSES.EDIT_COURSE'),
-          description: $t('ADMIN.COURSES.EDIT_COMING_SOON'),
-        })
+        openViewModal(row.original)
       },
     },
     {
-      label: $t('ADMIN.COURSES.VIEW_LESSONS'),
-      icon: 'i-heroicons-book-open',
+      label: $t('ADMIN.COURSES.EDIT_COURSE'),
+      icon: 'i-heroicons-pencil',
+      onSelect() {
+        openEditModal(row.original)
+      },
     },
     {
       type: 'separator',
@@ -83,11 +121,8 @@ function getRowItems(row: Row<Course>) {
       icon: 'i-heroicons-trash',
       color: 'error',
       onSelect() {
-        toast.add({
-          title: $t('ADMIN.COURSES.COURSE_DELETED'),
-          description: $t('ADMIN.COURSES.COURSE_DELETED_DESC'),
-          color: 'error',
-        })
+        coursesToDelete.value = [row.original]
+        deleteModalOpen.value = true
       },
     },
   ]
@@ -113,6 +148,15 @@ const columns: TableColumn<Course>[] = [
       }),
   },
   {
+    accessorKey: 'thumbnail',
+    header: 'Thumbnail',
+    cell: ({ row }) =>
+      h(img, {
+        src: row.original.thumbnail,
+        class: 'max-w-xs',
+      }),
+  },
+  {
     accessorKey: 'title',
     header: ({ column }) => {
       const isSorted = column.getIsSorted()
@@ -125,7 +169,7 @@ const columns: TableColumn<Course>[] = [
           ? isSorted === 'asc'
             ? 'i-heroicons-arrow-up-narrow-wide'
             : 'i-heroicons-arrow-down-wide-narrow'
-          : 'i-heroicons-arrow-up-down',
+          : 'i-heroicons-arrows-up-down',
         class: '-mx-2.5',
         onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
       })
@@ -133,44 +177,13 @@ const columns: TableColumn<Course>[] = [
     cell: ({ row }) => {
       return h('div', undefined, [
         h('p', { class: 'font-medium text-highlighted' }, row.original.title),
-        h('p', { class: 'text-sm text-muted truncate max-w-md' }, row.original.description),
       ])
     },
   },
   {
-    accessorKey: 'level',
-    header: $t('ADMIN.COURSES.COLUMN_LEVEL'),
-    filterFn: 'equals',
-    cell: ({ row }) => {
-      const color = {
-        beginner: 'success' as const,
-        intermediate: 'warning' as const,
-        advanced: 'error' as const,
-      }[row.original.level]
-
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        upperFirst(row.original.level))
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: $t('ADMIN.COURSES.COLUMN_STATUS'),
-    filterFn: 'equals',
-    cell: ({ row }) => {
-      const color = {
-        published: 'success' as const,
-        draft: 'warning' as const,
-        archived: 'neutral' as const,
-      }[row.original.status]
-
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        upperFirst(row.original.status))
-    },
-  },
-  {
-    accessorKey: 'lessonsCount',
-    header: $t('ADMIN.COURSES.COLUMN_LESSONS'),
-    cell: ({ row }) => row.original.lessonsCount || 0,
+    accessorKey: 'classesCount',
+    header: $t('ADMIN.COURSES.CLASSES'),
+    cell: ({ row }) => row.original.classes?.length || 0,
   },
   {
     id: 'actions',
@@ -233,10 +246,9 @@ watch(() => levelFilter.value, (newVal) => {
           <UDashboardSidebarCollapse />
         </template>
         <template #right>
-          <UButton
-            :label="$t('ADMIN.ADD_COURSE')"
-            icon="i-heroicons-plus"
-            color="primary"
+          <AdminCoursesAddModal
+            v-model:open="addModalOpen"
+            @created="handleCreated"
           />
         </template>
       </UDashboardNavbar>
@@ -250,15 +262,29 @@ watch(() => levelFilter.value, (newVal) => {
             class="w-full sm:w-64"
             @update:model-value="(value) => { if (columnFilters[0]) columnFilters[0].value = value }"
           />
+          <UButton
+            v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length"
+            :label="$t('COMMON.DELETE')"
+            color="error"
+            variant="subtle"
+            icon="i-heroicons-trash"
+            @click="openDeleteModal"
+          >
+            <template #trailing>
+              <UKbd>
+                {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length }}
+              </UKbd>
+            </template>
+          </UButton>
         </template>
         <template #right>
           <USelectMenu
             :model-value="statusFilter"
             :items="[
               { value: 'all', label: $t('COMMON.ALL') },
-              { value: 'published', label: $t('COURSE.STATUS.PUBLISHED') },
-              { value: 'draft', label: $t('COURSE.STATUS.DRAFT') },
-              { value: 'archived', label: $t('COURSE.STATUS.ARCHIVED') },
+              { value: 'PUBLISHED', label: $t('STATUS.COURSE.PUBLISHED') },
+              { value: 'DRAFT', label: $t('STATUS.COURSE.DRAFT') },
+              { value: 'ARCHIVED', label: $t('STATUS.COURSE.ARCHIVED') },
             ]"
             value-attribute="value"
             class="w-40"
@@ -268,9 +294,9 @@ watch(() => levelFilter.value, (newVal) => {
             :model-value="levelFilter"
             :items="[
               { value: 'all', label: $t('COMMON.ALL') },
-              { value: 'beginner', label: $t('COURSE.LEVELS.BEGINNER') },
-              { value: 'intermediate', label: $t('COURSE.LEVELS.INTERMEDIATE') },
-              { value: 'advanced', label: $t('COURSE.LEVELS.ADVANCED') },
+              { value: 'BEGINNER', label: $t('LEVELS.BEGINNER') },
+              { value: 'INTERMEDIATE', label: $t('LEVELS.INTERMEDIATE') },
+              { value: 'ADVANCED', label: $t('LEVELS.ADVANCED') },
             ]"
             value-attribute="value"
             class="w-40"
@@ -310,4 +336,23 @@ watch(() => levelFilter.value, (newVal) => {
       </UPageCard>
     </template>
   </UDashboardPanel>
+
+  <AdminCoursesDeleteModal
+    v-model:open="deleteModalOpen"
+    :courses="coursesToDelete"
+    @deleted="handleDeleted"
+  />
+
+  <AdminCoursesViewModal
+    v-model:open="viewModalOpen"
+    :course="selectedCourse"
+    @edit="handleViewEdit"
+    @delete="handleViewDelete"
+  />
+
+  <AdminCoursesEditModal
+    v-model:open="editModalOpen"
+    :course="selectedCourse"
+    @updated="handleDeleted"
+  />
 </template>

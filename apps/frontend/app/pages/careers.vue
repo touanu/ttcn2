@@ -13,7 +13,7 @@ interface Position {
   responsibilities: string[]
 }
 
-const { data: positions, pending, error } = await useFetch<Position[]>('/api/careers')
+const { data: positions, pending, error } = await useAPI<Position[]>('/api/careers')
 
 /* const openPositions: Position[] = [
   {

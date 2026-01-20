@@ -32,12 +32,38 @@
       "reAttach": true,
       "name": "Launch Firefox",
       "url": "http://localhost:3333/"
+    },
+    {
+      "type": "bun",
+      "runtimeArgs": ["run", "dev:backend"],
+      "request": "launch",
+      "name": "Bun: Dev Backend",
+      "cwd": "${workspaceFolder}",
+      "program": "."
+    },
+    {
+      "type": "bun",
+      "runtimeArgs": ["run", "dev:frontend"],
+      "request": "launch",
+      "name": "Bun: Dev Frontend",
+      "cwd": "${workspaceFolder}",
+      "program": ".",
+      "serverReadyAction": {
+        "action": "startDebugging",
+        "name": "Launch Firefox",
+        "killOnServerStop": false
+      }
     }
   ],
   "compounds": [
     {
       "name": "Development",
       "configurations": ["Dev: Run Backend", "Dev: Run Frontend"]
+    },
+    {
+      "name": "Bun: Dev",
+      "configurations": ["Bun: Dev Backend", "Bun: Dev Frontend"],
+      "preLaunchTask": "npm: install"
     }
   ]
 }

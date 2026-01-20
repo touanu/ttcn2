@@ -1,7 +1,6 @@
-import type { Permission } from '@shared/constants'
-import type { UserRole } from '@shared/types'
+import type { RequestWithUser } from '@interfaces/auth.interface'
+import type { Permission, UserRole } from '@shared/types'
 import type { NextFunction, Request, Response } from 'express'
-import type { RequestWithUser } from '@/interfaces/auth.interface'
 import { HttpException } from '@exceptions/HttpException'
 import {
   getRolePermissions,

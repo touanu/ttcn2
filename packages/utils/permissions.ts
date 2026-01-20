@@ -1,4 +1,4 @@
-import type { Permission } from '@shared/constants'
+import type { Permission } from '@shared/types'
 import { ROLE_PERMISSIONS } from '@shared/constants'
 
 /**
