@@ -2,11 +2,11 @@ import type { Enrollment } from '@shared/types/enrollment'
 import type { SuccessResponseBody } from '@shared/types/index'
 import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
+import { CoursesService } from '@services/courses.service'
 import { EnrollmentService } from '@services/enrollment.service'
 import { UsersService } from '@services/users.service'
 import { asyncHandler } from '@utils/asyncHandler'
-import { convertEnrollmentToResponse } from '@utils/convertToResponse'
-import { Types } from 'mongoose'
+import { convertEnrollmentToResponse, convertStringToObjectId } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -14,6 +14,7 @@ export class EnrollmentController {
   constructor(
     @inject(EnrollmentService) private enrollmentService: EnrollmentService,
     @inject(UsersService) private userService: UsersService,
+    @inject(CoursesService) private courseService: CoursesService,
   ) {}
 
   /**
@@ -70,10 +71,11 @@ export class EnrollmentController {
    */
   public getEnrollmentsByUser: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { userId } = req.params
-    const student = await this.userService.getUserById(userId)
 
-    if (!student || student.role !== 'student' || !student._id)
-      throw new HttpException(404, 'USERS.USER_NOT_FOUND')
+    const student = await this.userService.findOne({
+      _id: convertStringToObjectId(userId),
+      role: 'student',
+    })
 
     const enrollments = await this.enrollmentService.getEnrollmentsByUser(student._id)
     const response = enrollments.map(convertEnrollmentToResponse)
@@ -91,11 +93,8 @@ export class EnrollmentController {
   public getEnrollmentsByCourse: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { courseId } = req.params
 
-    if (!Types.ObjectId.isValid(courseId)) {
-      throw new HttpException(400, 'ENROLLMENT.INVALID_COURSE_ID')
-    }
-
-    const enrollments = await this.enrollmentService.getEnrollmentsByCourse(new Types.ObjectId(courseId))
+    const course = await this.courseService.getCourseById(courseId)
+    const enrollments = await this.enrollmentService.getEnrollmentsByCourse(course._id)
     const response = enrollments.map(convertEnrollmentToResponse)
 
     res.status(200).json({
@@ -111,15 +110,13 @@ export class EnrollmentController {
   public checkEnrollment: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { userId, courseId } = req.params
 
-    if (!Types.ObjectId.isValid(userId)) {
-      throw new HttpException(400, 'ENROLLMENT.INVALID_USER_ID')
-    }
+    const user = convertStringToObjectId(userId)
+    const course = convertStringToObjectId(courseId)
 
-    if (!Types.ObjectId.isValid(courseId)) {
-      throw new HttpException(400, 'ENROLLMENT.INVALID_COURSE_ID')
-    }
+    if (!user || !course)
+      throw new HttpException(400, 'ENROLLMENT.NOT_FOUND')
 
-    const isEnrolled = await this.enrollmentService.checkEnrollment(new Types.ObjectId(userId), new Types.ObjectId(courseId))
+    const isEnrolled = await this.enrollmentService.checkEnrollment(user, course)
 
     res.status(200).json({
       success: true,
@@ -178,7 +175,8 @@ export class EnrollmentController {
    */
   public countEnrollmentsByCourse: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { courseId } = req.params
-    const count = await this.enrollmentService.countEnrollmentsByCourse(new Types.ObjectId(courseId))
+    const course = await this.courseService.getCourseById(courseId)
+    const count = await this.enrollmentService.countEnrollmentsByCourse(course._id)
 
     res.status(200).json({
       success: true,

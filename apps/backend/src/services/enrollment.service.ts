@@ -1,4 +1,5 @@
 import type { EnrollmentDB } from '@interfaces/enrollment.interface'
+import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { EnrollmentModel } from '@models/enrollment.model'
 import { Types } from 'mongoose'
@@ -11,7 +12,7 @@ export class EnrollmentService {
    */
   public async createEnrollment(enrollmentData: Partial<EnrollmentDB>): Promise<EnrollmentDB> {
     const newEnrollment = await EnrollmentModel.create(enrollmentData)
-    return newEnrollment.populate(['userId', 'courseId'])
+    return newEnrollment
   }
 
   /**
@@ -62,18 +63,20 @@ export class EnrollmentService {
   /**
    * Lấy các đăng ký của người dùng
    */
-  public async getEnrollmentsByUser(userId: Types.ObjectId): Promise<EnrollmentDB[]> {
-    return EnrollmentModel.find({ userId } as any)
+  public async getEnrollmentsByUser(userId: ObjectId): Promise<EnrollmentDB[]> {
+    return EnrollmentModel.find({ userId })
       .populate('userId', 'fullName email')
       .populate('courseId', 'title')
       .sort({ enrolledAt: -1 })
+      .lean<EnrollmentDB[]>()
+      .exec()
   }
 
   /**
    * Lấy các đăng ký của khóa học
    */
-  public async getEnrollmentsByCourse(courseId: Types.ObjectId): Promise<EnrollmentDB[]> {
-    return EnrollmentModel.find({ courseId } as any)
+  public async getEnrollmentsByCourse(courseId: ObjectId): Promise<EnrollmentDB[]> {
+    return EnrollmentModel.find({ courseId })
       .populate('userId', 'fullName email')
       .populate('courseId', 'title')
       .sort({ enrolledAt: -1 })
@@ -105,12 +108,8 @@ export class EnrollmentService {
   /**
    * Kiểm tra đăng ký
    */
-  public async checkEnrollment(userId: Types.ObjectId, courseId: Types.ObjectId): Promise<boolean> {
-    const enrollment = await EnrollmentModel.findOne({
-      userId,
-      courseId,
-    } as any)
-
+  public async checkEnrollment(userId: ObjectId, courseId: ObjectId): Promise<boolean> {
+    const enrollment = await EnrollmentModel.countDocuments({ userId, courseId })
     return !!enrollment
   }
 
@@ -165,8 +164,8 @@ export class EnrollmentService {
   /**
    * Đếm số đăng ký của khóa học
    */
-  public async countEnrollmentsByCourse(courseId: Types.ObjectId): Promise<number> {
-    return EnrollmentModel.countDocuments({ courseId } as any)
+  public async countEnrollmentsByCourse(courseId: ObjectId): Promise<number> {
+    return EnrollmentModel.countDocuments({ courseId })
   }
 
   /**

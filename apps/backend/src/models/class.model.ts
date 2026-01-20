@@ -7,7 +7,6 @@ const ClassSchema = new Schema<ClassDB>({
   teacherId: { type: Schema.Types.ObjectId, ref: 'User' },
   studentIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   room: { type: String },
-  description: { type: String },
   maxStudents: { type: Number, default: 30 },
   status: { type: String, enum: ['PENDING', 'ACTIVE', 'COMPLETED'], default: 'PENDING' },
   startDate: { type: Date },

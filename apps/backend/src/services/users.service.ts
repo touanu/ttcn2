@@ -1,5 +1,6 @@
 import type { UserDB } from '@interfaces/users.interface'
 import type { Permission, User } from '@shared/types'
+import type { QueryFilter } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { UserModel } from '@models/users.model'
 import { getRolePermissions } from '@shared/utils'
@@ -12,7 +13,7 @@ export class UsersService {
     return await compare(currentPassword, hashedPassword)
   }
 
-  async getUserById(id: string): Promise<UserDB> {
+  async findUserById(id: string): Promise<UserDB> {
     const user = await UserModel.findById(id).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
@@ -26,28 +27,25 @@ export class UsersService {
     return user
   }
 
-  async findUserByUsernameInternal(username: string): Promise<UserDB> {
-    const user = await UserModel.findOne({ username }).lean<UserDB>().exec()
-    if (!user)
-      throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
-    return user
-  }
-
-  async findUserByEmailInternal(email: string): Promise<UserDB> {
+  async findUserByEmail(email: string): Promise<UserDB> {
     const user = await UserModel.findOne({ email }).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
-  async getUserByEmail(email: string): Promise<UserDB> {
-    const user = await UserModel.findOne({ email }).lean<UserDB>().exec()
+  async findUsers(filter: QueryFilter<UserDB>): Promise<UserDB[]> {
+    return await UserModel.find(filter).lean<UserDB[]>().exec()
+  }
+
+  async findOne(filter: QueryFilter<UserDB>): Promise<UserDB> {
+    const user = await UserModel.findOne(filter).lean<UserDB>().exec()
     if (!user)
       throw new HttpException(404, 'AUTH.USER_NOT_FOUND')
     return user
   }
 
-  async getAllUsers(options?: {
+  async findAllUsers(options?: {
     sort?: string
     limit?: number
   }): Promise<UserDB[]> {
@@ -117,7 +115,7 @@ export class UsersService {
   }
 
   async getUserPermissions(id: string): Promise<Permission[]> {
-    const user = await this.getUserById(id)
+    const user = await this.findUserById(id)
     const role = user.role || 'student'
     return getRolePermissions(role)
   }

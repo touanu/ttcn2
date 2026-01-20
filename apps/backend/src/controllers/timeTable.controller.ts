@@ -1,7 +1,7 @@
 import type { Class, TimeTable } from '@shared/types/class'
 import type { SuccessResponseBody } from '@shared/types/index'
 import type { Request, RequestHandler, Response } from 'express'
-import { ClassService } from '@services/class.service'
+import { ClassService } from '@services/classes.service'
 import { TimeTableService } from '@services/timeTable.service'
 import { asyncHandler } from '@utils/asyncHandler'
 import { convertClassToResponse, convertTimeTableToResponse } from '@utils/convertToResponse'

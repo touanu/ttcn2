@@ -7,7 +7,6 @@ const timeTableSchema = new Schema<TimeTableDB>({
   dayOfWeek: { type: Number, enum: Object.values(DAY_OF_WEEK), required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
-  description: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 })

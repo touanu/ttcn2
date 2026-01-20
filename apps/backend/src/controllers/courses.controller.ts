@@ -1,11 +1,10 @@
-import type { RequestWithUser } from '@interfaces/auth.interface'
-import type { Course, SuccessResponseBody } from '@shared/types'
+import type { Class, Course, GetAllQuery, SuccessResponseBody } from '@shared/types'
 import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { CoursesService } from '@services/courses.service'
 import { UsersService } from '@services/users.service'
 import { asyncHandler } from '@utils/asyncHandler'
-import { convertCourseToResponse } from '@utils/convertToResponse'
+import { convertClassToResponse, convertCourseToResponse, convertResponseToCourse } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -29,7 +28,9 @@ export class CoursesController {
   })
 
   getAllCourses: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const courses = await this.coursesService.getAllCourses()
+    const query: GetAllQuery = req.query
+
+    const courses = await this.coursesService.getAllCourses(query)
 
     const response: SuccessResponseBody<Course[]> = {
       success: true,
@@ -42,7 +43,7 @@ export class CoursesController {
 
   getCoursesByAuthor: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const authorId: string = req.params.authorId
-    const author = await this.userService.getUserById(authorId)
+    const author = await this.userService.findUserById(authorId)
     if (!author)
       throw new HttpException(404, 'USERS.NOT_FOUND')
 
@@ -101,16 +102,11 @@ export class CoursesController {
   })
 
   createCourse: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const userReq = req as RequestWithUser
     const courseData: Course = req.body
-    const { _id, ...dataToCreate } = courseData
 
-    // Get authorId from authenticated user
-    const authorId = userReq.user?._id
-    if (!authorId)
-      throw new HttpException(401, 'AUTH.UNAUTHORIZED')
-
-    const course = await this.coursesService.createCourse({ ...dataToCreate, authorId: authorId.toString() } as any)
+    const course = await this.coursesService.createCourse(
+      { ...convertResponseToCourse(courseData) },
+    )
 
     const response: SuccessResponseBody<Course> = {
       success: true,
@@ -143,6 +139,32 @@ export class CoursesController {
       success: true,
       data: null,
       message: 'COURSES.DELETE_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  getClassesDetail: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const courseId: string = req.params.id
+    const classes = await this.coursesService.getClassesDetail(courseId)
+
+    const response: SuccessResponseBody<Class[]> = {
+      success: true,
+      data: classes.map(convertClassToResponse),
+      message: 'CLASSES.GET_SUCCESS',
+    }
+
+    res.status(200).json(response)
+  })
+
+  getClassesCount: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const courseId: string = req.params.id
+    const classCount = await this.coursesService.getClassesCount(courseId)
+
+    const response: SuccessResponseBody<number> = {
+      success: true,
+      data: classCount,
+      message: 'CLASSES.GET_SUCCESS',
     }
 
     res.status(200).json(response)

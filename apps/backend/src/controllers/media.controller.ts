@@ -4,7 +4,7 @@ import type { Request, RequestHandler, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaService } from '@services/media.service'
 import { asyncHandler } from '@utils/asyncHandler'
-import { convertMediaToResponse } from '@utils/convertToResponse'
+import { convertMediaToResponse, convertStringToObjectId } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -41,7 +41,7 @@ export class MediaController {
       type = 'DOCUMENT'
     }
 
-    const media = await this.mediaService.createMedia({ url, type, ownerId: userId as any })
+    const media = await this.mediaService.createMedia({ url, type, ownerId: convertStringToObjectId(userId) })
 
     const response: SuccessResponseBody<Media> = {
       success: true,
@@ -67,7 +67,7 @@ export class MediaController {
 
   public getUserMedia: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userReq = req as RequestWithUser
-    const userId = userReq.user?._id?.toString()
+    const userId = userReq.user?._id
 
     if (!userId)
       throw new HttpException(401, 'AUTH.UNAUTHORIZED')

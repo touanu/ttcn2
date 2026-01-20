@@ -32,7 +32,7 @@ export class UsersController {
       }
     }
 
-    const users = await this.userService.getAllUsers(options)
+    const users = await this.userService.findAllUsers(options)
     const response: SuccessResponseBody<User[]> = {
       success: true,
       data: users.map(convertUserToResponse),
@@ -55,7 +55,7 @@ export class UsersController {
 
   getUserById: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
 
     const response: SuccessResponseBody<User> = {
       success: true,
@@ -69,6 +69,19 @@ export class UsersController {
   createUser: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userData: User = req.body
     const user = await this.userService.createUser(userData)
+
+    const response: SuccessResponseBody<User> = {
+      success: true,
+      data: convertUserToResponse(user),
+      message: 'USERS.CREATE_SUCCESS',
+    }
+
+    res.status(201).json(response)
+  })
+
+  registerStudent: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const userData: User = req.body
+    const user = await this.userService.createUser({ ...userData, role: 'student' })
 
     const response: SuccessResponseBody<User> = {
       success: true,
@@ -97,7 +110,7 @@ export class UsersController {
     const userId: string = req.params.id
     const { currentPassword, newPassword }: { currentPassword: string, newPassword: string } = req.body
 
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
     const isMatch = await this.userService.comparePassword(currentPassword, user.password)
     if (!isMatch) {
       throw new HttpException(400, 'USERS.CURRENT_PASSWORD_INCORRECT')
@@ -121,7 +134,7 @@ export class UsersController {
     }
 
     // Lấy thông tin người dùng cần xóa
-    const targetUser = await this.userService.getUserById(userId)
+    const targetUser = await this.userService.findUserById(userId)
     const actorRole: UserRole = userReq.user.role ?? 'student'
     const targetRole: UserRole = targetUser.role ?? 'student'
 
@@ -170,7 +183,7 @@ export class UsersController {
       email = user.email
     }
     else {
-      user = await this.userService.getUserByEmail(email)
+      user = await this.userService.findUserByEmail(email)
     }
 
     if (user.isEmailVerified)
@@ -193,7 +206,7 @@ export class UsersController {
 
   public verifyEmail: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (user.isEmailVerified)
       throw new HttpException(409, 'AUTH.EMAIL_ALREADY_VERIFIED')
@@ -214,7 +227,7 @@ export class UsersController {
 
   public requestPasswordReset: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (!user._id)
       throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
@@ -232,7 +245,7 @@ export class UsersController {
 
   public resetPassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { email, otp, newPassword } = req.body
-    const user = await this.userService.getUserByEmail(email)
+    const user = await this.userService.findUserByEmail(email)
 
     if (!user._id)
       throw new HttpException(400, 'AUTH.USER_NOT_FOUND')
@@ -303,7 +316,7 @@ export class UsersController {
    */
   public getUserPermissions: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const userId: string = req.params.id
-    const user = await this.userService.getUserById(userId)
+    const user = await this.userService.findUserById(userId)
     const permissions = await this.userService.getUserPermissions(userId)
 
     const response: SuccessResponseBody<{ role: UserRole, permissions: Permission[] }> = {

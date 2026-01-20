@@ -29,7 +29,7 @@ export class AuthController {
 
   public logIn: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const loginData: LoginCredential = req.body
-    const findUser = await this.userService.findUserByUsernameInternal(loginData.username)
+    const findUser = await this.userService.findUserByUsername(loginData.username)
 
     if (!findUser)
       throw new HttpException(401, 'AUTH.LOGIN.WRONG_CREDENTIALS')
@@ -61,7 +61,7 @@ export class AuthController {
   public refreshSession: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { sessionId, refreshToken } = req.body
     const session = await this.authService.getSessionById(sessionId)
-    const user = await this.userService.getUserById(session.userId.toString())
+    const user = await this.userService.findUserById(session.userId.toString())
     const data: RefreshTokenData = await this.authService.refreshSession(user, session, refreshToken)
 
     const response: SuccessResponseBody<RefreshTokenData> = {

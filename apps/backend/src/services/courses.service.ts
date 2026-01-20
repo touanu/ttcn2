@@ -1,5 +1,6 @@
+import type { ClassDB } from '@interfaces/class.interface'
 import type { CourseDB } from '@interfaces/courses.interface'
-import type { Course } from '@shared/types'
+import type { Course, GetAllQuery } from '@shared/types'
 import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { CourseModel } from '@models/course.model'
@@ -14,13 +15,7 @@ export class CoursesService {
     return course
   }
 
-  async getAllCourses(options?: {
-    search?: string
-    status?: string
-    page?: number
-    limit?: number
-    sort?: string
-  }): Promise<CourseDB[]> {
+  async getAllCourses(options?: GetAllQuery): Promise<CourseDB[]> {
     const query: any = {}
 
     // Filter by status
@@ -36,7 +31,7 @@ export class CoursesService {
       ]
     }
 
-    let queryBuilder = CourseModel.find(query as any)
+    let queryBuilder = CourseModel.find(query)
 
     // Apply sorting
     if (options?.sort) {
@@ -85,6 +80,44 @@ export class CoursesService {
   async deleteCourse(courseId: string): Promise<void> {
     const result = await CourseModel.findByIdAndDelete(courseId).exec()
     if (!result)
+      throw new HttpException(404, 'COURSE.NOT_FOUND')
+  }
+
+  async getClassesDetail(courseId: string): Promise<ClassDB[]> {
+    const course = await CourseModel
+      .findById(courseId)
+      .populate('classIds')
+      .lean<CourseDB>()
+      .exec()
+
+    if (!course)
+      throw new HttpException(404, 'COURSE.NOT_FOUND')
+
+    return course.classes as ClassDB[]
+  }
+
+  async getClassesCount(courseId: string): Promise<number> {
+    const course = await CourseModel
+      .findById(courseId)
+      .lean<CourseDB>()
+      .exec()
+
+    if (!course)
+      throw new HttpException(404, 'COURSE.NOT_FOUND')
+
+    return course.classes.length
+  }
+
+  async addClass(courseId: string, classId: ObjectId): Promise<void> {
+    const updatedCourse = await CourseModel
+      .findByIdAndUpdate(
+        courseId,
+        { $push: { classes: classId } },
+        { new: true },
+      )
+      .exec()
+
+    if (!updatedCourse)
       throw new HttpException(404, 'COURSE.NOT_FOUND')
   }
 }

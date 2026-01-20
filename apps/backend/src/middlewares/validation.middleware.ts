@@ -13,3 +13,18 @@ export function ValidationMiddleware(schema: ZodType) {
     next()
   }
 }
+
+export function QueryValidationMiddleware(schema: ZodType) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.query)
+    if (!result.success) {
+      const message = result.error.issues.map(e => e.message).join(', ')
+      return next(new HttpException(400, message))
+    }
+
+    req.query = {
+      ...result.data as object,
+    }
+    next()
+  }
+}

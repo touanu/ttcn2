@@ -1,4 +1,5 @@
 import type { MediaDB } from '@interfaces/media.interface'
+import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { MediaModel } from '@models/media.model'
 import { logger } from '@utils/logger'
@@ -29,8 +30,8 @@ export class MediaService {
     return media
   }
 
-  public async getMediaByOwner(ownerId: string): Promise<MediaDB[]> {
-    const mediaList = await MediaModel.find({ ownerId } as any)
+  public async getMediaByOwner(ownerId: ObjectId): Promise<MediaDB[]> {
+    const mediaList = await MediaModel.find({ ownerId })
       .sort({ createdAt: -1 })
       .lean<MediaDB[]>()
       .exec()
