@@ -15,8 +15,5 @@ export default defineEventHandler(async (event) => {
   })
 
   await clearUserSession(event)
-  return {
-    success: true,
-    message: await translate(event, 'AUTH.LOGOUT.SUCCESS'),
-  } as SuccessResponseBody<null>
+  return { success: true } as SuccessResponseBody<null>
 })

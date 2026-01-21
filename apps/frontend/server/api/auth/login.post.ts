@@ -18,6 +18,13 @@ export default defineEventHandler(async (event) => {
     method: 'POST',
   })
 
+  if (!loginData) {
+    throw createError({
+      status: 500,
+      message: await translate(event, 'ERRORS.INTERNAL_SERVER'),
+    })
+  }
+
   await setUserSession(event, {
     user: loginData.user,
     secure: {
