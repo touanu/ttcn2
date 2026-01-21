@@ -6,7 +6,7 @@ import { CoursesService } from '@services/courses.service'
 import { EnrollmentService } from '@services/enrollment.service'
 import { UsersService } from '@services/users.service'
 import { asyncHandler } from '@utils/asyncHandler'
-import { convertEnrollmentToResponse, convertStringToObjectId } from '@utils/convertToResponse'
+import { convertEnrollmentToResponse, convertResponseToEnrollment, convertStringToObjectId } from '@utils/convertToResponse'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
@@ -21,7 +21,7 @@ export class EnrollmentController {
    * Đăng ký khóa học
    */
   public createEnrollment: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const enrollmentData = req.body
+    const enrollmentData = convertResponseToEnrollment(req.body)
     const newEnrollment = await this.enrollmentService.createEnrollment(enrollmentData)
     const response = convertEnrollmentToResponse(newEnrollment)
 
@@ -94,6 +94,9 @@ export class EnrollmentController {
     const { courseId } = req.params
 
     const course = await this.courseService.getCourseById(courseId)
+    if (!course._id)
+      throw new HttpException(500, 'ERROS.INTERNAL_SERVER')
+
     const enrollments = await this.enrollmentService.getEnrollmentsByCourse(course._id)
     const response = enrollments.map(convertEnrollmentToResponse)
 
@@ -176,6 +179,8 @@ export class EnrollmentController {
   public countEnrollmentsByCourse: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { courseId } = req.params
     const course = await this.courseService.getCourseById(courseId)
+    if (!course._id)
+      throw new HttpException(500, 'ERROS.INTERNAL_SERVER')
     const count = await this.enrollmentService.countEnrollmentsByCourse(course._id)
 
     res.status(200).json({

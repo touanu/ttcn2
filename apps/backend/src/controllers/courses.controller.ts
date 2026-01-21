@@ -59,7 +59,7 @@ export class CoursesController {
   })
 
   getCourses: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const { search, status, page, limit, sort } = req.query
+    const { search, status, page, limit, sort, ids } = req.query
 
     const queryOptions: {
       search?: string
@@ -67,7 +67,11 @@ export class CoursesController {
       page?: number
       limit?: number
       sort?: string
+      ids?: string
     } = {}
+
+    if (ids && typeof ids === 'string')
+      queryOptions.ids = ids
 
     if (search && typeof search === 'string')
       queryOptions.search = search

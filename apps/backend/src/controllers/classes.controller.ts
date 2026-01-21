@@ -24,7 +24,7 @@ export class ClassController {
    * Tạo lớp học mới
    */
   public createClass: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const classData: Partial<Class> = req.body
+    const { _id, ...classData } = req.body as Partial<Class>
     const newClass = await this.classService.createClass({ ...classData })
     await this.courseService.addClass(newClass.courseId, newClass._id)
     const response = convertClassToResponse(newClass)
@@ -40,7 +40,19 @@ export class ClassController {
    * Lấy tất cả lớp học
    */
   public getAllClasses: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-    const classes = await this.classService.getAllClasses()
+    const { courseId } = req.query
+
+    let classes
+    if (courseId && typeof courseId === 'string') {
+      const courseObjectId = convertStringToObjectId(courseId)
+      if (!courseObjectId)
+        throw new HttpException(400, 'COURSES.ID.REQUIRED')
+      classes = await this.classService.getClassesByCourse(courseObjectId)
+    }
+    else {
+      classes = await this.classService.getAllClasses()
+    }
+
     const response = classes.map(convertClassToResponse)
 
     res.status(200).json({
@@ -195,7 +207,11 @@ export class ClassController {
    */
   public getTimeTablesByClass: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params
-    const timeTables = await this.timeTableService.getTimeTablesByClass(new Types.ObjectId(id))
+    const classes = await this.classService.getClassById(id)
+    if (!classes || !classes._id)
+      throw new HttpException(401, 'CLASSES.NOT_FOUND')
+
+    const timeTables = await this.timeTableService.getTimeTablesByClass(classes._id)
     const response = timeTables.map(convertTimeTableToResponse)
 
     res.status(200).json({
