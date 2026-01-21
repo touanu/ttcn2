@@ -69,6 +69,23 @@ export const deleteEnrollment = defineAbility((user: { permissions: string[] }) 
   return user.permissions.includes(PERMISSIONS.ENROLLMENTS.DELETE)
 })
 
+// Timetable abilities
+export const viewTimetable = defineAbility((user: { permissions: string[] }) => {
+  return user.permissions.includes(PERMISSIONS.TIMETABLE.VIEW)
+})
+
+export const createTimetable = defineAbility((user: { permissions: string[] }) => {
+  return user.permissions.includes(PERMISSIONS.TIMETABLE.CREATE)
+})
+
+export const updateTimetable = defineAbility((user: { permissions: string[] }) => {
+  return user.permissions.includes(PERMISSIONS.TIMETABLE.UPDATE)
+})
+
+export const deleteTimetable = defineAbility((user: { permissions: string[] }) => {
+  return user.permissions.includes(PERMISSIONS.TIMETABLE.DELETE)
+})
+
 // System abilities
 export const accessSystemSettings = defineAbility((user: { permissions: string[] }) => {
   return user.permissions.includes(PERMISSIONS.SYSTEM.SETTINGS)
