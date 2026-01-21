@@ -70,7 +70,7 @@ export class ClassRoute implements Routes {
     this.router.post(
       `${this.path}/:id/students`,
       AuthMiddleware,
-      requirePermission([PERMISSIONS.CLASS.UPDATE]),
+      requirePermission([PERMISSIONS.ENROLLMENTS.CREATE]),
       this.classController.addStudentToClass,
     )
 

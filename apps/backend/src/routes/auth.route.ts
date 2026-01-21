@@ -1,7 +1,6 @@
 import type { Routes } from '@interfaces/routes.interface'
 import { AuthController } from '@controllers/auth.controller'
 import { AuthMiddleware } from '@middlewares/auth.middleware'
-import { rateLimitMiddleware } from '@middlewares/rateLimit.middleware'
 import { ValidationMiddleware } from '@middlewares/validation.middleware'
 import {
   loginUserSchema,
@@ -23,7 +22,7 @@ export class AuthRoute implements Routes {
   private initializeRoutes() {
     this.router.post(
       `${this.path}/login`,
-      rateLimitMiddleware(10, true),
+      // rateLimitMiddleware(10, true),
       ValidationMiddleware(loginUserSchema),
       this.authController.logIn,
     )
@@ -35,7 +34,7 @@ export class AuthRoute implements Routes {
     )
     this.router.post(
       `${this.path}/refresh`,
-      rateLimitMiddleware(30, true),
+      // rateLimitMiddleware(30, true),
       ValidationMiddleware(refreshTokenSchema),
       this.authController.refreshSession,
     )
