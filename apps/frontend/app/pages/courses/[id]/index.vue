@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import type { Class, Course, TimeTable } from '@shared/types'
+import { DAY_OF_WEEK } from '@shared/constants'
+import { getKeyByValue } from '@shared/utils'
 
 definePageMeta({
   title: 'Course Details',
@@ -33,6 +35,7 @@ const { data: enrollmentCount } = await useAPI<number>(
 const { data: enrollmentStatus, refresh: refreshEnrollmentStatus } = await useAPI<{ isEnrolled: boolean, enrollment?: any }>(
   `/api/enrollments/check/${user.value?.id || 'guest'}/${courseId}`,
   {
+    server: false,
     immediate: !!user.value?.id,
   },
 )
@@ -140,14 +143,6 @@ function handleViewClasses() {
               >
                 {{ $t('COURSES.VIEW_SCHEDULE') }}
               </UButton>
-              <UButton
-                v-if="!isEnrolled"
-                color="neutral"
-                size="xl"
-                disabled
-              >
-                {{ $t('COURSES.NOT_AVAILABLE') }}
-              </UButton>
             </div>
           </div>
         </div>
@@ -166,7 +161,7 @@ function handleViewClasses() {
             </template>
 
             <div class="prose dark:prose-invert max-w-none">
-              <p>{{ course.description }}</p>
+              <p v-text="course.description" />
             </div>
           </UCard>
 
@@ -207,18 +202,18 @@ function handleViewClasses() {
                     :color="classItem.status === 'ACTIVE' ? 'success' : classItem.status === 'COMPLETED' ? 'neutral' : 'warning'"
                     variant="subtle"
                   >
-                    {{ $t(`CLASSES.STATUS.${classItem.status}`) }}
+                    {{ $t(`STATUS.CLASS.${classItem.status}`) }}
                   </UBadge>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mb-4">
                   <div class="flex items-center gap-2 text-sm">
                     <UIcon name="i-heroicons-calendar" class="text-gray-500" />
-                    <span>{{ $t('CLASSES.START') }}: {{ classItem.openedAt ? new Date(classItem.openedAt).toLocaleDateString() : 'TBA' }}</span>
+                    <span>{{ $t('CLASSES.START') }}: {{ classItem.startDate ? new Date(classItem.startDate).toLocaleDateString() : 'TBA' }}</span>
                   </div>
                   <div class="flex items-center gap-2 text-sm">
                     <UIcon name="i-heroicons-calendar" class="text-gray-500" />
-                    <span>{{ $t('CLASSES.END') }}: {{ classItem.endedAt ? new Date(classItem.endedAt).toLocaleDateString() : 'TBA' }}</span>
+                    <span>{{ $t('CLASSES.END') }}: {{ classItem.endDate ? new Date(classItem.endDate).toLocaleDateString() : 'TBA' }}</span>
                   </div>
                   <div class="flex items-center gap-2 text-sm">
                     <UIcon name="i-heroicons-users" class="text-gray-500" />
@@ -231,7 +226,7 @@ function handleViewClasses() {
                 </div>
 
                 <!-- Timetable -->
-                <div v-if="timetables[classItem._id!]?.length" class="mb-4">
+                <div v-if="timetables && timetables[classItem._id!]?.length" class="mb-4">
                   <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {{ $t('COURSES.SCHEDULE') }}:
                   </div>
@@ -243,7 +238,7 @@ function handleViewClasses() {
                       variant="subtle"
                       size="sm"
                     >
-                      {{ $t(`COMMON.DAYS.${schedule.dayOfWeek}`) }}:
+                      {{ $t(`COMMON.DAYS.${getKeyByValue(DAY_OF_WEEK, schedule.dayOfWeek)}`) }}:
                       {{ new Date(schedule.startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}
                       -
                       {{ new Date(schedule.endTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}
