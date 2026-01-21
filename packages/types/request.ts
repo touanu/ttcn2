@@ -7,4 +7,5 @@ export interface GetAllQuery {
   limit?: number
   sort?: string
   populate?: PopulateOptions[]
+  ids?: string
 }

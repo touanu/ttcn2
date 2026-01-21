@@ -3,5 +3,6 @@
 // export * from './currentDirectory'
 
 export * from './email'
+export * from './object'
 export * from './permissions'
 export * from './validation'
