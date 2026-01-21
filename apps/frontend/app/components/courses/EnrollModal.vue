@@ -12,7 +12,6 @@ const emit = defineEmits<{
 
 const { $api } = useNuxtApp()
 const open = defineModel<boolean>('open', { required: true })
-const router = useRouter()
 const toast = useToast()
 
 const selectedClassId = ref<string>()
@@ -51,19 +50,10 @@ async function handleEnroll() {
     body: {
       classId: selectedClassId.value,
     },
-  })
-
-  toast.add({
-    title: $t('SUCCESS_TITLE'),
-    description: $t('COURSES.ENROLLED_SUCCESSFULLY'),
-    color: 'success',
-  })
+  }).catch(() => { enrolling.value = false })
 
   open.value = false
   emit('enrolled')
-
-  // Redirect to my courses
-  router.push('/courses')
 
   enrolling.value = false
 }
@@ -117,9 +107,6 @@ watch(open, (isOpen) => {
                 <h4 class="font-semibold mb-1">
                   {{ classItem.name }}
                 </h4>
-                <p v-if="classItem.description" class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ classItem.description }}
-                </p>
               </div>
               <UIcon
                 v-if="selectedClassId === classItem._id"

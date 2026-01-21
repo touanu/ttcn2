@@ -75,16 +75,16 @@ async function onLoginSubmit(payload: FormSubmitEvent<LoginUserDto>): Promise<vo
 
     toast.add({
       title: $t('ERRORS.TITLE'),
-      description: $t(response.message || 'GENERIC_ERROR'),
+      description: response.message || $t('GENERIC_ERROR'),
       icon: 'i-lucide-alert-circle',
       color: 'error',
     })
-    return
   }
-
-  closeModal()
-  await refreshSession()
-  await navigateTo('/')
+  else {
+    closeModal()
+    await refreshSession()
+    await navigateTo('/')
+  }
 
   isLoading.value = false
 }

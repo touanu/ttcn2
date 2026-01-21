@@ -112,15 +112,6 @@ const canDelete = computed(() => {
 
           <div>
             <label class="text-sm font-medium text-muted">
-              {{ $t('COMMON.USER_ID') }}
-            </label>
-            <p class="mt-1 text-sm text-highlighted font-mono">
-              {{ user._id || $t('COMMON.NOT_AVAILABLE') }}
-            </p>
-          </div>
-
-          <div>
-            <label class="text-sm font-medium text-muted">
               {{ $t('COMMON.ROLE') }}
             </label>
             <p class="mt-1">
@@ -153,7 +144,7 @@ const canDelete = computed(() => {
             </p>
           </div>
 
-          <div class="md:col-span-2">
+          <div class="">
             <label class="text-sm font-medium text-muted">
               {{ $t('COMMON.UPDATED_AT') }}
             </label>
