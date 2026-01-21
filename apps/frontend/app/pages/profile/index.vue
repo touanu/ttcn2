@@ -6,17 +6,8 @@ definePageMeta({
   title: 'Profile',
 })
 
-interface UserStats {
-  coursesEnrolled: number
-  lessonsCompleted: number
-  achievements: number
-  dayStreak: number
-}
-
 const { locale } = useI18n()
-const { data: user, pending, error, refresh } = await useAPI<User>('/api/profile')
-
-const { data: stats, pending: statsPending } = await useAPI<UserStats>('/api/profile/stats')
+const { data: user, pending, error, refresh } = await useAPI<User>('/api/profile', { server: false })
 
 const formattedCreatedAt = computed(() => formatDate(user.value?.createdAt, locale.value))
 const formattedUpdatedAt = computed(() => formatDate(user.value?.updatedAt, locale.value))
@@ -87,37 +78,6 @@ const formattedUpdatedAt = computed(() => formatDate(user.value?.updatedAt, loca
           </div>
         </div>
       </UCard>
-
-      <!-- Statistics -->
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <CommonStatCard
-          icon="i-heroicons-book-open"
-          :label="$t('PROFILE.STATS.COURSES_ENROLLED')"
-          :value="statsPending ? '...' : (stats?.coursesEnrolled || 0)"
-          color="blue"
-        />
-
-        <CommonStatCard
-          icon="i-heroicons-academic-cap"
-          :label="$t('PROFILE.STATS.LESSONS_COMPLETED')"
-          :value="statsPending ? '...' : (stats?.lessonsCompleted || 0)"
-          color="green"
-        />
-
-        <CommonStatCard
-          icon="i-heroicons-trophy"
-          :label="$t('PROFILE.STATS.ACHIEVEMENTS')"
-          :value="statsPending ? '...' : (stats?.achievements || 0)"
-          color="purple"
-        />
-
-        <CommonStatCard
-          icon="i-heroicons-fire"
-          :label="$t('PROFILE.STATS.DAY_STREAK')"
-          :value="statsPending ? '...' : (stats?.dayStreak || 0)"
-          color="orange"
-        />
-      </div>
 
       <!-- Account Information -->
       <UCard>

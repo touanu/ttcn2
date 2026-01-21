@@ -12,7 +12,10 @@ const toast = useToast()
 const { locale } = useI18n()
 const router = useRouter()
 
-const { data: user } = await useAPI<User>('/api/profile')
+const { data: user } = await useAPI<User>('/api/profile', {
+  lazy: true,
+  server: false,
+})
 
 const passwordSchema = z.object({
   currentPassword: basePasswordSchema,
@@ -44,12 +47,6 @@ async function onChangePassword() {
     },
   })
 
-  toast.add({
-    title: $t('PROFILE.SUCCESS.PASSWORD_UPDATED'),
-    color: 'success',
-    icon: 'i-heroicons-check-circle',
-  })
-
   passwordForm.currentPassword = ''
   passwordForm.newPassword = ''
   passwordForm.confirmPassword = ''
@@ -59,29 +56,17 @@ async function onChangePassword() {
 async function onDeleteAccount() {
   isDeletingAccount.value = true
 
-  try {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
-    toast.add({
-      title: $t('PROFILE.SUCCESS.ACCOUNT_DELETED'),
-      color: 'success',
-      icon: 'i-heroicons-check-circle',
-    })
+  toast.add({
+    title: $t('PROFILE.SUCCESS.ACCOUNT_DELETED'),
+    color: 'success',
+    icon: 'i-heroicons-check-circle',
+  })
 
-    router.push('/')
-  }
-  catch (err: any) {
-    toast.add({
-      title: $t('PROFILE.ERROR.ACCOUNT_DELETE_FAILED'),
-      description: err.message || $t('COMMON.ERROR.UNKNOWN'),
-      color: 'error',
-      icon: 'i-heroicons-x-circle',
-    })
-  }
-  finally {
-    isDeletingAccount.value = false
-    showDeleteConfirmation.value = false
-  }
+  router.push('/')
+  isDeletingAccount.value = false
+  showDeleteConfirmation.value = false
 }
 </script>
 
@@ -260,61 +245,63 @@ async function onDeleteAccount() {
                 {{ $t('PROFILE.SECURITY.DELETE_ACCOUNT_DESC') }}
               </p>
             </div>
-            <UButton
-              color="error"
-              variant="soft"
-              @click="showDeleteConfirmation = true"
-            >
-              {{ $t('PROFILE.SECURITY.DELETE_ACCOUNT_BTN') }}
-            </UButton>
+            <!-- Delete Confirmation Modal -->
+            <UModal v-model="showDeleteConfirmation" title="{{ $t('PROFILE.SECURITY.DELETE_ACCOUNT_BTN') }}">
+              <UButton
+                color="error"
+                variant="soft"
+                @click="showDeleteConfirmation = true"
+              >
+                {{ $t('PROFILE.SECURITY.DELETE_ACCOUNT_BTN') }}
+              </UButton>
+
+              <template #content>
+                <UCard>
+                  <template #header>
+                    <div class="flex items-center gap-3">
+                      <UIcon name="i-heroicons-exclamation-triangle" class="h-6 w-6 text-red-500" />
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        {{ $t('PROFILE.SECURITY.DELETE_CONFIRMATION_TITLE') }}
+                      </h3>
+                    </div>
+                  </template>
+
+                  <div class="space-y-4">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ $t('PROFILE.SECURITY.DELETE_CONFIRMATION_DESC') }}
+                    </p>
+
+                    <div class="rounded-lg bg-red-50 p-4 dark:bg-red-950/20">
+                      <p class="text-sm font-medium text-red-900 dark:text-red-200">
+                        {{ $t('PROFILE.SECURITY.DELETE_WARNING') }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <template #footer>
+                    <div class="flex items-center justify-end gap-2">
+                      <UButton
+                        color="neutral"
+                        variant="ghost"
+                        @click="showDeleteConfirmation = false"
+                      >
+                        {{ $t('COMMON.CANCEL') }}
+                      </UButton>
+                      <UButton
+                        color="error"
+                        :loading="isDeletingAccount"
+                        @click="onDeleteAccount"
+                      >
+                        {{ $t('PROFILE.SECURITY.CONFIRM_DELETE') }}
+                      </UButton>
+                    </div>
+                  </template>
+                </UCard>
+              </template>
+            </UModal>
           </div>
         </div>
       </UCard>
     </div>
-
-    <!-- Delete Confirmation Modal -->
-    <UModal v-model="showDeleteConfirmation">
-      <UCard>
-        <template #header>
-          <div class="flex items-center gap-3">
-            <UIcon name="i-heroicons-exclamation-triangle" class="h-6 w-6 text-red-500" />
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              {{ $t('PROFILE.SECURITY.DELETE_CONFIRMATION_TITLE') }}
-            </h3>
-          </div>
-        </template>
-
-        <div class="space-y-4">
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            {{ $t('PROFILE.SECURITY.DELETE_CONFIRMATION_DESC') }}
-          </p>
-
-          <div class="rounded-lg bg-red-50 p-4 dark:bg-red-950/20">
-            <p class="text-sm font-medium text-red-900 dark:text-red-200">
-              {{ $t('PROFILE.SECURITY.DELETE_WARNING') }}
-            </p>
-          </div>
-        </div>
-
-        <template #footer>
-          <div class="flex items-center justify-end gap-2">
-            <UButton
-              color="neutral"
-              variant="ghost"
-              @click="showDeleteConfirmation = false"
-            >
-              {{ $t('COMMON.CANCEL') }}
-            </UButton>
-            <UButton
-              color="error"
-              :loading="isDeletingAccount"
-              @click="onDeleteAccount"
-            >
-              {{ $t('PROFILE.SECURITY.CONFIRM_DELETE') }}
-            </UButton>
-          </div>
-        </template>
-      </UCard>
-    </UModal>
   </NuxtLayout>
 </template>

@@ -10,7 +10,10 @@ const toast = useToast()
 const { setLocale, locale } = useI18n()
 
 // Fetch current user data
-const { data: user, pending, error } = await useAPI<User>('/api/profile')
+const { data: user, pending, error } = await useAPI<User>('/api/profile', {
+  server: false,
+  lazy: true,
+})
 
 // Form state
 const formState = reactive({
@@ -141,44 +144,6 @@ async function requestVerifyEmail() {
         class="space-y-8"
         @submit="onSubmit"
       >
-        <!-- Profile Picture Section -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-photo" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-            <h4 class="text-base font-medium text-gray-900 dark:text-white">
-              {{ $t('PROFILE.SETTINGS.PROFILE_PICTURE') }}
-            </h4>
-          </div>
-
-          <UFormField
-            name="profilePictureUrl"
-            :hint="$t('PROFILE.SETTINGS.PROFILE_PICTURE_HINT')"
-            class="pl-7"
-          >
-            <div class="flex items-start gap-6">
-              <UAvatar
-                :src="formState.profilePictureUrl"
-                :alt="formState.fullName"
-                size="2xl"
-                class="ring-4 ring-gray-100 dark:ring-gray-800"
-              />
-              <div class="flex-1 space-y-2">
-                <UInput
-                  v-model="formState.profilePictureUrl"
-                  :placeholder="$t('PROFILE.SETTINGS.PROFILE_PICTURE_URL')"
-                  size="lg"
-                >
-                  <template #leading>
-                    <UIcon name="i-heroicons-link" class="h-5 w-5" />
-                  </template>
-                </UInput>
-              </div>
-            </div>
-          </UFormField>
-        </div>
-
-        <USeparator />
-
         <!-- Personal Information Section -->
         <div class="space-y-4">
           <div class="flex items-center gap-2">
@@ -207,78 +172,6 @@ async function requestVerifyEmail() {
               </UInput>
             </UFormField>
 
-            <!-- Username -->
-            <UFormField
-              :label="$t('FORMS.USERNAME.LABEL')"
-              name="username"
-              required
-            >
-              <UInput
-                v-model="formState.username"
-                type="text"
-                :placeholder="$t('FORMS.USERNAME.PLACEHOLDER')"
-                size="lg"
-              >
-                <template #leading>
-                  <UIcon name="i-heroicons-at-symbol" class="h-5 w-5" />
-                </template>
-              </UInput>
-            </UFormField>
-          </div>
-        </div>
-
-        <USeparator />
-
-        <!-- Localization Section -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-language" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-            <h4 class="text-base font-medium text-gray-900 dark:text-white">
-              {{ $t('SETTINGS.LOCALIZATION') }}
-            </h4>
-          </div>
-
-          <div class="pl-7">
-            <UFormField
-              :label="$t('SETTINGS.LANGUAGE')"
-              :description="$t('SETTINGS.LANGUAGE_DESC')"
-            >
-              <USelectMenu
-                :model-value="{ value: locale, label: locale === 'vi' ? 'Tiếng Việt' : 'English', icon: locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us' }"
-                :items="[{
-                  value: 'vi',
-                  label: 'Tiếng Việt',
-                  icon: 'i-circle-flags-vn',
-                }, {
-                  value: 'en',
-                  label: 'English',
-                  icon: 'i-circle-flags-us',
-                }]"
-                value-attribute="value"
-                size="lg"
-                @update:model-value="(item) => setLocale(item.value as 'vi' | 'en')"
-              >
-                <template #leading>
-                  <UIcon :name="locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us'" class="h-5 w-5" />
-                </template>
-              </USelectMenu>
-            </UFormField>
-          </div>
-        </div>
-
-        <USeparator />
-
-        <!-- Contact Information Section -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-envelope" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-            <h4 class="text-base font-medium text-gray-900 dark:text-white">
-              {{ $t('PROFILE.SETTINGS.CONTACT_INFO') }}
-            </h4>
-          </div>
-
-          <div class="pl-7">
-            <!-- Email -->
             <UFormField
               :label="$t('FORMS.EMAIL.LABEL')"
               name="email"
@@ -316,36 +209,75 @@ async function requestVerifyEmail() {
               </div>
             </UFormField>
           </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="flex items-center justify-between border-t border-gray-200 pt-6 dark:border-gray-800">
-          <UButton
-            color="neutral"
-            variant="ghost"
-            type="button"
-            size="lg"
-            :disabled="!hasChanges"
-            @click="resetForm"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-arrow-uturn-left" />
-            </template>
-            {{ $t('COMMON.CANCEL') }}
-          </UButton>
+          <USeparator />
 
-          <UButton
-            type="submit"
-            color="primary"
-            size="lg"
-            :loading="isSubmitting"
-            :disabled="!hasChanges"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-check" />
-            </template>
-            {{ $t('COMMON.SAVE_CHANGES') }}
-          </UButton>
+          <!-- Localization Section -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-language" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+              <h4 class="text-base font-medium text-gray-900 dark:text-white">
+                {{ $t('SETTINGS.LOCALIZATION') }}
+              </h4>
+            </div>
+
+            <div class="pl-7">
+              <UFormField
+                :label="$t('SETTINGS.LANGUAGE')"
+                :description="$t('SETTINGS.LANGUAGE_DESC')"
+              >
+                <USelectMenu
+                  :model-value="{ value: locale, label: locale === 'vi' ? 'Tiếng Việt' : 'English', icon: locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us' }"
+                  :items="[{
+                    value: 'vi',
+                    label: 'Tiếng Việt',
+                    icon: 'i-circle-flags-vn',
+                  }, {
+                    value: 'en',
+                    label: 'English',
+                    icon: 'i-circle-flags-us',
+                  }]"
+                  value-attribute="value"
+                  size="lg"
+                  @update:model-value="(item) => setLocale(item.value as 'vi' | 'en')"
+                >
+                  <template #leading>
+                    <UIcon :name="locale === 'vi' ? 'i-circle-flags-vn' : 'i-circle-flags-us'" class="h-5 w-5" />
+                  </template>
+                </USelectMenu>
+              </UFormField>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-between border-t border-gray-200 pt-6 dark:border-gray-800">
+            <UButton
+              color="neutral"
+              variant="ghost"
+              type="button"
+              size="lg"
+              :disabled="!hasChanges"
+              @click="resetForm"
+            >
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-uturn-left" />
+              </template>
+              {{ $t('COMMON.CANCEL') }}
+            </UButton>
+
+            <UButton
+              type="submit"
+              color="primary"
+              size="lg"
+              :loading="isSubmitting"
+              :disabled="!hasChanges"
+            >
+              <template #leading>
+                <UIcon name="i-heroicons-check" />
+              </template>
+              {{ $t('COMMON.SAVE_CHANGES') }}
+            </UButton>
+          </div>
         </div>
       </UForm>
     </UCard>
