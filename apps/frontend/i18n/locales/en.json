@@ -58,9 +58,45 @@
       "ACTION_MENU_TITLE": "User Actions",
       "DROPDOWN": {
         "PROFILE": "Profile",
+        "MY_COURSES": "My Courses",
         "SETTINGS": "Settings",
         "LOGOUT": "Logout"
       }
+    }
+  },
+  "MY_COURSES": {
+    "TITLE": "My Courses",
+    "DESCRIPTION": "Track your learning journey and manage your enrolled courses",
+    "STATS": {
+      "TOTAL": "Total Courses",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed"
+    },
+    "FILTER": {
+      "ALL": "All Courses",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "DROPPED": "Dropped"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "DROPPED": "Dropped",
+      "UNKNOWN": "Unknown"
+    },
+    "PROGRESS": "Progress",
+    "ENROLLED_AT": "Enrolled",
+    "COMPLETED_AT": "Completed",
+    "CLASSES": "Classes",
+    "SCHEDULE": "Schedule",
+    "ROOM": "Room",
+    "NO_CLASSES": "No classes available",
+    "CONTINUE": "Continue Learning",
+    "REVIEW": "Review Course",
+    "EMPTY": {
+      "TITLE": "No Enrolled Courses",
+      "DESCRIPTION": "You haven't enrolled in any courses yet. Explore our course catalog to get started!",
+      "BROWSE_COURSES": "Browse Courses"
     }
   },
   "AUTH": {
@@ -284,7 +320,8 @@
     },
     "ERROR": {
       "UNKNOWN": "An unknown error occurred"
-    }
+    },
+    "REFRESH": "Refresh"
   },
   "ADMIN": {
     "TITLE": "Admin Panel",
@@ -466,7 +503,22 @@
       "DELETE_WARNING": "This action cannot be undone. This will permanently delete the selected class(es).",
       "CLASSES_TO_DELETE": "Classes to delete:",
       "AND_MORE": "and {count} more...",
-      "DELETE_MODAL_TITLE": "Delete Class(es)"
+      "DELETE_MODAL_TITLE": "Delete Class(es)",
+      "TIMETABLE": {
+        "TITLE": "Manage Timetable",
+        "MANAGE": "Manage Timetable",
+        "ADD": "Add Schedule",
+        "EDIT": "Edit Schedule",
+        "DELETE_CONFIRM": "Are you sure you want to delete this schedule?",
+        "NO_TIMETABLES": "No schedules yet. Click 'Add Schedule' to create one.",
+        "DAY_OF_WEEK": "Day of Week",
+        "SELECT_DAY": "Select a day",
+        "START_TIME": "Start Time",
+        "END_TIME": "End Time",
+        "CREATED": "Schedule created successfully",
+        "UPDATED": "Schedule updated successfully",
+        "DELETED": "Schedule deleted successfully"
+      }
     },
     "CATEGORIES": {
       "TITLE": "Course Categories",

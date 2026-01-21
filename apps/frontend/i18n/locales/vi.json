@@ -31,7 +31,7 @@
     },
     "CLASS": {
       "ACTIVE": "Đang hoạt động",
-      "PENDING": "Đang chờ",
+      "PENDING": "Chưa bắt đầu",
       "COMPLETED": "Đã hoàn thành",
       "CANCELLED": "Đã hủy"
     },
@@ -58,9 +58,45 @@
       "ACTION_MENU_TITLE": "Hành Động Người Dùng",
       "DROPDOWN": {
         "PROFILE": "Hồ sơ của tôi",
+        "MY_COURSES": "Khóa học của tôi",
         "SETTINGS": "Cài đặt",
         "LOGOUT": "Đăng xuất"
       }
+    }
+  },
+  "MY_COURSES": {
+    "TITLE": "Khóa học của tôi",
+    "DESCRIPTION": "Theo dõi hành trình học tập và quản lý các khóa học đã đăng ký",
+    "STATS": {
+      "TOTAL": "Tổng số khóa học",
+      "IN_PROGRESS": "Đang học",
+      "COMPLETED": "Đã hoàn thành"
+    },
+    "FILTER": {
+      "ALL": "Tất cả khóa học",
+      "IN_PROGRESS": "Đang học",
+      "COMPLETED": "Đã hoàn thành",
+      "DROPPED": "Đã hủy"
+    },
+    "STATUS": {
+      "IN_PROGRESS": "Đang học",
+      "COMPLETED": "Đã hoàn thành",
+      "DROPPED": "Đã hủy",
+      "UNKNOWN": "Không xác định"
+    },
+    "PROGRESS": "Tiến độ",
+    "ENROLLED_AT": "Đăng ký",
+    "COMPLETED_AT": "Hoàn thành",
+    "CLASSES": "Lớp học",
+    "SCHEDULE": "Lịch học",
+    "ROOM": "Phòng",
+    "NO_CLASSES": "Chưa có lớp học",
+    "CONTINUE": "Tiếp tục học",
+    "REVIEW": "Xem lại khóa học",
+    "EMPTY": {
+      "TITLE": "Chưa có khóa học nào",
+      "DESCRIPTION": "Bạn chưa đăng ký khóa học nào. Khám phá danh mục khóa học để bắt đầu!",
+      "BROWSE_COURSES": "Khám phá khóa học"
     }
   },
   "AUTH": {
@@ -285,7 +321,8 @@
     },
     "ERROR": {
       "UNKNOWN": "Đã xảy ra lỗi không xác định"
-    }
+    },
+    "REFRESH": "Tải lại"
   },
   "ADMIN": {
     "TITLE": "Quản Trị",
@@ -467,7 +504,22 @@
       "DELETE_WARNING": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn các lớp học đã chọn.",
       "CLASSES_TO_DELETE": "Các lớp học sẽ xóa:",
       "AND_MORE": "và {count} lớp học nữa...",
-      "DELETE_MODAL_TITLE": "Xóa lớp học"
+      "DELETE_MODAL_TITLE": "Xóa lớp học",
+      "TIMETABLE": {
+        "TITLE": "Quản lý Lịch học",
+        "MANAGE": "Quản lý Lịch học",
+        "ADD": "Thêm Lịch học",
+        "EDIT": "Chỉnh sửa Lịch học",
+        "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa lịch học này?",
+        "NO_TIMETABLES": "Chưa có lịch học. Nhấn 'Thêm Lịch học' để tạo mới.",
+        "DAY_OF_WEEK": "Ngày trong tuần",
+        "SELECT_DAY": "Chọn ngày",
+        "START_TIME": "Thời gian bắt đầu",
+        "END_TIME": "Thời gian kết thúc",
+        "CREATED": "Đã tạo lịch học thành công",
+        "UPDATED": "Đã cập nhật lịch học thành công",
+        "DELETED": "Đã xóa lịch học thành công"
+      }
     },
     "CATEGORIES": {
       "TITLE": "Danh mục khóa học",
