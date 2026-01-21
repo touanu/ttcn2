@@ -9,6 +9,7 @@ import { CoursesRoute } from '@routes/courses.route'
 import { EnrollmentRoute } from '@routes/enrollment.route'
 import { MediaRoute } from '@routes/media.route'
 import { UsersRoute } from '@routes/users.route'
+import { TimeTableRoute } from '@routes/timeTable.route'
 import { container } from 'tsyringe'
 import App from '@/app'
 import '@shared/config'
@@ -21,6 +22,7 @@ const routes = [
   container.resolve(MediaRoute),
   container.resolve(ClassRoute),
   container.resolve(EnrollmentRoute),
+  container.resolve(TimeTableRoute),
 ]
 
 // Tạo instance của ứng dụng

@@ -182,3 +182,12 @@ export function convertEnrollmentToResponse(enrollment: EnrollmentDB): Enrollmen
     courseId: convertObjectId(enrollment.courseId) as string,
   }
 }
+
+export function convertResponseToEnrollment(response: Enrollment): EnrollmentDB {
+  return {
+    ...response,
+    _id: convertStringToObjectId(response._id),
+    userId: convertStringToObjectId(response.userId) as ObjectId,
+    courseId: convertStringToObjectId(response.courseId) as ObjectId,
+  }
+}

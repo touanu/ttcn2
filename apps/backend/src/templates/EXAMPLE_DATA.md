@@ -8,7 +8,7 @@ File này chứa dữ liệu mẫu để test các email templates.
 
 ```javascript
 {
-  appName: "Englearn",
+  appName: "Zenlish",
   username: "Nguyễn Văn A",
   otp: "123456",
   expiresInMinutes: 15,
@@ -48,7 +48,7 @@ Expires in 15 minutes.
 
 ```javascript
 {
-  appName: "Englearn",
+  appName: "Zenlish",
   username: "Nguyễn Văn A",
   otp: "654321",
   expiresInMinutes: 15,
@@ -92,7 +92,7 @@ import { renderMJMLTemplate, renderTemplate } from '../utils/renderTemplate';
 
 // Test Email Verification
 const emailVerificationData = {
-  appName: 'Englearn',
+  appName: 'Zenlish',
   username: 'Nguyễn Văn A',
   otp: '123456',
   expiresInMinutes: 15,
@@ -120,7 +120,7 @@ npm run build
 npx ts-node -e "
 import { renderMJMLTemplate } from './src/utils/renderTemplate';
 const data = {
-  appName: 'Englearn',
+  appName: 'Zenlish',
   username: 'Test User',
   otp: '123456',
   expiresInMinutes: 15,

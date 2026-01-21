@@ -28,7 +28,7 @@ export async function sendMail(
   mailTemplate: string,
   mailData: Record<string, any>,
 ): Promise<Error | void> {
-  mailData.appName = 'Englearn'
+  mailData.appName = 'Zenlish'
   const htmlMail = await renderMJMLTemplate(`${mailTemplate}.eta`, mailData)
   const fallbackMail = await renderTemplate(`${mailTemplate}.txt.eta`, mailData)
 
