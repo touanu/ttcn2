@@ -10,9 +10,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return await useAPI<User>(event, `/users/${session.user.id}`, {
-    headers: {
-      Authorization: `Bearer ${session.accessToken}`,
-    },
-  })
+  return await useAPI<User>(event, `/users/${session.user.id}`)
 })

@@ -14,17 +14,12 @@ export default defineEventHandler(async (event) => {
   if (classes && Array.isArray(classes)) {
     for (const classItem of classes) {
       if (classItem._id) {
-        try {
-          const timetables = await useAPI<TimeTable[]>(
-            event,
-            `/timetables/class/${classItem._id}`,
-            { method: 'GET' },
-          )
-          timetablesMap[classItem._id] = timetables || []
-        }
-        catch {
-          timetablesMap[classItem._id] = []
-        }
+        const timetables = await useAPI<TimeTable[]>(
+          event,
+          `/timetables/class/${classItem._id}`,
+          { method: 'GET' },
+        )
+        timetablesMap[classItem._id] = timetables || []
       }
     }
   }
