@@ -19,6 +19,7 @@ const addModalOpen = ref(false)
 const deleteModalOpen = ref(false)
 const viewModalOpen = ref(false)
 const editModalOpen = ref(false)
+const timetableModalOpen = ref(false)
 const classesToDelete = ref<Class[]>([])
 const selectedClass = ref<Class | null>(null)
 
@@ -56,6 +57,11 @@ function handleViewEdit(classItem: Class) {
 function handleViewDelete(classItem: Class) {
   classesToDelete.value = [classItem]
   deleteModalOpen.value = true
+}
+
+function openTimetableModal(classItem: Class) {
+  selectedClass.value = classItem
+  timetableModalOpen.value = true
 }
 
 const { data: classes, status, refresh: refreshClasses } = await useAPI<Class[]>('/api/admin/classes', {
@@ -139,6 +145,13 @@ function getRowItems(row: Row<Class>) {
       icon: 'i-lucide-pencil',
       onSelect() {
         openEditModal(row.original)
+      },
+    },
+    {
+      label: $t('ADMIN.CLASSES.TIMETABLE.MANAGE'),
+      icon: 'i-heroicons-calendar',
+      onSelect() {
+        openTimetableModal(row.original)
       },
     },
     {
@@ -378,6 +391,13 @@ const columns: TableColumn<Class>[] = [
 
   <AdminClassesEditModal
     v-model:open="editModalOpen"
+    :class-item="selectedClass"
+    @updated="handleDeleted"
+  />
+
+  <AdminClassesTimetableModal
+    v-if="selectedClass"
+    v-model:open="timetableModalOpen"
     :class-item="selectedClass"
     @updated="handleDeleted"
   />

@@ -8,7 +8,10 @@ definePageMeta({
 
 const searchQuery = ref('')
 
-const { data: courses, pending } = await useAPI<Course[]>('/api/courses')
+const { data: courses, pending } = await useAPI<Course[]>(
+  '/api/courses',
+  { server: false, lazy: true },
+)
 
 const filteredCourses = computed(() => {
   if (!courses?.value)
