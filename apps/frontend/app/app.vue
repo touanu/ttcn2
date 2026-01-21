@@ -8,7 +8,7 @@ const dir = computed(() => locales[locale.value].dir)
 const { fetch: refreshSession, clear: clearSession } = useUserSession()
 
 useHead({
-  title: route.meta.title ? `${route.meta.title} - Englearn` : 'Englearn',
+  title: route.meta.title ? `${route.meta.title} - Zenlish` : 'Zenlish',
   meta: [
     {
       name: 'viewport',
@@ -16,7 +16,7 @@ useHead({
     },
     {
       property: 'og:title',
-      content: `${route.meta.title} - Englearn`,
+      content: `${route.meta.title} - Zenlish`,
     },
   ],
   link: [

@@ -52,6 +52,11 @@ const userActionItems = ref<DropdownMenuItem[]>([
     icon: 'i-ph-user-circle',
   },
   {
+    label: $t('NAVIGATION.USER.DROPDOWN.MY_COURSES'),
+    to: '/my-courses',
+    icon: 'i-ph-book-open',
+  },
+  {
     label: $t('NAVIGATION.USER.DROPDOWN.SETTINGS'),
     to: '/settings',
     icon: 'i-ph-gear',
@@ -106,7 +111,7 @@ async function addAdminLink() {
     <template #title>
       <div class="flex items-center gap-2 font-semibold text-lg">
         <LayoutLogo class="w-auto h-8 shrink-0" />
-        <span>Englearn</span>
+        <span>Zenlish</span>
       </div>
     </template>
 
@@ -194,7 +199,7 @@ async function addAdminLink() {
       <div>
         <div class="flex items-center gap-2 font-semibold text-lg">
           <LayoutLogo class="w-auto h-6 shrink-0" />
-          <span class="">Englearn</span>
+          <span class="">Zenlish</span>
         </div>
 
         <div class="text-muted text-sm">
@@ -292,7 +297,7 @@ async function addAdminLink() {
   <UFooter>
     <template #left>
       <p class="text-sm text-muted">
-        &copy; {{ new Date().getFullYear() }} Englearn. All rights reserved.
+        &copy; {{ new Date().getFullYear() }} Zenlish. All rights reserved.
       </p>
     </template>
 
