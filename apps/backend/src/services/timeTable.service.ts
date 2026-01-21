@@ -1,4 +1,5 @@
 import type { TimeTableDB } from '@interfaces/class.interface'
+import type { ObjectId } from 'mongoose'
 import { HttpException } from '@exceptions/HttpException'
 import { TimeTableModel } from '@models/timeTable.model'
 import { Types } from 'mongoose'
@@ -11,14 +12,18 @@ export class TimeTableService {
    */
   public async createTimeTable(timeTableData: Partial<TimeTableDB>): Promise<TimeTableDB> {
     const newTimeTable = await TimeTableModel.create(timeTableData)
-    return newTimeTable
+    return newTimeTable.toObject()
   }
 
   /**
    * Lấy tất cả lịch học
    */
   public async getAllTimeTables(): Promise<TimeTableDB[]> {
-    return TimeTableModel.find().populate('classId', 'name')
+    return TimeTableModel
+      .find()
+      .populate('classId', 'name')
+      .lean<TimeTableDB[]>()
+      .exec()
   }
 
   /**
@@ -41,17 +46,23 @@ export class TimeTableService {
   /**
    * Lấy lịch học theo lớp
    */
-  public async getTimeTablesByClass(classId: Types.ObjectId): Promise<TimeTableDB[]> {
-    return TimeTableModel.find({ classId } as any)
+  public async getTimeTablesByClass(classId: ObjectId): Promise<TimeTableDB[]> {
+    return TimeTableModel.find({ classId })
       .populate('classId', 'name')
       .sort({ dayOfWeek: 1, startTime: 1 })
+      .lean<TimeTableDB[]>()
+      .exec()
   }
 
   /**
    * Lấy lịch học theo ngày trong tuần
    */
   public async getTimeTablesByDayOfWeek(dayOfWeek: number): Promise<TimeTableDB[]> {
-    return TimeTableModel.find({ dayOfWeek }).populate('classId', 'name')
+    return TimeTableModel
+      .find({ dayOfWeek })
+      .populate('classId', 'name')
+      .lean<TimeTableDB[]>()
+      .exec()
   }
 
   /**
@@ -66,7 +77,8 @@ export class TimeTableService {
       timeTableId,
       { ...updateData, updatedAt: new Date() },
       { new: true },
-    ).populate('classId', 'name')
+    )
+      .populate('classId', 'name')
 
     if (!updatedTimeTable) {
       throw new HttpException(404, 'MESSAGES.NOT_FOUND', { resource: 'timetable' })

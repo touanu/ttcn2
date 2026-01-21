@@ -18,6 +18,12 @@ export class CoursesService {
   async getAllCourses(options?: GetAllQuery): Promise<CourseDB[]> {
     const query: any = {}
 
+    // Filter by IDs
+    if (options?.ids) {
+      const idsArray = options.ids.split(',').filter(Boolean)
+      query._id = { $in: idsArray }
+    }
+
     // Filter by status
     if (options?.status) {
       query.status = options.status

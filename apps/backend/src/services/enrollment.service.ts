@@ -11,8 +11,12 @@ export class EnrollmentService {
    * Tạo đăng ký mới
    */
   public async createEnrollment(enrollmentData: Partial<EnrollmentDB>): Promise<EnrollmentDB> {
-    const newEnrollment = await EnrollmentModel.create(enrollmentData)
-    return newEnrollment
+    try {
+      return await EnrollmentModel.create(enrollmentData)
+    }
+    catch {
+      throw new HttpException(500, 'ENROLLMENTS.CREATE_ERROR')
+    }
   }
 
   /**
@@ -64,12 +68,11 @@ export class EnrollmentService {
    * Lấy các đăng ký của người dùng
    */
   public async getEnrollmentsByUser(userId: ObjectId): Promise<EnrollmentDB[]> {
-    return EnrollmentModel.find({ userId })
-      .populate('userId', 'fullName email')
-      .populate('courseId', 'title')
+    const enrollments = await EnrollmentModel.find({ userId })
       .sort({ enrolledAt: -1 })
       .lean<EnrollmentDB[]>()
       .exec()
+    return enrollments
   }
 
   /**
